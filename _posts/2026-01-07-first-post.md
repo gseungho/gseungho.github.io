@@ -1,7 +1,8 @@
 ---
 title: "github.io 블로그 시작"
-date: 2026-01-07
-categories: startup
+date: 2026-01-07 00:00:00 +0900
+categories: [Startup]
+tags: []
 ---
 
 오늘 github.io 블로그를 만들었다.
