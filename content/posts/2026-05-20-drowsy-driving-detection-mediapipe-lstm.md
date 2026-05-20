@@ -172,6 +172,51 @@ $\gamma = 3.0 \sim 5.0$ 구간에서 성능이 안정적이었다. 최종 모델
 
 ---
 
+## 실시간 감지: 웹캠에 모델을 붙이다
+
+학습이 끝난 뒤, 저장된 `.h5` 모델을 불러와 웹캠 영상에 실시간으로 연결했다. 구조는 단순하다.
+
+1. 웹캠 프레임을 MediaPipe로 처리해 7개 특징값 추출
+2. 길이 40의 슬라이딩 버퍼에 프레임별 특징을 쌓는다
+3. 버퍼가 꽉 차면 LSTM 모델에 넣어 졸음 확률 계산
+4. 결과를 화면에 오버레이
+
+```python
+feature_buffer = deque(maxlen=SEQUENCE_LENGTH)  # 40프레임 버퍼
+
+while cap.isOpened():
+    ret, frame = cap.read()
+    feats, prev_ear, prev_mar, history_ear = _extract_single_frame_features(
+        frame, prev_ear, prev_mar, history_ear
+    )
+    if feats is not None:
+        feature_buffer.append(feats)
+
+    if len(feature_buffer) == SEQUENCE_LENGTH:
+        X = normalize_features(np.array(feature_buffer))
+        prob = model.predict(X[np.newaxis, ...])[0][0]  # 졸음 확률
+        label = "DROWSY" if prob > 0.6 else "Normal"
+```
+
+실시간으로 동작하는 모습은 아래 영상에서 확인할 수 있다.
+
+<video
+  src="/images/posts/drowsy-detection/demo.mp4"
+  controls
+  style={{ width: "100%", maxWidth: "640px", borderRadius: "8px", margin: "16px auto", display: "block" }}
+/>
+
+영상에서 눈에 띄는 특징이 하나 있다. 하품을 하거나 눈을 감아도 졸음 퍼센트가 즉시 올라가지 않고 **약 2초 뒤에 반응**한다. 의도한 동작이다. 모델이 40프레임(4초)의 누적 패턴을 보고 판단하기 때문에, 입력이 변화하더라도 버퍼에 졸음 신호가 충분히 쌓인 뒤에야 확률이 올라간다. 실제로 이 지연 덕분에 순간적인 눈 깜빡임이나 잠깐의 고개 숙임을 졸음으로 오판하는 경우가 줄었다.
+
+반대로 보면 반응 속도가 느린 것이기도 하다. 진짜 졸음 상황에서 2~4초 뒤에 경고가 울린다면 의미가 있는가에 대한 질문은 여전히 유효하다.
+
+또 다른 문제는 **프레임 끊김**이다. 영상에서 보이듯 실시간 처리 중 화면이 미세하게 버벅인다. MediaPipe와 모델 추론이 메인 스레드에서 돌고 있어서 생기는 문제다. 실제 차량 탑재를 목표로 한다면 두 가지가 필요하다.
+
+- **경량화**: 양자화(Quantization) 또는 지식 증류(Knowledge Distillation)로 모델 크기를 줄여 추론 속도를 높인다.
+- **멀티스레딩**: 영상 캡처, 특징 추출, 모델 추론을 별도 스레드로 분리해 프레임 드롭을 방지한다.
+
+---
+
 ## 최종 결과
 
 테스트셋(119 clips, 학습에 전혀 사용하지 않은 영상들)에서의 성능:
