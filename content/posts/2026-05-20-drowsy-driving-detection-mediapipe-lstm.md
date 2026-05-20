@@ -14,6 +14,33 @@ description: "MediaPipe + LSTM + Attention으로 실시간 졸음 운전 감지 
 
 ---
 
+## 데이터를 직접 만들었다
+
+데이터셋은 두 가지를 합쳤다.
+
+**Kaggle NTHU-DDD**: 졸음 운전 감지 연구에서 많이 쓰이는 공개 데이터셋이다. 다양한 피험자의 졸음/정상 영상이 포함돼 있다. 30fps 영상을 10fps로 다운샘플링해 프레임 이미지로 추출했다.
+
+**자체 제작 데이터**: Kaggle 데이터만으로는 촬영 각도와 환경이 제한적이라고 판단했다. 팀원들이 직접 졸음 상태와 정상 상태를 연출해 영상을 촬영하고, 마찬가지로 10fps로 추출해 레이블링했다.
+
+아래 두 이미지가 자체 제작 데이터의 실제 샘플이다. 왼쪽이 졸음(Drowsy), 오른쪽이 정상(Not Drowsy) 상태다.
+
+<div style="display: flex; gap: 16px; justify-content: center; margin: 24px 0;">
+  <figure style="text-align: center; margin: 0;">
+    <img src="/images/posts/drowsy-detection/sample-drowsy.jpg" alt="졸음 상태 샘플" style="width: 200px; border-radius: 8px;" />
+    <figcaption style="margin-top: 8px; color: #888; font-size: 0.9em;">Drowsy — 눈이 감기고 고개가 숙여진 상태</figcaption>
+  </figure>
+  <figure style="text-align: center; margin: 0;">
+    <img src="/images/posts/drowsy-detection/sample-notdrowsy.jpg" alt="정상 상태 샘플" style="width: 200px; border-radius: 8px;" />
+    <figcaption style="margin-top: 8px; color: #888; font-size: 0.9em;">Not Drowsy — 눈을 뜨고 정면을 바라보는 상태</figcaption>
+  </figure>
+</div>
+
+파일명 규칙은 `{인물ID}_{라벨}({프레임번호}).jpg` 형태다. 인물별로 묶어서 처리해야 Nod Calibration 같은 개인별 보정이 가능하다.
+
+전체 학습 데이터는 28,245 프레임이며, 이를 Sliding Window(길이 40, stride 5)로 자르면 수천 개의 시퀀스가 만들어진다.
+
+---
+
 ## 이미지를 픽셀로 넣지 않은 이유
 
 가장 먼저 맞닥뜨린 질문은 **"어떤 입력을 모델에 넣을 것인가"** 였다.
