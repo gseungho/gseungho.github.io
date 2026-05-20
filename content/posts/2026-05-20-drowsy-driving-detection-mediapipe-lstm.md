@@ -200,11 +200,7 @@ while cap.isOpened():
 
 실시간으로 동작하는 모습은 아래 영상에서 확인할 수 있다.
 
-<video
-  src="/images/posts/drowsy-detection/demo.mp4"
-  controls
-  style={{ width: "100%", maxWidth: "640px", borderRadius: "8px", margin: "16px auto", display: "block" }}
-/>
+<video src="/images/posts/drowsy-detection/demo.mp4" controls width="100%" />
 
 영상에서 눈에 띄는 특징이 하나 있다. 하품을 하거나 눈을 감아도 졸음 퍼센트가 즉시 올라가지 않고 **약 2초 뒤에 반응**한다. 의도한 동작이다. 모델이 40프레임(4초)의 누적 패턴을 보고 판단하기 때문에, 입력이 변화하더라도 버퍼에 졸음 신호가 충분히 쌓인 뒤에야 확률이 올라간다. 실제로 이 지연 덕분에 순간적인 눈 깜빡임이나 잠깐의 고개 숙임을 졸음으로 오판하는 경우가 줄었다.
 
