@@ -12,25 +12,29 @@ const NAV = [
 export default function Header() {
   const pathname = usePathname();
   return (
-    <header
-      style={{ borderBottom: "1px solid var(--border)", background: "var(--bg)" }}
-      className="sticky top-0 z-50"
-    >
+    <header className="sticky top-0 z-50 bg-[#101010]/80 backdrop-blur-md border-b border-[#3d3a39]">
       <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="text-lg font-bold" style={{ color: "var(--text)" }}>
-          gseungho&apos;s log
+        <Link href="/" className="group flex items-center gap-1.5 text-base font-semibold tracking-tight text-[#ffffff]">
+          <span>gseungho&apos;s log</span>
+          <span className="text-[#00d992] transition-transform duration-300 group-hover:scale-125">✦</span>
         </Link>
-        <nav className="flex gap-6 text-sm">
-          {NAV.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              style={{ color: pathname === href ? "var(--accent)" : "var(--text-muted)" }}
-              className="hover:opacity-80 transition-opacity"
-            >
-              {label}
-            </Link>
-          ))}
+        <nav className="flex gap-5 text-sm font-medium">
+          {NAV.map(({ href, label }) => {
+            const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`transition-colors duration-200 ${
+                  isActive 
+                    ? "text-[#00d992]" 
+                    : "text-[#8b949e] hover:text-[#ffffff]"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>
