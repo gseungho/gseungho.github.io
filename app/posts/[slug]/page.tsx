@@ -15,38 +15,48 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = getPostBySlug(slug);
 
   return (
-    <article>
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-3">
+    <article className="space-y-8">
+      {/* Post Header */}
+      <header className="space-y-4">
+        <div className="flex items-center gap-3">
           <Link
             href={`/category/${post.category}`}
-            style={{ color: "var(--accent)", fontSize: "0.85rem" }}
-            className="hover:underline"
+            className="inline-block px-2.5 py-0.5 text-xs font-semibold text-[#00d992] bg-[#1a1a1a]/60 border border-[#3d3a39] rounded-full hover:border-[#00d992]/80 transition-colors"
           >
             {post.category}
           </Link>
-          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>· {post.date}</span>
+          <span className="font-mono text-xs text-[#8b949e]">{post.date}</span>
         </div>
-        <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
+        
+        <h1 className="text-2xl md:text-3.5xl font-semibold leading-tight text-[#ffffff] tracking-tight">
+          {post.title}
+        </h1>
+        
         {post.description && (
-          <p style={{ color: "var(--text-muted)" }}>{post.description}</p>
+          <p className="text-base text-[#bdbdbd] leading-relaxed italic border-l-2 border-[#3d3a39] pl-3">
+            {post.description}
+          </p>
         )}
+        
         {post.tags.length > 0 && (
-          <div className="flex gap-2 mt-3 flex-wrap">
+          <div className="flex gap-2 flex-wrap pt-1">
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                style={{ background: "var(--bg-card)", color: "var(--text-muted)", fontSize: "0.78rem" }}
-                className="px-2 py-0.5 rounded-full border border-[var(--border)]"
+                className="bg-[#1a1a1a] text-[#8b949e] border border-[#3d3a39] text-xs px-2 py-0.5 rounded-sm transition-colors duration-200 hover:text-[#ffffff] hover:border-[#8b949e]"
               >
                 #{tag}
               </span>
             ))}
           </div>
         )}
-      </div>
-      <hr style={{ borderColor: "var(--border)", marginBottom: "2rem" }} />
-      <div className="prose">
+      </header>
+
+      {/* Voltagent Dashed Line Section Divider */}
+      <div className="border-b border-dashed border-[#4f5d75]/30 w-full" />
+
+      {/* Post Body (MDX Content) */}
+      <div className="prose max-w-none">
         <MDXRemote
           source={post.content}
           options={{
@@ -57,9 +67,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           }}
         />
       </div>
-      <div className="mt-12">
-        <Link href="/" style={{ color: "var(--accent)" }} className="hover:underline text-sm">
-          ← 목록으로
+
+      {/* Voltagent Dashed Line Section Divider */}
+      <div className="border-b border-dashed border-[#4f5d75]/30 w-full mt-12" />
+
+      {/* Back Button (button-outline-on-dark style) */}
+      <div className="pt-4">
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-1.5 px-4 py-2 border border-[#3d3a39] rounded-md bg-[#101010] text-[#bdbdbd] hover:text-[#00d992] hover:border-[#00d992] text-sm transition-all duration-300 font-medium cursor-pointer"
+        >
+          <span>← Back to Journal</span>
         </Link>
       </div>
     </article>
