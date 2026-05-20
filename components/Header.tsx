@@ -4,9 +4,9 @@ import { usePathname } from "next/navigation";
 
 const NAV = [
   { href: "/", label: "Home" },
-  { href: "/category/공부정리", label: "공부정리" },
+  { href: "/category/공부", label: "공부" },
+  { href: "/category/프로젝트", label: "프로젝트" },
   { href: "/category/논문리뷰", label: "논문리뷰" },
-  { href: "/category/창업일지", label: "창업일지" },
 ];
 
 export default function Header() {

@@ -9,6 +9,7 @@ export type PostMeta = {
   title: string;
   date: string;
   category: string;
+  subcategory?: string;
   tags: string[];
   description: string;
 };
@@ -28,6 +29,7 @@ export function getAllPosts(): PostMeta[] {
         title: data.title ?? "",
         date: data.date ?? "",
         category: data.category ?? "기타",
+        subcategory: data.subcategory,
         tags: data.tags ?? [],
         description: data.description ?? "",
       };
@@ -43,6 +45,7 @@ export function getPostBySlug(slug: string): Post {
     title: data.title ?? "",
     date: data.date ?? "",
     category: data.category ?? "기타",
+    subcategory: data.subcategory,
     tags: data.tags ?? [],
     description: data.description ?? "",
     content,
