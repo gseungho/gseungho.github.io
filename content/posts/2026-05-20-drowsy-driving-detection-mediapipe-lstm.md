@@ -24,14 +24,14 @@ description: "MediaPipe + LSTM + Attention으로 실시간 졸음 운전 감지 
 
 아래 두 이미지가 자체 제작 데이터의 실제 샘플이다. 왼쪽이 졸음(Drowsy), 오른쪽이 정상(Not Drowsy) 상태다.
 
-<div style="display: flex; gap: 16px; justify-content: center; margin: 24px 0;">
-  <figure style="text-align: center; margin: 0;">
-    <img src="/images/posts/drowsy-detection/sample-drowsy.jpg" alt="졸음 상태 샘플" style="width: 200px; border-radius: 8px;" />
-    <figcaption style="margin-top: 8px; color: #888; font-size: 0.9em;">Drowsy — 눈이 감기고 고개가 숙여진 상태</figcaption>
+<div className="flex gap-4 justify-center my-6">
+  <figure className="text-center m-0">
+    <img src="/images/posts/drowsy-detection/sample-drowsy.jpg" alt="졸음 상태 샘플" width="200" className="rounded-lg" />
+    <figcaption className="mt-2 text-sm text-gray-500">Drowsy — 눈이 감기고 고개가 숙여진 상태</figcaption>
   </figure>
-  <figure style="text-align: center; margin: 0;">
-    <img src="/images/posts/drowsy-detection/sample-notdrowsy.jpg" alt="정상 상태 샘플" style="width: 200px; border-radius: 8px;" />
-    <figcaption style="margin-top: 8px; color: #888; font-size: 0.9em;">Not Drowsy — 눈을 뜨고 정면을 바라보는 상태</figcaption>
+  <figure className="text-center m-0">
+    <img src="/images/posts/drowsy-detection/sample-notdrowsy.jpg" alt="정상 상태 샘플" width="200" className="rounded-lg" />
+    <figcaption className="mt-2 text-sm text-gray-500">Not Drowsy — 눈을 뜨고 정면을 바라보는 상태</figcaption>
   </figure>
 </div>
 
