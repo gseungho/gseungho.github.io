@@ -2,13 +2,13 @@ import { getAllPosts, getAllTags } from "@/lib/posts";
 import PostCard from "@/components/PostCard";
 
 export async function generateStaticParams() {
-  return getAllTags().map((name) => ({ name: encodeURIComponent(name) }));
+  return getAllTags().map((name) => ({ name }));
 }
 
 export default async function TagPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
-  const tag = decodeURIComponent(name);
-  const posts = getAllPosts().filter((p) => p.tags.includes(tag));
+  const tag = decodeURIComponent(name).normalize("NFC");
+  const posts = getAllPosts().filter((p) => p.tags.map(t => t.normalize("NFC")).includes(tag));
 
   return (
     <div className="space-y-10">
