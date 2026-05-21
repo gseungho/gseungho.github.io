@@ -134,7 +134,7 @@ body {
   padding: 0; 
   border-radius: 0;
   font-size: 0.88em;
-  color: #e1e4e8; /* 기본 코드 가독성을 보완하기 위한 부드러운 화이트 계열 */
+  color: var(--text); /* 테마에 대응하는 기본 텍스트 색상 적용 */
 }
 .prose img { 
   max-width: 100%; 
@@ -146,5 +146,59 @@ body {
 .prose hr { 
   border-color: var(--border); 
   margin: 2.2rem 0; 
+}
+
+/* Rehype Highlight (Syntax Highlighting) - Theme-responsive Styling */
+.hljs-comment,
+.hljs-quote {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: var(--accent); /* Electric Green in Dark / Emerald in Light */
+  font-weight: 600;
+}
+
+.hljs-number,
+.hljs-string,
+.hljs-meta,
+.hljs-regexp,
+.hljs-attribute,
+.hljs-constant {
+  color: var(--accent-soft);
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-subst,
+.hljs-meta .hljs-keyword {
+  color: var(--text-strong);
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-name {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-class .hljs-title,
+.hljs-type {
+  color: var(--text);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
