@@ -3,8 +3,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "gseungho's log",
-  description: "창업 일지, AI 논문 리뷰, 프로젝트 기록을 남기는 공간",
+  title: "Tensors & Notebooks",
+  description: "AI 논문 리뷰, 고도화된 소프트웨어 프로젝트, 수학통계를 기록하는 공간",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
