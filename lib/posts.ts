@@ -56,3 +56,9 @@ export function getAllCategories(): string[] {
   const posts = getAllPosts();
   return [...new Set(posts.map((p) => p.category))];
 }
+
+export function getAllTags(): string[] {
+  const posts = getAllPosts();
+  const allTags = posts.flatMap((p) => p.tags);
+  return [...new Set(allTags)];
+}

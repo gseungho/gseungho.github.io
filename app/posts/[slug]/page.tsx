@@ -41,12 +41,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {post.tags.length > 0 && (
           <div className="flex gap-2 flex-wrap pt-1">
             {post.tags.map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className="bg-(--bg-soft) text-(--text-muted) border border-(--border) text-xs px-2 py-0.5 rounded-sm transition-colors duration-200 hover:text-(--text-strong) hover:border-(--text-muted)"
+                href={`/tag/${encodeURIComponent(tag)}`}
+                className="bg-(--bg-soft) text-(--text-muted) border border-(--border) text-xs px-2 py-0.5 rounded-sm transition-colors duration-200 hover:text-(--accent) hover:border-(--accent) cursor-pointer"
               >
                 #{tag}
-              </span>
+              </Link>
             ))}
           </div>
         )}

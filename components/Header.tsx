@@ -14,20 +14,20 @@ export default function Header() {
   const pathname = usePathname();
   return (
     <header className="sticky top-0 z-50 bg-(--bg)/80 backdrop-blur-md border-b border-(--border) transition-colors duration-300">
-      <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="group flex items-center gap-1.5 text-base font-semibold tracking-tight text-(--text-strong)">
+      <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-3">
+        <Link href="/" className="group flex items-center gap-1 sm:gap-1.5 text-sm sm:text-base font-semibold tracking-tight text-(--text-strong) shrink-0">
           <span>gseungho&apos;s log</span>
           <span className="text-(--accent) transition-transform duration-300 group-hover:scale-125">✦</span>
         </Link>
-        <div className="flex items-center gap-5">
-          <nav className="flex gap-5 text-sm font-medium">
+        <div className="flex items-center gap-3 sm:gap-5 min-w-0">
+          <nav className="flex gap-3 sm:gap-5 text-xs sm:text-sm font-medium whitespace-nowrap overflow-x-auto no-scrollbar">
             {NAV.map(({ href, label }) => {
               const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
               return (
                 <Link
                   key={href}
                   href={href}
-                  className={`transition-colors duration-200 ${
+                  className={`transition-colors duration-200 shrink-0 ${
                     isActive 
                       ? "text-(--accent)" 
                       : "text-(--text-muted) hover:text-(--text-strong)"
@@ -38,7 +38,7 @@ export default function Header() {
               );
             })}
           </nav>
-          <div className="border-l border-(--border) pl-4 h-5 flex items-center">
+          <div className="border-l border-(--border) pl-3 sm:pl-4 h-5 flex items-center shrink-0">
             <ThemeToggle />
           </div>
         </div>
