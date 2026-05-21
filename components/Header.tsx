@@ -16,7 +16,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-(--bg)/80 backdrop-blur-md border-b border-(--border) transition-colors duration-300">
       <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-3">
         <Link href="/" className="group flex items-center gap-1 sm:gap-1.5 text-sm sm:text-base font-semibold tracking-tight text-(--text-strong) shrink-0">
-          <span>gseungho&apos;s log</span>
+          <span>Tensors &amp; Notebooks</span>
           <span className="text-(--accent) transition-transform duration-300 group-hover:scale-125">✦</span>
         </Link>
         <div className="flex items-center gap-3 sm:gap-5 min-w-0">

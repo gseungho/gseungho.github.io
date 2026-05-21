@@ -8,13 +8,13 @@ export default function Home() {
       {/* Voltagent Hero Band */}
       <section className="py-6">
         <div className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#00d992] mb-3">
-          npx gseungho --log
+          npx tensors-and-notebooks --log
         </div>
         <h1 className="text-[2.85rem] md:text-[3.75rem] font-normal leading-none tracking-[-0.035em] text-(--text-strong) mb-6 font-sans">
-          AI & Entrepreneurship.
+          AI &amp; Mathematics.
         </h1>
         <p className="text-base md:text-lg text-(--text) max-w-xl leading-relaxed">
-          창업 일지, AI 논문 리뷰, 그리고 고도화된 소프트웨어 프로젝트 개발 기록을 담는 엔지니어링 저널입니다.
+          AI 논문 리뷰, 그리고 고도화된 소프트웨어 프로젝트 개발 기록을 담는 엔지니어링 저널입니다.
         </p>
         
         {/* Voltagent Signature Dashed Divider */}
