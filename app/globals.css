@@ -148,6 +148,37 @@ body {
   margin: 2.2rem 0; 
 }
 
+/* 마크다운 표(Table) 가독성 및 반응형 여백 스타일링 */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.prose th {
+  background: var(--bg-soft);
+  color: var(--text-strong);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.85rem 1.2rem;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+.prose td {
+  padding: 0.85rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  line-height: 1.6;
+  vertical-align: middle;
+}
+.prose tr:hover td {
+  background: var(--bg-soft);
+  color: var(--text-strong);
+}
+
 /* Rehype Highlight (Syntax Highlighting) - Theme-responsive Styling */
 .hljs-comment,
 .hljs-quote {
