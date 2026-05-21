@@ -7,7 +7,7 @@ export async function generateStaticParams() {
     ...defaultCategories,
     ...getAllCategories()
   ]));
-  return allCategories.map((name) => ({ name: encodeURIComponent(name) }));
+  return allCategories.map((name) => ({ name }));
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ name: string }> }) {
