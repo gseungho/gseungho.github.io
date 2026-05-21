@@ -2,8 +2,8 @@
 @import "tailwindcss";
 @import "katex/dist/katex.min.css";
 
-:root {
-  /* Voltagent Brand Palette */
+:root, html.dark {
+  /* Voltagent Brand Palette (Dark Theme - Default) */
   --bg: #101010;          /* canvas */
   --bg-soft: #1a1a1a;     /* canvas-soft */
   --bg-card: #101010;     /* canvas (flat background, card rely on borders) */
@@ -19,6 +19,25 @@
   --accent: #00d992;      /* primary (electric-green) */
   --accent-soft: #2fd6a1; /* primary-soft */
   --accent-deep: #10b981; /* primary-deep */
+}
+
+html.light {
+  /* Voltagent Brand Palette (Light Theme) */
+  --bg: #ffffff;          /* canvas */
+  --bg-soft: #f4f4f5;     /* canvas-soft (zinc-100) */
+  --bg-card: #ffffff;     /* canvas (flat background, card rely on borders) */
+  --bg-hover: #f4f4f5;    /* canvas-soft */
+  
+  --border: #e4e4e7;      /* hairline (zinc-200) */
+  --border-glow: #10b981; /* active green border */
+  
+  --text: #3f3f46;        /* body text (zinc-700) */
+  --text-strong: #09090b; /* ink-strong (zinc-950) */
+  --text-muted: #71717a;  /* mute (zinc-500) */
+  
+  --accent: #10b981;      /* primary (emerald-500) */
+  --accent-soft: #059669; /* primary-soft */
+  --accent-deep: #047857; /* primary-deep */
 }
 
 body {
