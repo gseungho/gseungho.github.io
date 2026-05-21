@@ -21,19 +21,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div className="flex items-center gap-3">
           <Link
             href={`/category/${post.category}`}
-            className="inline-block px-2.5 py-0.5 text-xs font-semibold text-[#00d992] bg-[#1a1a1a]/60 border border-[#3d3a39] rounded-full hover:border-[#00d992]/80 transition-colors"
+            className="inline-block px-2.5 py-0.5 text-xs font-semibold text-(--accent) bg-(--bg-soft)/60 border border-(--border) rounded-full hover:border-(--accent)/80 transition-colors"
           >
             {post.category}
           </Link>
-          <span className="font-mono text-xs text-[#8b949e]">{post.date}</span>
+          <span className="font-mono text-xs text-(--text-muted)">{post.date}</span>
         </div>
         
-        <h1 className="text-2xl md:text-3.5xl font-semibold leading-tight text-[#ffffff] tracking-tight">
+        <h1 className="text-2xl md:text-3.5xl font-semibold leading-tight text-(--text-strong) tracking-tight">
           {post.title}
         </h1>
         
         {post.description && (
-          <p className="text-base text-[#bdbdbd] leading-relaxed italic border-l-2 border-[#3d3a39] pl-3">
+          <p className="text-base text-(--text) leading-relaxed italic border-l-2 border-(--border) pl-3">
             {post.description}
           </p>
         )}
@@ -43,7 +43,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="bg-[#1a1a1a] text-[#8b949e] border border-[#3d3a39] text-xs px-2 py-0.5 rounded-sm transition-colors duration-200 hover:text-[#ffffff] hover:border-[#8b949e]"
+                className="bg-(--bg-soft) text-(--text-muted) border border-(--border) text-xs px-2 py-0.5 rounded-sm transition-colors duration-200 hover:text-(--text-strong) hover:border-(--text-muted)"
               >
                 #{tag}
               </span>
@@ -53,7 +53,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </header>
 
       {/* Voltagent Dashed Line Section Divider */}
-      <div className="border-b border-dashed border-[#4f5d75]/30 w-full" />
+      <div className="border-b border-dashed border-(--border) w-full opacity-60" />
 
       {/* Post Body (MDX Content) */}
       <div className="prose max-w-none">
@@ -69,13 +69,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* Voltagent Dashed Line Section Divider */}
-      <div className="border-b border-dashed border-[#4f5d75]/30 w-full mt-12" />
+      <div className="border-b border-dashed border-(--border) w-full mt-12 opacity-60" />
 
       {/* Back Button (button-outline-on-dark style) */}
       <div className="pt-4">
         <Link 
           href="/" 
-          className="inline-flex items-center gap-1.5 px-4 py-2 border border-[#3d3a39] rounded-md bg-[#101010] text-[#bdbdbd] hover:text-[#00d992] hover:border-[#00d992] text-sm transition-all duration-300 font-medium cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 border border-(--border) rounded-md bg-(--bg) text-(--text) hover:text-(--accent) hover:border-(--accent) text-sm transition-all duration-300 font-medium cursor-pointer"
         >
           <span>← Back to Journal</span>
         </Link>
