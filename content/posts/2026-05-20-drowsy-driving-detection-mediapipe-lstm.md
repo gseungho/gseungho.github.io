@@ -2,6 +2,7 @@
 title: "졸음 운전 감지 시스템을 직접 만들어보며 배운 것들"
 date: "2026-05-20"
 category: "프로젝트"
+subcategory: "Deep Learning"
 tags: ["딥러닝", "LSTM", "MediaPipe", "컴퓨터비전"]
 description: "MediaPipe + LSTM + Attention으로 실시간 졸음 운전 감지 시스템을 구현한 딥러닝 수업 팀 프로젝트 회고"
 ---
