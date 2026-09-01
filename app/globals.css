@@ -61,19 +61,19 @@ body {
   letter-spacing: -0.02em;
 }
 .prose h2 { 
-  font-size: 1.4rem; 
+  font-size: 1.75rem; 
   font-weight: 600; 
   color: var(--text-strong);
-  margin: 1.8rem 0 0.8rem; 
+  margin: 3rem 0 1rem; 
   border-bottom: 1px solid var(--border); 
-  padding-bottom: 0.4rem; 
+  padding-bottom: 0.5rem; 
   letter-spacing: -0.015em;
 }
 .prose h3 { 
-  font-size: 1.15rem; 
+  font-size: 1.3rem; 
   font-weight: 600; 
   color: var(--text-strong);
-  margin: 1.4rem 0 0.6rem; 
+  margin: 2rem 0 0.7rem; 
 }
 .prose p { 
   margin: 1.1rem 0; 
