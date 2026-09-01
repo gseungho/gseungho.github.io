@@ -17,6 +17,8 @@ description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN이 공짜�
 
 이 질문을 계속 붙잡고 읽으시면 구조 파트도 실험 파트도 전부 하나로 이어집니다.
 
+이 글은 [Attention Is All You Need 리뷰](/posts/2026-09-01-attention-is-all-you-need)의 다음 편입니다. 거기서 다룬 Pre-LN, positional encoding, skip-connection 이야기가 여기서 그대로 이어지니, 트랜스포머 구조가 낯설다면 그쪽을 먼저 보셔도 좋습니다.
+
 ## 갈라져 있던 두 세계
 
 2020년 당시 상황을 보면 NLP와 Vision이 완전히 다른 길을 가고 있었습니다.
@@ -27,7 +29,7 @@ description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN이 공짜�
 
 그래서 이 논문의 질문은 단순합니다. **CNN을 완전히 버리고, 표준 트랜스포머를 최소한만 고쳐서 그대로 쓰면 어떻게 되나?**
 
-## 이 논문의 진짜 기여는 아키텍처가 아닙니다
+## 이 논문의 진짜 기여는 아키텍처가 아니다
 
 논문을 읽을 때 항상 해야 하는 게 하나 있습니다. **초록이 주장하는 새로움**과 **실제로 새로운 것**을 구분하는 일입니다.
 
@@ -180,6 +182,8 @@ $$\prod_{\ell=1}^{L} (I + \delta_\ell) \qquad \text{vs.} \qquad \prod_{\ell=1}^{
 
 대가가 없는 건 아닙니다. Pre-LN은 residual stream이 정규화 없이 계속 누적되니까 마지막에 LN을 한 번 더 걸어줘야 해요. 그게 식 (4)의 $\text{LN}(\mathbf{z}_L^0)$입니다. 습관적으로 붙인 게 아니라 이유가 있는 거죠.
 
+LayerNorm의 Jacobian을 층수만큼 곱하면 6층과 32층에서 각각 얼마가 되는지, skip-connection이 아예 없으면 어떻게 되는지는 [앞 글의 Add & Norm 절](/posts/2026-09-01-attention-is-all-you-need)에서 수치로 확인했습니다.
+
 ## Inductive bias — 이 글의 축
 
 여기가 개념적으로 가장 중요한 부분입니다. 이것만 이해하시면 뒤의 실험은 전부 따라옵니다.
@@ -221,9 +225,20 @@ Table 2입니다. 정확도부터 보면 ViT-H/14가 ImageNet 88.55%로 BiT-L의
 
 **즉 이 논문의 승리는 정확도가 아니라 성능/연산 트레이드오프에서의 승리입니다.**
 
-논문 리뷰니까 약점도 짚겠습니다. **이 비교는 통제된 비교가 아닙니다.** optimizer도 다르고, 학습 스케줄도 다르고, weight decay도 다릅니다. 논문도 이걸 인정하고 4.4절에서 통제된 비교를 따로 해요. 표 하나만 보고 "아키텍처가 더 좋다"고 결론 내면 안 되는 겁니다.
+논문 리뷰니까 약점도 짚겠습니다. **이 비교는 통제된 비교가 아닙니다.** optimizer도 다르고, 학습 스케줄도 다르고, weight decay도 다릅니다. **에폭 수부터 다릅니다** — ViT는 7/14 에폭인데 BiT-L은 원 논문 기준 30 에폭이고, BiT-L은 ResNet152x4라 모델 크기도 다릅니다. 논문도 이걸 인정하고 4.4절에서 통제된 비교를 따로 해요.
 
-## 데이터 규모가 결론을 뒤집습니다
+**통제된 숫자는 Appendix의 Table 6에 있습니다.** 같은 14 에폭끼리 비교하면 이렇습니다.
+
+| 모델 (JFT, 14 epochs) | ImageNet | exaFLOPs |
+|---|---|---|
+| ViT-L/16 | 87.12 | **1567** |
+| ResNet200x3 | 87.22 | **3306** |
+
+거의 같은 정확도에 연산은 **약 2.1배** 차이입니다. 15배가 아니라 2배가 이 논문이 실제로 보여준 숫자예요. 인용한다면 이쪽을 인용하는 게 맞습니다.
+
+한 가지 더 짚고 싶은 게 있습니다. **"ViT가 CNN보다 가볍다"는 명제 자체는 틀렸습니다.** 이미지 한 장을 처리하는 비용만 보면 ViT-B/16이 약 17.4 GMACs, ResNet-50이 약 4.1 GMACs로 **ViT가 4배 넘게 비쌉니다.** 논문의 주장은 "같은 성능에 도달하는 데 드는 총 pre-training 연산이 더 적다"이지 "장당 연산이 적다"가 아닙니다. 이 둘은 전혀 다른 얘기예요.
+
+## 데이터 규모가 결론을 뒤집는다
 
 앞에서 세운 예측을 검증하는 자리입니다.
 
@@ -277,7 +292,7 @@ Figure 4도 같은 얘기입니다. **ResNet은 작은 데이터에서 더 좋�
 
 앞 절에서 "학습이 대체하고 있다"고 했는데, 정말 그런지 논문이 직접 들여다봅니다.
 
-### 1. Attention distance — receptive field를 스스로 만듭니다
+### 1. Attention distance — receptive field를 스스로 만든다
 
 **attention distance**는 CNN의 receptive field에 대응하는 지표입니다. attention weight로 가중한, query 패치와 key 패치 사이의 평균 픽셀 거리예요. 작으면 "가까운 것만 본다", 크면 "멀리까지 본다"는 뜻입니다.
 
@@ -293,7 +308,7 @@ Figure 4도 같은 얘기입니다. **ResNet은 작은 데이터에서 더 좋�
 
 **그리고 이걸 뒷받침하는 증거가 hybrid에 있습니다.** hybrid에서는 이 국소적 head가 훨씬 덜 나타납니다. 왜냐하면 **ResNet이 이미 그 일을 해줬으니까요.** 앞 절과 이 절이 서로를 설명해주는 구조입니다.
 
-### 2. Patch embedding 필터 — conv 필터를 재발견합니다
+### 2. Patch embedding 필터 — conv 필터를 재발견한다
 
 <figure className="my-6 text-center">
   <img src="/images/posts/vit-16x16-words/fig_pca.png" alt="학습된 patch embedding 필터의 주성분 28개" className="rounded-lg mx-auto" />
@@ -306,7 +321,7 @@ Figure 4도 같은 얘기입니다. **ResNet은 작은 데이터에서 더 좋�
 
 결과가 놀랍습니다. convolution의 locality를 전혀 주지 않았는데 **CNN 초기 layer가 수렴하는 것과 똑같은 패턴** — 선, 격자, 색 대비 blob — 이 나타납니다.
 
-### 3. 위치 임베딩이 2D를 재발견합니다
+### 3. 위치 임베딩이 2D를 재발견한다
 
 개인적으로 이 논문에서 제일 인상적이었던 부분입니다.
 
@@ -415,7 +430,7 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 - **Table 2의 비교는 통제되지 않았습니다** — optimizer, 스케줄, weight decay가 전부 다릅니다
 - **self-supervised pre-training은 supervised보다 여전히 4%p 뒤처집니다.** NLP에서 BERT가 self-supervised로 성공한 것과 대비되는 지점이고, 논문도 future work로 남겼습니다
 
-### 그리고 하나 더 — "스스로 배운다"는 보장된 성질이 아닙니다
+### 그리고 하나 더 — "스스로 배운다"는 보장된 성질이 아니다
 
 <figure className="my-6 text-center">
   <img src="/images/posts/vit-16x16-words/fig_hparam.png" alt="hyperparameter에 따라 달라지는 position embedding 패턴" className="rounded-lg mx-auto" />
@@ -457,6 +472,12 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 **Q. sinusoidal PE를 ViT에 쓰면요?**
 
 Table 8에 직접 비교는 없지만 반대 방향 실험은 원래 트랜스포머 논문에 있습니다. sinusoidal 대신 learned를 썼는데 BLEU 차이가 거의 없었어요. 그리고 sinusoidal을 쓰면 interpolation 문제가 애초에 생기지 않습니다 — 공식이니까 몇 번째 위치든 그냥 계산하면 되거든요.
+
+---
+
+## 앞 글
+
+이 글의 앞 편은 **[Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)** 입니다. sinusoidal positional encoding이 "수식으로 강제한" 성질을, ViT의 learned embedding이 "분류 loss만으로 스스로 배운" 과정과 나란히 놓고 보면 이 논문의 Figure 7이 훨씬 잘 읽힙니다.
 
 ---
 
