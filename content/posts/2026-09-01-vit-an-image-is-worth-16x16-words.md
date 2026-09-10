@@ -7,7 +7,7 @@ tags: ["논문리뷰", "ViT", "Transformer", "컴퓨터비전"]
 description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN이 공짜로 갖고 있던 사전 지식을 전부 걷어낸 트랜스포머가 왜 3억 장 앞에서만 이기는지, 그리고 모델이 스스로 무엇을 되찾았는지 정리했습니다."
 ---
 
-학부 논문 리뷰 세미나에서 발표한 **An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale** (Dosovitskiy et al., ICLR 2021) 리뷰입니다. 발표 대본을 글로 옮기면서, 발표 때 시간에 쫓겨 줄였던 부분을 다시 채워 넣었습니다.
+학부 논문 리뷰 세미나에서 발표한 **An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale** (Dosovitskiy et al., ICLR 2021) 리뷰입니다. 발표 내용을 글로 옮기면서, 발표 때 시간에 쫓겨 줄였던 부분을 다시 채워 넣었습니다.
 
 제목이 좀 장난스럽죠. 그런데 사실 논문 내용을 거의 다 요약하고 있습니다. **이미지를 16×16 패치로 잘라서, 그 패치들을 단어처럼 취급하겠다**는 뜻이거든요.
 
