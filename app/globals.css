@@ -69,12 +69,14 @@ body {
   padding-bottom: 0.5rem; 
   letter-spacing: -0.015em;
 }
-.prose h3 { 
-  font-size: 1.3rem; 
-  font-weight: 600; 
+.prose h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
   color: var(--text-strong);
-  margin: 2rem 0 0.7rem; 
+  margin: 2rem 0 0.7rem;
 }
+/* keep anchor targets clear of the sticky header */
+.prose h2, .prose h3 { scroll-margin-top: 5.5rem; }
 .prose p { 
   margin: 1.1rem 0; 
   color: var(--text); 
