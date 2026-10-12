@@ -8,6 +8,7 @@ const NAV = [
   { href: "/category/공부", label: "공부" },
   { href: "/category/프로젝트", label: "프로젝트" },
   { href: "/category/논문리뷰", label: "논문리뷰" },
+  { href: "/about", label: "About" },
 ];
 
 export default function Header() {
