@@ -4,9 +4,20 @@ import { getAllPosts, type PostMeta } from "@/lib/posts";
 const AFFILIATION = ["세종대학교 소프트웨어학과", "수학통계학과 복수전공", "ISDS Lab"];
 
 const INTERESTS: { name: string; note?: string }[] = [
+  { name: "Class-Imbalanced Learning", note: "Loss Reweighting" },
   { name: "Dynamic Compute" },
   { name: "Efficient Sequence Models", note: "Linear Attention, State Space Models" },
   { name: "Test-Time Training" },
+];
+
+const AWARDS = [
+  {
+    date: "2025-11-29",
+    title: "우수논문상",
+    venue: "한국지능시스템학회(KIIS) 2025년 추계학술대회",
+    paper: "클래스 불균형 학습을 위한 로그 스케일 가중 교차 엔트로피",
+    authors: "고승호, 이현석, 윤진희",
+  },
 ];
 
 function Section({ label, children }: { label: string; children: React.ReactNode }) {
@@ -71,6 +82,24 @@ export default function AboutPage() {
             <li key={name}>
               <span className="text-(--text-strong)">{name}</span>
               {note && <span className="text-(--text-muted)"> ({note})</span>}
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section label="Awards">
+        <ul className="border-y border-(--border) divide-y divide-(--border)">
+          {AWARDS.map((award) => (
+            <li key={`${award.date}-${award.title}`} className="flex items-baseline gap-4 py-3">
+              <span className="font-mono text-xs text-(--text-muted) shrink-0">{award.date}</span>
+              <div className="text-sm leading-relaxed">
+                <div className="text-(--text-strong)">
+                  {award.title} · {award.venue}
+                </div>
+                <div className="text-(--text-muted)">
+                  {award.paper} ({award.authors})
+                </div>
+              </div>
             </li>
           ))}
         </ul>
