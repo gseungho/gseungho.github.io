@@ -1,10 +1,12 @@
-import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { getAllPosts, getPostBySlug, getHeadings } from "@/lib/posts";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
 import Link from "next/link";
+import TableOfContents from "@/components/TableOfContents";
 
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
@@ -13,9 +15,12 @@ export async function generateStaticParams() {
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
+  const headings = getHeadings(post.content);
 
   return (
     <article className="space-y-8">
+      <TableOfContents headings={headings} />
+
       {/* Post Header */}
       <header className="space-y-4">
         <div className="flex items-center gap-3">
@@ -63,7 +68,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           options={{
             mdxOptions: {
               remarkPlugins: [remarkGfm, remarkMath],
-              rehypePlugins: [rehypeKatex, rehypeHighlight],
+              rehypePlugins: [rehypeSlug, rehypeKatex, rehypeHighlight],
             },
           }}
         />
