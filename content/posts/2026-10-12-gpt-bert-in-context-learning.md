@@ -35,7 +35,7 @@ backbone 줄을 보면 BERT만 encoder이고 나머지는 전부 decoder입니�
 
 이 글은 그 화살표를 따라갑니다. task in weights에서 task in context로요.
 
-## GPT-1은 "먼저 읽고 나중에 배우는" recipe를 만들었다
+## GPT-1 — 먼저 읽고, 나중에 배우는 recipe
 
 ### 두 단계이고, 두 번째 단계의 보조 loss가 핵심이다
 
@@ -142,7 +142,7 @@ pre-training update 횟수에 따라 이 zero-shot 성능을 그린 게 위 그�
 물론 GPT-1의 주력 결과는 여전히 fine-tuning입니다. 12개 dataset 중 9개에서 SOTA를 갱신했고
 Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었습니다.
 
-## BERT는 문맥을 양쪽으로 열었지만 fine-tuning은 그대로 뒀다
+## BERT — 문맥은 양쪽으로, fine-tuning은 그대로
 
 ### 왼쪽만 보는 pre-training이 손해를 보는 지점이 있다
 
@@ -234,7 +234,7 @@ representation이 좋을수록 데이터가 부족한 task에서 이득이 큽�
 다만 **BERT도 dataset마다 전체 파라미터를 update합니다.** representation은 더 일반적이 됐지만,
 downstream 적응 방식 자체는 GPT-1과 똑같습니다. task 정보는 여전히 weight에 들어갑니다.
 
-## GPT-2는 task를 weight에서 prompt로 옮겼다
+## GPT-2 — task를 prompt에 적으면?
 
 ### 가설은 한 줄이고, 데이터가 그 가설을 떠받친다
 
@@ -330,7 +330,7 @@ weight update가 없다는 의미에서는 분명히 zero-shot입니다. 하지�
 그래서 GPT-2의 기여는 benchmark 정복이 아닙니다. 고정된 모델 하나가 자연어 지시만으로 여러 task를
 "하기 시작했다"는 방향성입니다.
 
-## GPT-3는 scale을 키우고 예시를 context에 넣었다
+## GPT-3 — scale, 그리고 context 속 예시
 
 ### demonstration은 gradient step이 아니라 attention의 재료다
 
@@ -490,7 +490,7 @@ clean subset과 점수 차이가 0.5% 이내였다고 보고합니다. 정직하
 그래서 GPT-3의 결론은 "fine-tuning은 끝났다"가 아닙니다. **in-context learning이라는 새로운 적응
 방식이 가능해졌다**는 쪽이 정확합니다.
 
-## 네 논문을 잇는 건 구조가 아니라 적응 방식이다
+## 정리
 
 | | GPT-1 | BERT | GPT-2 | GPT-3 |
 |---|---|---|---|---|
@@ -509,7 +509,7 @@ GPT-2와 GPT-3는 decoder를 유지한 채 task를 prompt로 옮깁니다. GPT-2
 정리하면 이렇습니다. **Transformer 구조는 거의 그대로였고, 바뀐 것은 task 설명이 존재하는 위치와
 downstream 학습이 일어나는 시점입니다.**
 
-## 마지막 논문이 두 번째 논문의 문제의식으로 돌아온다
+## GPT-3가 다시 꺼낸 BERT의 질문
 
 흐름이 한 방향으로만 가지는 않습니다. GPT-3 논문의 Limitations 절에 이런 대목이 있습니다.
 
