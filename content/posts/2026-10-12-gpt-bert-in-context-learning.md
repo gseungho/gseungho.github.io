@@ -33,7 +33,7 @@ Transformer 자체는 2017년 이후 거의 바뀌지 않았습니다. 그런데
 backbone 줄을 보면 BERT만 encoder이고 나머지는 전부 decoder입니다. 구조는 거의 안 바뀌었죠.
 정작 달라진 건 아래 두 줄, **task 정보가 weight에 들어가는가 context에 들어가는가**입니다.
 
-이 글은 그 화살표를 따라갑니다. task in weights에서 task in context로요.
+이 글은 그 이동을 따라갑니다. task in weights에서 task in context로요.
 
 ## GPT-1 — 먼저 읽고, 나중에 배우는 recipe
 
@@ -72,7 +72,7 @@ dataset이면 12개 모델입니다.
 
 훨씬 큰 효과는 다른 줄에 있습니다. **pre-training을 빼면 평균이 14.8점 떨어집니다.** LSTM으로
 바꾸면 5.6점이고요. "Transformer가 좋아서인가, pre-training이 좋아서인가"라는 질문에는 이 두
-숫자로 답이 됩니다. 둘 다지만, pre-training 쪽이 세 배쯤 큽니다.
+숫자로 답이 됩니다. 둘 다지만, pre-training 쪽이 두 배 반쯤 큽니다.
 
 ### task가 달라지면 무엇을 바꾸나
 
@@ -205,8 +205,8 @@ MLM은 token의 15%를 예측 대상으로 고르고, 그중 80%는 `[MASK]`로,
 | 0% | 20% | 80% | 83.7 | 94.8 | 94.6 |
 | 0% | 0% | 100% | 83.6 | 94.9 | 94.6 |
 
-MNLI를 fine-tuning으로 풀면 80/10/10이 84.2, 100% `[MASK]`가 84.3입니다. **오히려 미세하게
-낮습니다.** 차이가 드러나는 건 맨 오른쪽 열, BERT를 freeze하고 feature extractor로만 쓰는
+MNLI를 fine-tuning으로 풀면 80/10/10이 84.2, 100% `[MASK]`가 84.3입니다. 80/10/10 쪽이 **오히려
+0.1 낮습니다.** 차이가 드러나는 건 맨 오른쪽 열, BERT를 freeze하고 feature extractor로만 쓰는
 NER에서예요. 94.9 대 94.0으로 거의 1점 벌어집니다.
 
 해석은 자연스럽습니다. fine-tuning을 하면 모델이 mismatch에 **적응할 기회**가 있지만, weight를
@@ -257,8 +257,8 @@ GPT-2는 질문 자체를 바꿉니다. 입력만이 아니라 입력과 **task*
 | **1542M** | **48** | **1600** |
 
 구조에서 하나 바뀐 게 LayerNorm을 각 block의 **입력 쪽으로** 옮긴 겁니다. 흔히 Pre-LN이라고
-부르는 그 변경이 여기서 나왔어요. [ViT 리뷰](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)에서
-ViT가 Pre-LN을 쓴다고 적었는데, 계보를 거슬러 올라가면 GPT-2입니다.
+부르는 배치입니다. [ViT 리뷰](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)에서
+ViT가 Pre-LN을 쓴다고 적었는데, GPT-2가 그보다 먼저 같은 배치를 쓰고 있었습니다.
 
 ### `TL;DR:` — 6.4점짜리 두 토큰
 
@@ -400,7 +400,7 @@ band 폭도 layer 비율도 적혀 있지 않습니다.
   <figcaption className="mt-2 text-sm text-gray-500">Figure 3.8 — 오른쪽은 175B 모델에서 context 내 예시 수 K를 늘린 결과 (Brown et al., 2020)</figcaption>
 </figure>
 
-오른쪽 그래프가 이 논문에서 제일 인상적인 그림 중 하나입니다. $K$를 1에서 8로 늘렸을 때의 향상
+오른쪽 그래프는 이 논문에서 특히 인상적인 그림입니다. $K$를 1에서 8로 늘렸을 때의 향상
 폭이, 점선으로 그어진 **BERT-Large와 BERT++의 차이**와 비슷합니다.
 
 BERT++는 SuperGLUE 전에 MultiNLI 392k와 SWAG 113k로 추가 fine-tuning을 거친 모델입니다. 수십만 건의
@@ -485,7 +485,7 @@ RACE가 더 극적입니다. **175B GPT-3가 이 글 맨 앞에서 본 fine-tune
 
 대신 겹치지 않는 clean subset으로 따로 평가했습니다. LAMBADA는 실제로 contamination이 있었지만
 clean subset과 점수 차이가 0.5% 이내였다고 보고합니다. 정직하게 적어둔 건 좋지만, 숫자를 읽을 때
-머릿속에 두어야 하는 조건인 건 분명합니다.
+염두에 둬야 하는 조건입니다.
 
 그래서 GPT-3의 결론은 "fine-tuning은 끝났다"가 아닙니다. **in-context learning이라는 새로운 적응
 방식이 가능해졌다**는 쪽이 정확합니다.
@@ -506,8 +506,8 @@ GPT-1과 BERT는 backbone도 objective도 다르지만 **dataset마다 weight를
 GPT-2와 GPT-3는 decoder를 유지한 채 task를 prompt로 옮깁니다. GPT-2는 문구와 형식을, GPT-3는
 예시까지 전달합니다.
 
-정리하면 이렇습니다. **Transformer 구조는 거의 그대로였고, 바뀐 것은 task 설명이 존재하는 위치와
-downstream 학습이 일어나는 시점입니다.**
+정리하면 이렇습니다. **Transformer 구조는 거의 그대로였고, 바뀐 것은 task 설명을 어디에 두느냐와
+downstream 학습이 언제 일어나느냐입니다.**
 
 ## GPT-3가 다시 꺼낸 BERT의 질문
 
