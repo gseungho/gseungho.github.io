@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Heading } from "@/lib/posts";
 
 export default function TableOfContents({ headings }: { headings: Heading[] }) {
   const [activeId, setActiveId] = useState<string>("");
+  // only the top-level sections; h3 ids still exist for direct links
+  const items = useMemo(() => headings.filter((h) => h.depth === 2), [headings]);
 
   useEffect(() => {
-    if (headings.length === 0) return;
+    if (items.length === 0) return;
 
-    const nodes = headings
+    const nodes = items
       .map((h) => document.getElementById(h.id))
       .filter((el): el is HTMLElement => el !== null);
     if (nodes.length === 0) return;
@@ -36,28 +38,27 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [headings]);
+  }, [items]);
 
-  if (headings.length < 2) return null;
+  if (items.length < 2) return null;
 
   return (
     <nav
       aria-label="목차"
-      className="hidden xl:block fixed top-28 left-[calc(50%+24rem+2rem)] w-56 max-h-[calc(100vh-10rem)] overflow-y-auto pr-2"
+      className="hidden min-[1340px]:block fixed top-28 right-6 w-52 max-h-[calc(100vh-10rem)] overflow-y-auto"
     >
       <p className="font-mono text-[10px] tracking-widest uppercase text-(--text-muted) mb-3">
         On this page
       </p>
       <ul className="space-y-1 border-l border-(--border)">
-        {headings.map((h) => {
+        {items.map((h) => {
           const active = h.id === activeId;
           return (
             <li key={h.id}>
               <a
                 href={`#${h.id}`}
                 className={[
-                  "block border-l -ml-px py-1 text-xs leading-snug transition-colors duration-200",
-                  h.depth === 3 ? "pl-6" : "pl-3",
+                  "block border-l -ml-px pl-3 py-1 text-xs leading-snug transition-colors duration-200",
                   active
                     ? "border-(--accent) text-(--accent)"
                     : "border-transparent text-(--text-muted) hover:text-(--text)",

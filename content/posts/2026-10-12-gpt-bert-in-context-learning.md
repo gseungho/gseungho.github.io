@@ -27,7 +27,7 @@ Transformer 자체는 2017년 이후 거의 바뀌지 않았습니다. 그런데
 | Backbone | decoder | encoder | decoder | decoder |
 | Pre-training | next token | MLM + NSP | next token | next token |
 | 최대 모델 | 117M | 340M | 1.5B | 175B |
-| **task가 사는 곳** | **weight** | **weight** | **prompt** | **prompt + 예시** |
+| **task 정보 위치** | **weight** | **weight** | **prompt** | **prompt + 예시** |
 | downstream update | 전체 fine-tune | 전체 fine-tune | 없음 | 없음 |
 
 backbone 줄을 보면 BERT만 encoder이고 나머지는 전부 decoder입니다. 구조는 거의 안 바뀌었죠.
