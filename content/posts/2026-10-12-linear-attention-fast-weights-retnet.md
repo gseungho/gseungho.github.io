@@ -295,7 +295,7 @@ $\beta^{(i)}$는 그 시점 이후의 모든 loss에서 신호를 받습니다.
 
 state 크기는 그대로입니다. 용량이 늘어난 게 아니라 **관리되기 시작한** 겁니다.
 
-### 같은 key에 새 값이 올 때
+### 같은 key의 값을 갱신하는 실험
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig3.png" alt="update 규칙별 학습 곡선" className="rounded-lg mx-auto max-w-xl" />
@@ -316,7 +316,7 @@ weight 모델입니다. 범례의 "Schlag (2021)"은 이 논문이 아니라 같
 softmax attention에는 갱신이라는 개념이 없습니다. 논문의 표현대로 key와 value 쌍을 바꿀 수 없는
 채로 이어 붙일 뿐이에요. 고정 크기 memory는 그럴 수 없어서 갱신 규칙이 있어야 합니다.
 
-## RetNet: 과거 정보의 기여를 줄이는 메모리
+## RetNet: 오래된 정보를 감쇠시키는 메모리
 
 ### 감쇠 계수 γ와 기억 범위
 
@@ -368,7 +368,7 @@ $V_m$들의 가중합이고, 가중치가 "내용으로 정해지는 값"과 "�
 감쇠입니다. softmax의 mask는 볼 수 있느냐 없느냐 둘 중 하나인데, $D$는 "볼 수는 있지만 멀수록
 흐리게"를 표현합니다.
 
-### 같은 함수, 세 가지 계산 방식
+### 병렬·재귀·청크 단위 계산
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/ret_dual.png" alt="RetNet의 병렬 형태와 재귀 형태" className="rounded-lg mx-auto" />
