@@ -1,5 +1,5 @@
 import { getAllPosts, getAllCategories } from "@/lib/posts";
-import PostCard from "@/components/PostCard";
+import FolderTree from "@/components/FolderTree";
 
 export async function generateStaticParams() {
   const defaultCategories = ["공부", "프로젝트", "논문리뷰", "창업일지"];
@@ -43,21 +43,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
     );
   }
 
-  // Group by subcategory; posts without subcategory go under "일반"
-  const groups = new Map<string, typeof posts>();
-  for (const post of posts) {
-    const key = (post.subcategory ?? "일반").normalize("NFC");
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key)!.push(post);
-  }
-
-  // Sort keys: "일반" (General) first, then alphabetically
-  const sortedKeys = [...groups.keys()].sort((a, b) => {
-    if (a === "일반") return -1;
-    if (b === "일반") return 1;
-    return a.localeCompare(b);
-  });
-
   return (
     <div className="space-y-10">
       {/* Category Header Band */}
@@ -76,22 +61,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
         <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
       </section>
 
-      {/* Posts Section */}
-      <section className="space-y-10">
-        {sortedKeys.map((key) => (
-          <div key={key || "__root__"}>
-            <div className="mb-4">
-              <span className="font-mono text-xs text-(--text-muted)">~/</span>
-              <span className="font-mono text-sm text-(--accent)">{key.replace(/\//g, " / ")}</span>
-              <div className="mt-2 border-b border-(--border) w-full" />
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {groups.get(key)!.map((post) => (
-                <PostCard key={post.slug} post={post} />
-              ))}
-            </div>
-          </div>
-        ))}
+      {/* Folder tree built from each post's subcategory path */}
+      <section>
+        <FolderTree posts={posts} />
       </section>
     </div>
   );

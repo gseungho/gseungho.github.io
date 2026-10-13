@@ -225,6 +225,12 @@ body {
   color: var(--text);
 }
 
+/* Folder tree on category pages: hide the native marker, turn our chevron when open */
+.folder > summary { list-style: none; cursor: pointer; }
+.folder > summary::-webkit-details-marker { display: none; }
+.folder > summary .folder-chevron { transition: transform 150ms ease; }
+.folder[open] > summary .folder-chevron { transform: rotate(90deg); }
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
