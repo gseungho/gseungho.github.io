@@ -2,7 +2,7 @@
 title: "GPT-1 · BERT · GPT-2 · GPT-3 — 모델은 무슨 task인지 어디서 아는가"
 date: "2026-10-12"
 category: "논문리뷰"
-subcategory: "Deep Learning/Language Model"
+subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "GPT", "BERT", "In-Context Learning"]
 description: "GPT-1과 BERT의 미세조정에서 GPT-2와 GPT-3의 프롬프트 기반 적응으로 이어지는 변화를 구조, 학습 목적, 평가 결과로 비교했습니다."
 ---

@@ -2,7 +2,7 @@
 title: "Linear Attention · Fast Weight · RetNet — 크기가 고정된 memory에 어떻게 쓸 것인가"
 date: "2026-10-12"
 category: "논문리뷰"
-subcategory: "Deep Learning/Linear Attention"
+subcategory: "Deep Learning/Sequence Models"
 tags: ["논문리뷰", "Linear Attention", "Fast Weight", "RetNet"]
 description: "Linear Attention, Fast Weight와 RetNet의 고정 크기 상태를 비교하고, 정보의 누적·갱신·감쇠와 delta rule의 경사하강법 해석을 정리했습니다."
 ---
