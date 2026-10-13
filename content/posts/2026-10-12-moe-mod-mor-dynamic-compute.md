@@ -166,7 +166,7 @@ Switch가 보여준 건 이겁니다. **파라미터 수와 계산량은 따로 
 
 ## MoD: 일부 토큰만 block에 통과시키기
 
-### 통과하거나, 건너뛰거나
+### 블록을 건너뛰는 방식과 early-exit의 차이
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig1.png" alt="Mixture-of-Depths 구조와 routing 결과" className="rounded-lg mx-auto" />
@@ -219,7 +219,7 @@ ACT(Adaptive Computation Time)처럼 계산량 자체가 입력마다 달라지�
 되어 지금의 하드웨어와 잘 맞지 않는다는 게 논문의 진단입니다. MoD는 예산을 못 박아서 이 문제를
 피합니다.
 
-### token이 고르나, block이 고르나
+### Token-choice와 expert-choice의 차이
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig2.png" alt="token-choice와 expert-choice routing" className="rounded-lg mx-auto" />
@@ -267,7 +267,7 @@ cross-entropy를 겁니다. 뽑힌 token의 점수는 sigmoid 기준 0.5 위로,
 학습된 모델의 router 점수 분포를 보면 약 12.5%가 0.5 위, 87.5%가 아래에 놓입니다. 보조 loss가
 의도한 대로입니다.
 
-### 얼마나 건너뛰어도 되나
+### 블록 생략 비율에 따른 성능 비교
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig3.png" alt="MoD hyperparameter 탐색 결과" className="rounded-lg mx-auto" />
@@ -352,7 +352,7 @@ Sequence 계열이 뚜렷하게 나쁩니다. 같은 변환을 연달아 적용�
 좋았습니다. 논문도 최적의 공유 방식은 열린 문제라고 적습니다. 이후 실험은 전부 Middle-Cycle을
 씁니다.
 
-### 몇 번 돌릴지는 누가 정하나
+### Router로 토큰별 반복 횟수 정하기
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig1.png" alt="Mixture-of-Recursions 개요" className="rounded-lg mx-auto" />
