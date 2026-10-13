@@ -1,10 +1,10 @@
 ---
-title: "MoE · MoD · MoR — 모든 token에 같은 계산을 써야 하는가"
+title: "MoE·MoD·MoR: 토큰별 계산 경로와 계산량 조절"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Dynamic Compute"
 tags: ["논문리뷰", "Mixture-of-Experts", "Mixture-of-Depths", "Mixture-of-Recursions"]
-description: "세 논문 모두 router를 하나 붙이는데, 그 router가 정하는 것이 다릅니다. 어떤 weight를 쓸지, 계산을 할지 말지, 몇 번 반복할지. 앞 논문의 해법이 다음 논문의 문제가 되는 과정을 식과 숫자로 따라갔습니다."
+description: "MoE의 expert 선택, MoD의 block 생략, MoR의 반복 횟수 조절을 비교하고 각 routing 방식의 학습 방법과 제약을 살펴봤습니다."
 ---
 
 dense Transformer는 모든 token을 똑같이 다룹니다. "the" 같은 흔한 단어든 처음 보는 고유명사든 같은
@@ -13,7 +13,7 @@ weight로, 같은 수의 layer를 전부 통과시키죠. 예측하기 쉬운 �
 
 이 글이 따라가는 질문은 하나입니다.
 
-> **모든 token에 같은 계산을 써야 하는가?**
+> **모든 토큰에 같은 계산량이 필요한가?**
 
 세 논문은 모두 **router**라는 작은 부품을 붙여서 이 질문에 답합니다. 그런데 router에게 맡기는 결정이
 서로 다릅니다. MoE는 **어떤 weight**를 쓸지를, MoD는 **계산을 할지 말지**를, MoR은 **몇 번
@@ -25,7 +25,7 @@ weight로, 같은 수의 layer를 전부 통과시키죠. 예측하기 쉬운 �
 MoE는 처음 제안한 Shazeer et al. (2017)보다, Transformer에 맞게 단순화한 Switch Transformer
 (Fedus et al., 2022)를 기준으로 봅니다.
 
-## router가 정하는 것 세 가지
+## 세 방식에서 router가 정하는 것
 
 | | token마다 달라지는 것 | token당 FLOPs | 전체 파라미터 |
 |---|---|---|---|
@@ -113,11 +113,11 @@ router가 한 expert에 그보다 많이 보내면 넘칩니다. 논문은 이 �
 
 > 계산을 건너뛰고 token 표현을 residual connection으로 다음 layer에 그대로 넘긴다.
 
-**넘친 token은 그 layer의 FFN 계산을 받지 못합니다.** Switch 입장에서는 피하고 싶은 부작용이에요.
+**용량을 넘긴 token은 그 layer의 FFN을 통과하지 않습니다.** Switch 입장에서는 피하고 싶은 부작용이에요.
 capacity factor를 키우면 덜 넘치지만 빈 자리에 쓰는 계산과 메모리가 늘어납니다. 논문은 실험
 전반에서 넘치는 비율이 보통 1% 미만이었다고 보고합니다.
 
-이 "계산 없이 residual로 지나가는 token"을 기억해 두세요. 뒤에서 MoD가 바로 이 동작을 설계의
+이 경우 token은 FFN 계산 없이 residual 경로로 지나갑니다. 뒤에서 MoD가 바로 이 동작을 설계의
 중심으로 가져갑니다.
 
 ### 한쪽으로 쏠리지 않게 하는 loss
@@ -148,7 +148,7 @@ $$\sum_{i=1}^{N} P_i^2 \;\ge\; \frac{1}{N}$$
 계수는 $\alpha = 10^{-2}$입니다. 논문은 $10^{-1}$부터 $10^{-5}$까지 시험했고 이 값이 본래의 loss를
 방해하지 않으면서 빠르게 균형을 잡았다고 적습니다.
 
-### 같은 FLOPs, 7분의 1 시간
+### 같은 품질에 도달하는 학습 시간 비교
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig5.png" alt="학습 시간에 따른 Switch-Base와 T5-Base의 품질" className="rounded-lg mx-auto max-w-md" />
@@ -161,10 +161,10 @@ example당 FLOPs를 맞춘 비교에서, expert 64개를 쓴 Switch-Base는 T5-B
 Switch가 보여준 건 이겁니다. **파라미터 수와 계산량은 따로 움직일 수 있습니다.** expert를 늘리면
 모델은 커지는데 token당 계산은 그대로니까요.
 
-다만 처음 질문으로 돌아가 보면 달라진 게 없습니다. 쉬운 token도 어려운 token도 **정확히 같은 양의
-계산**을 받습니다. 계산량을 token마다 다르게 쓰는 건 다음 논문부터입니다.
+다만 처음 질문으로 돌아가 보면 달라진 게 없습니다. 쉬운 token과 어려운 token 모두 **같은 양의
+계산**을 수행합니다. 계산량을 token마다 다르게 쓰는 건 다음 논문부터입니다.
 
-## MoD — block을 건너뛰는 token
+## MoD: 일부 토큰만 block에 통과시키기
 
 ### 통과하거나, 건너뛰거나
 
@@ -244,9 +244,9 @@ token이 넘치게 두는 쪽보다 분명히 좋았습니다. 저자들의 해�
 > token이 residual 경로를 **스스로 고르도록 배우는 것**과, 원하는 expert가 있었는데 **밀려나는 것**은
 > 다르다.
 
-같은 "계산 없이 지나감"이라도 학습된 결정이냐 사고냐에 따라 결과가 달라진다는 얘기입니다.
+같은 "계산 없이 지나감"이라도 학습으로 선택한 경로인지 용량 제한으로 밀려난 것인지에 따라 결과가 달라진다는 얘기입니다.
 
-### top-k는 미래를 본다
+### 전체 시퀀스의 순위를 생성에 사용할 때 생기는 문제
 
 expert-choice에는 대가가 있습니다. top-$k$는 **sequence 전체**의 점수를 놓고 순위를 매깁니다. 학습할
 때는 문장 전체가 주어지니 문제가 없지만 생성할 때는 다릅니다. 네 번째 token을 만드는 시점에 다섯
@@ -290,7 +290,7 @@ token이 참여하는 block이 자주 있기만 하면 capacity는 과감하게 
 두 번째가 중요합니다. 계산을 줄인 것 자체가 좋은 게 아닙니다. **무엇을 줄일지를 학습했기 때문에**
 손해가 없는 겁니다.
 
-### 계산을 받는 token
+### 어떤 토큰에 계산을 더 배정하나
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig5.png" alt="MoD의 routing 결정과 router 점수 분포" className="rounded-lg mx-auto" />
@@ -306,7 +306,7 @@ entropy가 높았다**고 보고합니다. 다음 token을 맞히기 어려운 �
 다만 논문 스스로 "preliminary analyses"라고 단서를 달았습니다. 수치나 그림으로 제시된 결과가
 아니어서 확인된 사실로 받아들이기는 이릅니다.
 
-## MoR — 같은 block을 몇 번 돌릴 것인가
+## MoR: 토큰마다 block 반복 횟수 조절하기
 
 ### block 하나를 반복해서 쓰기
 
@@ -409,7 +409,7 @@ few-shot 평균은 LAMBADA, HellaSwag, PIQA, WinoGrande, ARC, MMLU 여섯 벤치
 가져와서 balancing loss가 필요합니다. expert-choice는 MoD가 겪은 문제를 가져옵니다. top-$k$가
 non-causal이라 보조 loss나 보조 router가 있어야 하죠.
 
-### 일찍 빠진 token의 KV는 어떻게 하나
+### 반복을 일찍 끝낸 토큰의 KV cache
 
 MoR에만 있는 문제가 하나 더 생깁니다. 생성할 때는 이전 token들의 key와 value를 cache해 두고 씁니다.
 그런데 어떤 token이 첫 단계에서 빠졌다면 그 token의 둘째, 셋째 단계 key와 value는 **계산된 적이
@@ -437,7 +437,7 @@ $k/N_{\text{ctx}}$만큼만 줄어들고요.
 
 성능도 recursion-wise caching이 조금 낫습니다. 본 실험은 이 방식을 씁니다.
 
-### 파라미터 절반, 더 낮은 loss
+### 파라미터 수와 학습 비용을 맞춘 성능 비교
 
 논문의 Table 3에서 핵심 행을 옮겼습니다.
 
@@ -471,7 +471,7 @@ NLL이 2.7749로 vanilla의 2.7824보다 낮습니다. 논문은 이 설정에�
 2.8079입니다. block을 재사용하는 구조 안에서는 token마다 반복 횟수를 다르게 하는 쪽이 낫다는
 것까지는 분명합니다.
 
-### 규모와 속도 — 단서 두 가지
+### 모델 규모별 성능과 속도 측정의 조건
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig3.png" alt="모델 크기별 validation loss" className="rounded-lg mx-auto" />
@@ -500,7 +500,7 @@ MoR이 이번에도 token을 더 봤는데도(26B 대 20B) 그렇습니다. 저�
 이유예요. 그런데 MoR의 KV cache는 단계마다 길이가 달라 다루기가 까다롭습니다. 실제 배포 속도는
 2.06배보다 낮을 수 있습니다.
 
-## 해법이 다음 문제를 만든다
+## Routing 방식마다 다른 제약
 
 세 논문을 나란히 놓으면 이렇습니다.
 
@@ -534,12 +534,12 @@ token과 아닌 token의 router 출력이 거의 완전히 갈라져서, **학�
 - **MoD**는 미리 정한 예산 안에서 token이 block을 건너뛰게 했습니다
 - **MoR**은 block 하나를 재사용하면서 token마다 반복 횟수를 다르게 했습니다
 
-같은 router가 세 가지 다른 질문에 답합니다. 어떤 weight를 쓸지, 계산을 할지 말지, 몇 번 반복할지.
+세 방식에서 router가 정하는 것은 서로 다릅니다. 어떤 weight를 쓸지, 계산을 할지 말지, 몇 번 반복할지.
 
 처음 질문의 답은 "아니다"에 가깝습니다. MoD에서는 token의 87.5%가 절반의 block을 건너뛰어도 loss가
 같았고, MoR은 FLOPs를 25% 줄이고도 더 낮은 loss를 냈습니다.
 
-다만 근거의 무게는 같지 않습니다. "어려운 token에 계산을 더 쓴다"는 MoD의 관찰은 예비 분석이고,
+각 결과가 확인된 조건은 다릅니다. "어려운 token에 계산을 더 쓴다"는 MoD의 관찰은 예비 분석이고,
 MoR의 우위는 $N_r = 2$와 중간 규모에서 확인된 것이며 1.7B에서는 뒤집혔습니다.
 
 그리고 세 논문은 데이터도 모델도 평가 지표도 달라서 숫자를 서로 비교할 수 없습니다. 이 글에서
@@ -547,9 +547,9 @@ MoR의 우위는 $N_r = 2$와 중간 규모에서 확인된 것이며 1.7B에서
 
 ## 이어지는 글
 
-- [GPT-1 · BERT · GPT-2 · GPT-3 — 모델은 무슨 task인지 어디서 아는가](/posts/2026-10-12-gpt-bert-in-context-learning)
-- [Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
-- [ViT 리뷰 — inductive bias는 데이터로 대체할 수 있는가](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
+- [GPT-1부터 GPT-3까지: 미세조정에서 In-Context Learning으로](/posts/2026-10-12-gpt-bert-in-context-learning)
+- [Attention Is All You Need: 공부하며 남긴 질문들](/posts/2026-09-01-attention-is-all-you-need)
+- [ViT: 데이터 규모와 inductive bias의 관계](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
 
 ## 참고문헌
 
