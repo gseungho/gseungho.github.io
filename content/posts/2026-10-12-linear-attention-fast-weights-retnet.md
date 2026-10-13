@@ -1,5 +1,5 @@
 ---
-title: "Linear Attention·Fast Weight·RetNet: 고정 크기 메모리에 정보를 저장하는 방법"
+title: "Linear Attention · Fast Weight · RetNet — 크기가 고정된 memory에 어떻게 쓸 것인가"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Linear Attention"
@@ -78,7 +78,7 @@ gradient가 0이 되는 걸 피하려고요.
 주장하지 않습니다. 오히려 exp kernel에 대응하는 feature map은 무한 차원이라 softmax를 정확히
 선형화할 수는 없다고 적습니다. 그 근사를 시도한 것이 Performer입니다.
 
-### 괄호를 옮기면 N²이 사라진다
+### 행렬곱의 순서와 계산 복잡도
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/perf_fig1.png" alt="attention 행렬을 만들지 않고 계산하는 순서" className="rounded-lg mx-auto" />
@@ -98,7 +98,7 @@ $V$를 곱합니다. 오른쪽은 $\phi(K)^\top V$라는 $d \times d$ 행렬을 
 softmax에서는 이 괄호를 옮길 수 없습니다. $\exp(q^\top k)$가 $q$만의 함수와 $k$만의 함수의 유한
 차원 내적으로 나뉘지 않기 때문입니다. $\phi(q)^\top\phi(k)$는 처음부터 나뉘어 있죠.
 
-### causal mask를 걸면 왜 RNN이 되나
+### Causal linear attention의 재귀식
 
 언어 모델은 causal mask를 씁니다. $i$번째 token은 자기까지만 봅니다. 그러면 합의 범위가
 $j \le i$로 줄어듭니다.
@@ -139,7 +139,7 @@ RNN의 조건은 둘입니다. 다음 상태가 **직전 상태와 지금 입력
 병렬로 하고 생성만 RNN처럼** 할 수 있습니다. tanh가 끼어 있는 보통의 RNN은 앞 step을 끝내야 다음
 step을 시작할 수 있죠.
 
-### state S는 무엇을 담고 있나
+### 상태 행렬 S에 저장되는 정보
 
 $S$를 풀어 쓰면 바깥곱(outer product)의 합입니다.
 
@@ -240,7 +240,7 @@ $d_{\text{dot}}$을 넘는 상태를 overcapacity라고 부릅니다.
 softmax에는 이 한계가 없습니다. 저장 공간이 자라니까요. 저장 공간을 고정한 대신 정보 간 간섭이 생기는 것입니다.
 고정 크기 state는 속도를 위한 트릭이기 전에 **기억할 수 있는 양의 상한**입니다.
 
-### 실험으로 보이는 용량 한계
+### 저장한 key 수에 따른 검색 성능
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig2.png" alt="저장한 key 수에 따른 retrieval loss" className="rounded-lg mx-auto max-w-xl" />
@@ -260,7 +260,7 @@ softmax에는 이 한계가 없습니다. 저장 공간이 자라니까요. 저�
 
 앞 절의 논증이 그림 한 장에 그대로 나타납니다.
 
-### delta rule — 읽고 지운 다음 쓰기
+### Delta rule로 저장된 값 갱신하기
 
 논문은 쓰는 규칙을 바꾸자고 제안합니다. 식 (20)부터 (24)입니다.
 
@@ -318,7 +318,7 @@ softmax attention에는 갱신이라는 개념이 없습니다. 논문의 표현
 
 ## RetNet: 과거 정보의 기여를 줄이는 메모리
 
-### 매 step 곱해지는 γ
+### 감쇠 계수 γ와 기억 범위
 
 Retentive Network (Sun et al., 2023)는 같은 문제에 다른 답을 냅니다. 논문의 식 (6)입니다.
 
@@ -338,7 +338,7 @@ $$\gamma = 1 - 2^{-5 - \text{arange}(0,\, h)}$$
 거리로 바꾸면 각각 약 22, 44, 88 token이에요. 가까운 문맥을 보는 head와 먼 문맥을 보는 head를
 섞어 두는 셈입니다.
 
-### D는 어디서 나오나
+### 재귀식에서 감쇠 행렬 D 유도하기
 
 RetNet은 같은 계산을 병렬 형태로도 씁니다. 논문의 식 (5)입니다.
 
@@ -506,9 +506,9 @@ RetNet의 표에 기호로만 나옵니다. 그 이유는 두 논문의 설명�
 
 ## 이어지는 글
 
-- [MoE·MoD·MoR: 토큰별 계산 경로와 계산량 조절](/posts/2026-10-12-moe-mod-mor-dynamic-compute)
-- [GPT-1부터 GPT-3까지: 미세조정에서 In-Context Learning으로](/posts/2026-10-12-gpt-bert-in-context-learning)
-- [Attention Is All You Need: 공부하며 남긴 질문들](/posts/2026-09-01-attention-is-all-you-need)
+- [MoE · MoD · MoR — 모든 token에 같은 계산을 써야 하는가](/posts/2026-10-12-moe-mod-mor-dynamic-compute)
+- [GPT-1 · BERT · GPT-2 · GPT-3 — 모델은 무슨 task인지 어디서 아는가](/posts/2026-10-12-gpt-bert-in-context-learning)
+- [Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
 
 ## 참고문헌
 

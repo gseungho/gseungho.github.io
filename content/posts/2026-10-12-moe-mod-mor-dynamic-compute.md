@@ -1,5 +1,5 @@
 ---
-title: "MoE·MoD·MoR: 토큰별 계산 경로와 계산량 조절"
+title: "MoE · MoD · MoR — 모든 token에 같은 계산을 써야 하는가"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Dynamic Compute"
@@ -25,7 +25,7 @@ weight로, 같은 수의 layer를 전부 통과시키죠. 예측하기 쉬운 �
 MoE는 처음 제안한 Shazeer et al. (2017)보다, Transformer에 맞게 단순화한 Switch Transformer
 (Fedus et al., 2022)를 기준으로 봅니다.
 
-## 세 방식에서 router가 정하는 것
+## MoE·MoD·MoR의 routing 비교
 
 | | token마다 달라지는 것 | token당 FLOPs | 전체 파라미터 |
 |---|---|---|---|
@@ -41,9 +41,9 @@ MoR부터입니다. MoR은 block을 재사용하기까지 해서 파라미터가
 그러니까 MoE는 처음 질문의 답이 아니라 **출발점**입니다. router라는 부품과 그 학습 방법이
 MoE에서 나왔고 뒤의 두 논문이 그걸 가져다 다른 결정에 씁니다. 그래서 MoE부터 봅니다.
 
-## MoE — token마다 다른 FFN
+## MoE: 토큰마다 다른 FFN 선택하기
 
-### FFN N개 중 하나만
+### 여러 expert 중 하나만 선택하는 Switch Transformer
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig2.png" alt="Switch Transformer encoder block" className="rounded-lg mx-auto" />
@@ -93,7 +93,7 @@ $j \neq i^\ast$여도 0이 아니죠. 그래서 $W_r$의 모든 행이 gradient�
 Shazeer et al. (2017)은 expert를 둘 이상 비교해야 routing이 학습될 거라고 추측했습니다. Switch는
 $k = 1$로도 품질이 유지된다는 걸 실험으로 보였고요.
 
-### 넘친 token은 어디로 가나
+### Expert 용량을 초과한 토큰의 처리
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig3.png" alt="capacity factor에 따른 token routing" className="rounded-lg mx-auto" />
@@ -120,7 +120,7 @@ capacity factor를 키우면 덜 넘치지만 빈 자리에 쓰는 계산과 메
 이 경우 token은 FFN 계산 없이 residual 경로로 지나갑니다. 뒤에서 MoD가 바로 이 동작을 설계의
 중심으로 가져갑니다.
 
-### 한쪽으로 쏠리지 않게 하는 loss
+### Expert 간 부하를 맞추는 보조 손실
 
 router를 language model loss만으로 학습시키면 몇몇 expert만 계속 고릅니다. 많이 뽑힌 expert가 더
 빨리 좋아지고, 좋아진 만큼 더 뽑히니까요. 그래서 보조 loss를 더합니다. 논문의 식 (4)부터
@@ -185,7 +185,7 @@ layer를 전부 건너뜁니다. 한 번 빠지면 돌아오지 않죠. MoD의 t
 **뒤쪽 block에 다시 들어올 수 있습니다.** 논문은 이 점을 early-exit 방식과 구별되는 특징으로
 듭니다.
 
-### top-C — 예산을 먼저 정하는 routing
+### 처리할 토큰 수를 미리 정하는 top-C routing
 
 어떤 token을 통과시킬지는 top-$k$로 정합니다. layer $l$에서 router가 token마다 scalar 점수를 냅니다.
 
@@ -246,7 +246,7 @@ token이 넘치게 두는 쪽보다 분명히 좋았습니다. 저자들의 해�
 
 같은 "계산 없이 지나감"이라도 학습으로 선택한 경로인지 용량 제한으로 밀려난 것인지에 따라 결과가 달라진다는 얘기입니다.
 
-### 전체 시퀀스의 순위를 생성에 사용할 때 생기는 문제
+### 생성 중에는 알 수 없는 top-k 순위
 
 expert-choice에는 대가가 있습니다. top-$k$는 **sequence 전체**의 점수를 놓고 순위를 매깁니다. 학습할
 때는 문장 전체가 주어지니 문제가 없지만 생성할 때는 다릅니다. 네 번째 token을 만드는 시점에 다섯
@@ -325,7 +325,7 @@ weight를 두는 대신 **같은 layer 묶음을 $N_r$번 반복**해서 통과�
 
 층 하나가 약 9.8M이니 17층이면 167M, 12층이면 118M으로 맞아떨어집니다.
 
-### 공유 방식 네 가지, 그리고 Middle-Cycle
+### 네 가지 가중치 공유 방식 비교
 
 어느 layer를 어떻게 공유할지는 정해진 답이 없습니다. 논문은 네 가지를 비교합니다. 9층을 3번
 반복하는 경우로 적으면,
@@ -547,9 +547,9 @@ MoR의 우위는 $N_r = 2$와 중간 규모에서 확인된 것이며 1.7B에서
 
 ## 이어지는 글
 
-- [GPT-1부터 GPT-3까지: 미세조정에서 In-Context Learning으로](/posts/2026-10-12-gpt-bert-in-context-learning)
-- [Attention Is All You Need: 공부하며 남긴 질문들](/posts/2026-09-01-attention-is-all-you-need)
-- [ViT: 데이터 규모와 inductive bias의 관계](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
+- [GPT-1 · BERT · GPT-2 · GPT-3 — 모델은 무슨 task인지 어디서 아는가](/posts/2026-10-12-gpt-bert-in-context-learning)
+- [Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
+- [ViT 리뷰 — inductive bias는 데이터로 대체할 수 있는가](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
 
 ## 참고문헌
 

@@ -1,5 +1,5 @@
 ---
-title: "ViT: 데이터 규모와 inductive bias의 관계"
+title: "ViT 리뷰 — inductive bias는 데이터로 대체할 수 있는가"
 date: "2026-09-01"
 category: "논문리뷰"
 subcategory: "Deep Learning/Vision Transformer"
@@ -81,7 +81,7 @@ patch_embed = nn.Conv2d(3, D, kernel_size=16, stride=16)
 
 커널 크기와 stride를 둘 다 패치 크기로 맞추면 패치끼리 겹치지 않고 딱 잘리거든요. 수학적으로 완전히 같습니다.
 
-### 2단계 — Linear Projection of Flattened Patches
+### 2단계 — 패치 임베딩
 
 Figure 1의 분홍색 박스에 "Linear Projection of Flattened Patches"라고 적혀 있는데, **이게 patch embedding입니다.** 같은 변환을 가리킵니다. 저는 처음에 이게 patch embedding 앞에 오는 별도 단계인 줄 알았는데 아니었습니다.
 
@@ -93,7 +93,7 @@ Figure 1의 분홍색 박스에 "Linear Projection of Flattened Patches"라고 �
 
 여기서 입출력 차원이 같다고 변환이 없는 것은 아닙니다. ViT-B/16은 우연히 $16^2 \times 3 = 768$이고 $D$도 768이라 입출력 차원이 똑같습니다. "그냥 통과시키는 거 아닌가" 싶지만 우연의 일치일 뿐이고 여전히 학습되는 선형변환이에요. ViT-L/16을 보면 768 → 1024로 명확히 바뀝니다.
 
-### 3단계 — CLS 토큰과 position embedding
+### 3단계 — CLS 토큰과 위치 임베딩
 
 논문의 식 (1)입니다.
 
@@ -123,7 +123,7 @@ CLS는 다른 접근입니다. **정보가 하나도 없는 빈 슬롯**을 앞�
 
 둘 다 "앞에 붙이는 특수 토큰"이라 비슷해 보이지만 역할이 완전히 다릅니다.
 
-### 4단계 — Encoder
+### 4단계 — Transformer encoder
 
 식 (2), (3), (4)입니다.
 
@@ -149,7 +149,7 @@ Base와 Large는 **BERT의 설정을 그대로 가져온 것**이고 Huge만 새
 
 모델 이름의 표기도 살펴보겠습니다. ViT-L/16은 "Large 크기 + 패치 16×16"입니다. 그리고 시퀀스 길이는 패치 크기의 제곱에 반비례하니까, /16이 /32보다 패치가 4배 많고 훨씬 비쌉니다.
 
-## vanilla 트랜스포머와 달라진 여섯 곳
+## 원래 Transformer와 달라진 여섯 가지
 
 | | 2017 Transformer | ViT |
 |---|---|---|
@@ -288,11 +288,11 @@ Figure 4도 같은 얘기입니다. **ResNet은 작은 데이터에서 더 좋�
 
 **충분한 스케일에서는 inductive bias를 넣어줘도 아무 이득이 없습니다.** 학습이 이미 그걸 대체하고 있는 거예요. 논문도 이 결과를 "somewhat surprising"이라고 표현합니다. conv의 지역적 특징 추출이 어떤 크기에서든 도움이 될 거라고 예상했을 텐데, 그렇지 않았다는 거죠.
 
-## 그럼 ViT는 뭘 스스로 배웠나
+## ViT가 학습한 이미지의 공간 구조
 
 앞 절에서 "학습이 대체하고 있다"고 했는데, 정말 그런지 논문이 직접 들여다봅니다.
 
-### 1. Attention distance로 본 국소·전역 정보 활용
+### 1. Attention이 보는 범위
 
 **attention distance**는 CNN의 receptive field에 대응하는 지표입니다. attention weight로 가중한, query 패치와 key 패치 사이의 평균 픽셀 거리예요. 작으면 "가까운 것만 본다", 크면 "멀리까지 본다"는 뜻입니다.
 
@@ -365,7 +365,7 @@ convolution의 locality를 전혀 주지 않았는데 **CNN 초기 layer가 수�
 
 왼쪽 곡선을 자세히 보시면 중간중간 살짝 출렁이는 구간이 있는데, 가장 빠른 주파수 성분이 주기를 한 바퀴 돌면서 생기는 aliasing입니다. 256개 주파수가 겹쳐서 대부분 상쇄돼요.
 
-## 그럼 2D를 알려주면 좋아지나
+## 2D 위치 정보를 명시하면 성능이 좋아질까
 
 바로 나오는 질문입니다. "어차피 배울 거면, 아예 2D 구조를 알려주면 더 빨리 배우지 않을까?" 논문이 Appendix D.4에서 실험했습니다.
 
@@ -424,7 +424,7 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 
 이 결과에서는 **대규모 데이터가 이미지에 대한 사전 가정의 부족을 보완합니다.** 둘 중 하나는 있어야 하는데, 3억 장이 있으면 구조에 박아둘 필요가 없다는 거죠.
 
-### 남는 약점 세 가지
+### 실험 결과를 해석할 때의 한계
 
 - **JFT-300M은 구글 내부 비공개 데이터셋입니다.** 이 논문의 핵심 결과를 **외부에서 재현할 수 없습니다.** 논문 리뷰 관점에서 이건 꽤 큰 문제예요
 - **Table 2의 비교는 통제되지 않았습니다.** optimizer, 스케줄, weight decay가 전부 다릅니다
@@ -461,7 +461,7 @@ Table 8에 직접 비교는 없지만 반대 방향 실험은 원래 트랜스�
 
 ## 앞 글
 
-이 글의 앞 편은 **[Attention Is All You Need: 공부하며 남긴 질문들](/posts/2026-09-01-attention-is-all-you-need)** 입니다. sinusoidal positional encoding이 "수식으로 강제한" 성질을, ViT의 learned embedding이 "분류 loss만으로 스스로 배운" 과정과 나란히 놓고 보면 이 논문의 Figure 7이 훨씬 잘 읽힙니다.
+이 글의 앞 편은 **[Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)** 입니다. sinusoidal positional encoding이 "수식으로 강제한" 성질을, ViT의 learned embedding이 "분류 loss만으로 스스로 배운" 과정과 나란히 놓고 보면 이 논문의 Figure 7이 훨씬 잘 읽힙니다.
 
 ---
 
