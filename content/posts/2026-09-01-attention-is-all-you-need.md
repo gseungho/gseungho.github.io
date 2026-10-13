@@ -1,5 +1,5 @@
 ---
-title: "Attention Is All You Need: 공부하며 남긴 질문들"
+title: "Attention Is All You Need — 설명이 항상 멈추는 자리들"
 date: "2026-09-01"
 category: "논문리뷰"
 subcategory: "Deep Learning/Transformer"
@@ -26,10 +26,10 @@ description: "위치 인코딩, Q·K·V의 학습, attention scaling과 LayerNor
 head $h=8$개, $d_k=d_v=64$, 파라미터 65M입니다.
 
 이 논문을 먼저 읽고 그다음에 ViT를 읽었습니다. 이어지는 글은
-[ViT: 데이터 규모와 inductive bias의 관계](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)에
+[ViT 리뷰 — inductive bias는 데이터로 대체할 수 있는가](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)에
 있습니다.
 
-## 위치 정보를 왜 "더하는가"
+## 위치 정보를 임베딩에 더하는 이유
 
 ### sin/cos로 위치를 표현하는 방법
 
@@ -147,7 +147,7 @@ $d=512$면 **0.044**, $d=768$이면 **0.036**입니다.
 게다가 위의 네 항 중 **position–position만 상대적**이고 나머지 cross term은 절대 위치에
 의존합니다. 이 비일관성이 Transformer-XL 이후 relative position 계열 연구가 파고든 지점이고요.
 
-### 임베딩에 √d_model을 곱하는 이유는 논문에 없다
+### 임베딩에 √d_model을 곱하는 이유
 
 논문 3.4절에 딱 한 문장 있습니다. "In the embedding layers, we multiply those weights by
 $\sqrt{d_{\text{model}}}$." 근거는 없습니다.
@@ -172,14 +172,14 @@ PyTorch `nn.Embedding` 기본값인 $\mathcal{N}(0,1)$이면 곱한 뒤 norm이 
 반대로 PE가 묻힙니다. **초기화 방식과 함께 확인해야 하는 부분**이고, 구현체마다 이 부분이 다른
 이유이기도 합니다.
 
-## Self-attention에서 자주 틀리는 것들
+## Self-attention을 공부하며 생긴 질문
 
 <figure className="my-6 text-center">
   <img src="/images/posts/attention-is-all-you-need/fig_attention.png" alt="Scaled Dot-Product Attention과 Multi-Head Attention" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">Figure 2 — 왼쪽이 Scaled Dot-Product Attention, 오른쪽이 Multi-Head Attention (Vaswani et al., 2017)</figcaption>
 </figure>
 
-### 같은 손실 함수로 Q, K, V가 서로 다르게 학습되는 이유
+### Q, K, V는 어떻게 서로 다르게 학습되나
 
 $W_Q$, $W_K$, $W_V$는 전부 같은 스칼라 loss 하나로 학습됩니다. 그런데 어떻게 각자 다른 역할을
 맡게 될까요.
@@ -261,7 +261,7 @@ scaling 없이 $d_k{=}512$면 **한 key가 94%를 가져갑니다.** 사실상 o
 그리고 이건 트랜스포머 전체를 관통하는 원칙이기도 합니다. LayerNorm도,
 $\times\sqrt{d_{\text{model}}}$도 결국 같은 이야기예요. **분산을 1 근처로 유지한다.**
 
-### multi-head는 많을수록 좋지 않다
+### Head 수와 head별 차원의 관계
 
 "8개 만드니까 조합이 다양해진다"는 설명은 방향은 맞지만 이유가 중요합니다. **"같은 계산을
 8번 반복"이 아닙니다.**
@@ -294,7 +294,7 @@ $\times\sqrt{d_{\text{model}}}$도 결국 같은 이야기예요. **분산을 1 
 Figure 1에 "Add & Norm"이라고 한 덩어리로 그려져 있어서 하나로 묶어 외우기 쉬운데,
 **둘은 서로 다른 문제를 풉니다.** 분리해서 봐야 합니다.
 
-### Add는 gradient 통로를 확보한다
+### 잔차 연결이 기울기 전달에 미치는 영향
 
 $$\frac{\partial}{\partial x}\big(x+F(x)\big) = I + \frac{\partial F}{\partial x}$$
 
@@ -315,7 +315,7 @@ $L=32$, $\partial F/\partial x = 0.1$인 경우로 계산하면 이렇습니다.
 - 곱셈 구조 $\prod \delta_\ell$: 항 하나만 작아도 전체가 지수적으로 붕괴
 - $\prod(1+\delta_\ell)$: $\delta$가 0이어도 각 항이 **최소 1**이라 절대 0으로 수렴하지 않음
 
-### Norm은 activation의 크기를 조절한다
+### LayerNorm으로 활성값의 크기 조절하기
 
 skip은 gradient를 살리는 대신 **activation이 층마다 커지는 부작용**을 만듭니다. $\delta > 0$이
 반복되면 이번엔 값이 발산하는 쪽이 문제가 되죠. Norm이 매 블록에서 다시 눌러줍니다.
@@ -333,7 +333,7 @@ NLP의 입력은 $(N, T, D)$이고 BatchNorm은 배치 축으로 통계를 냅�
 LayerNorm은 **토큰 하나의 $D$개 feature**에 대해서만 통계를 냅니다. 그래서 배치 크기가 1이어도,
 추론에서 한 단어씩 넣어도 문제가 없습니다.
 
-### Post-LN에서 Pre-LN으로 뒤집힌 이유
+### Post-LN과 Pre-LN의 차이
 
 원 논문은 $\text{LN}(x + F(x))$, 즉 **Post-LN**입니다. 그런데 GPT-2와 ViT는 $x + F(\text{LN}(x))$,
 **Pre-LN**을 씁니다.
@@ -388,7 +388,7 @@ $512 \rightarrow 2048 \rightarrow 512$. 왜 굳이 늘렸다가 다시 줄일까
 
 키우면 좋아지긴 하는데 파라미터도 같이 늘어납니다. **4가 최적이라는 논증은 논문에 없습니다.**
 
-## masking은 왜 softmax 전에 하나
+## Softmax 전에 미래 토큰을 가리는 이유
 
 decoder에서 미래 토큰을 가릴 때, 아주 큰 음수로 바꿔치기해서 $e^{-\infty} = 0$이 되게 합니다.
 그런데 왜 굳이 softmax **전**일까요. 후에 0으로 만들면 안 되나요.

@@ -1,5 +1,5 @@
 ---
-title: "GPT-1부터 GPT-3까지: 미세조정에서 In-Context Learning으로"
+title: "GPT-1 · BERT · GPT-2 · GPT-3 — 모델은 무슨 task인지 어디서 아는가"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Language Model"
@@ -20,7 +20,7 @@ Transformer 자체는 2017년 이후 거의 바뀌지 않았습니다. 그런데
 이동하는지, 그리고 각 논문이 자기 주장을 실제로 어떤 숫자로 뒷받침했는지를 봅니다. 뒷받침하지
 못한 것도 같이 적었습니다.
 
-## 네 논문은 구조가 아니라 적응 방식으로 갈린다
+## 네 모델의 구조와 과제 적응 방식
 
 | | GPT-1 (2018) | BERT (2018) | GPT-2 (2019) | GPT-3 (2020) |
 |---|---|---|---|---|
@@ -73,7 +73,7 @@ dataset이면 12개 모델입니다.
 바꾸면 5.6점이고요. "Transformer가 좋아서인가, pre-training이 좋아서인가"라는 질문에는 이 두
 숫자로 답이 됩니다. 둘 다지만, pre-training 쪽이 두 배 반쯤 큽니다.
 
-### task가 달라지면 무엇을 바꾸나
+### 과제별 입력 형식과 출력층
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/g1_fig1_right.png" alt="GPT-1의 task별 입력 변환" className="rounded-lg mx-auto" />
@@ -90,7 +90,7 @@ GPT-1의 덜 유명하지만 중요한 아이디어입니다. task마다 모델 
 
 바뀌는 건 입력 형식과 마지막 linear head뿐이에요. Transformer 본체는 건드리지 않습니다.
 
-### GELU — 입력 크기에 따라 열리는 gate
+### GELU의 확률적 해석
 
 GPT-1은 ReLU 대신 GELU를 씁니다. 보통 "부드러운 ReLU" 정도로 설명하고 넘어가는데, 원 논문의
 유도를 따라가면 성격이 더 분명해집니다.
@@ -118,7 +118,7 @@ $$m \sim \mathrm{Bernoulli}(p) \;\Rightarrow\; \mathbb{E}[m\,x] = p\,x$$
 그래프에서 눈에 띄는 건 GELU가 **단조증가가 아니라는 점**입니다. 음수 구간에서 한 번 내려갔다가
 올라옵니다. ReLU는 음수를 전부 0으로 죽이고, dropout의 기댓값은 원점을 지나는 직선이죠.
 
-### fine-tuning을 안 하면 어디까지 되나
+### 미세조정 없이 평가한 성능
 
 개인적으로 GPT-1에서 가장 흥미로웠던 분석입니다.
 
@@ -143,7 +143,7 @@ Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었습니다.
 
 ## BERT: 양방향 문맥을 활용한 사전학습
 
-### 왼쪽만 보면 어디서 손해를 보나
+### 양방향 문맥이 필요한 이유
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/b_fig3.png" alt="BERT, GPT, ELMo의 pre-training 구조 비교" className="rounded-lg mx-auto" />
@@ -179,7 +179,7 @@ BERT의 입력은 세 임베딩의 합입니다. token embedding은 어떤 subwo
 냅니다. 참고로 이후 연구에서 NSP가 필수는 아니라는 결과가 여럿 나왔는데, 이 글은 원 논문 기준으로
 봅니다.
 
-### 80 / 10 / 10은 얼마나 중요한가
+### MLM의 80 / 10 / 10 비율 비교
 
 MLM은 token의 15%를 예측 대상으로 고르고, 그중 80%는 `[MASK]`로, 10%는 무작위 token으로 바꾸고,
 10%는 그대로 둔 다음 원래 값을 맞히게 합니다.
@@ -212,7 +212,7 @@ NER에서예요. 94.9 대 94.0으로 거의 1점 벌어집니다.
 고정하면 그럴 수 없거든요. 그러니까 80/10/10은 "mismatch를 없애는 장치"라기보다 "weight를 고정해
 쓸 때를 대비한 보험"에 가깝습니다.
 
-### 같은 크기에서 4.5점 차이
+### 같은 모델 크기에서 비교한 GLUE 성능
 
 | | MNLI (m/mm) | QQP | QNLI | SST-2 | CoLA | STS-B | MRPC | RTE | Avg |
 |---|---|---|---|---|---|---|---|---|---|
@@ -259,7 +259,7 @@ GPT-2는 질문 자체를 바꿉니다. 입력만이 아니라 입력과 **task*
 부르는 배치입니다. [ViT 리뷰](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)에서
 ViT가 Pre-LN을 쓴다고 적었는데, GPT-2가 그보다 먼저 같은 배치를 쓰고 있었습니다.
 
-### `TL;DR:` — 6.4점짜리 두 토큰
+### `TL;DR:`를 붙였을 때의 요약 성능
 
 GPT-2는 모든 task를 next-token prediction으로 바꿉니다.
 
@@ -391,7 +391,7 @@ band 폭도 layer 비율도 적혀 있지 않습니다.
 보편 법칙이라기보다 큰 모델의 학습 안정성을 위한 경험적 선택, 즉 이 논문의 recipe로 보는 게
 정확합니다.
 
-### 예시 7개 대 fine-tuning 수십만 건
+### 문맥 속 예시를 늘렸을 때의 성능 변화
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/g3_fig3_8.png" alt="SuperGLUE 성능과 context 내 예시 수" className="rounded-lg mx-auto" />
@@ -434,7 +434,7 @@ Alice was friends with Bob. Alice went to visit her friend ___. → Bob
 예시가 하나뿐이면 모델이 이 **형식**을 알아채지 못하고, 여러 개 주면 알아채서 86.4까지 올라갑니다.
 그러니까 demonstration이 전달하는 건 정답 내용만이 아니라 **task의 출력 형식**이기도 합니다.
 
-### 산술 — 특정 규모에서 갑자기 나타나는 능력
+### 모델 규모와 자릿수별 산술 성능
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/g3_fig3_10.png" alt="모델 크기별 산술 정확도" className="rounded-lg mx-auto max-w-md" />
@@ -573,8 +573,8 @@ weight가 바뀌지 않습니다. 적응이 forward pass 안에서 attention으�
 
 ## 이어지는 글
 
-- [Attention Is All You Need: 공부하며 남긴 질문들](/posts/2026-09-01-attention-is-all-you-need)
-- [ViT: 데이터 규모와 inductive bias의 관계](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
+- [Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
+- [ViT 리뷰 — inductive bias는 데이터로 대체할 수 있는가](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
 
 ## 참고문헌
 
