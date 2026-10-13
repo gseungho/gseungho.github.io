@@ -1,13 +1,13 @@
 ---
-title: "Linear Attention · Fast Weight · RetNet — 크기가 고정된 memory에 어떻게 쓸 것인가"
+title: "Linear Attention·Fast Weight·RetNet: 고정 크기 메모리에 정보를 저장하는 방법"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Linear Attention"
 tags: ["논문리뷰", "Linear Attention", "Fast Weight", "RetNet"]
-description: "softmax attention은 과거를 전부 쌓아 두고 다시 읽습니다. memory 크기를 고정하면 읽기는 싸지지만 무엇을 어떻게 쓸지를 정해야 합니다. 더하기, 지우고 쓰기, 잊기라는 세 가지 답과, 그 쓰기가 gradient step 한 번이었다는 데까지 따라갔습니다."
+description: "Linear Attention, Fast Weight와 RetNet의 고정 크기 상태를 비교하고, 정보의 누적·갱신·감쇠와 delta rule의 경사하강법 해석을 정리했습니다."
 ---
 
-softmax attention을 memory로 보면 이상한 점이 하나 있습니다. **아무것도 기록하지 않습니다.** 지나간
+softmax attention은 **과거의 key와 value를 개별 항목으로 보관합니다.** 지나간
 token의 key와 value를 손대지 않고 쌓아 두었다가, 새 token이 올 때마다 전부 다시 읽습니다. 요약하지도
 고치지도 잊지도 않아요.
 
@@ -15,7 +15,7 @@ token의 key와 value를 손대지 않고 쌓아 두었다가, 새 token이 올 
 KV cache가 커지는 이유예요.
 
 이 글에서 다루는 논문들은 반대로 갑니다. 들고 다니는 memory의 크기를 **먼저 고정합니다.** 그러면
-읽기는 싸지는데 질문이 바뀝니다. 무엇을 읽을지가 아니라 다음을 정해야 합니다.
+읽는 비용은 줄지만 질문이 바뀝니다. 무엇을 읽을지가 아니라 다음을 정해야 합니다.
 
 > **크기가 고정된 memory에 새 정보를 어떻게 쓸 것인가?**
 
@@ -23,7 +23,7 @@ KV cache가 커지는 이유예요.
 마지막에는 그 "쓰기"가 사실 gradient descent 한 걸음이었다는 데까지 갑니다. 다음에 읽을 Test-Time
 Training으로 이어지는 지점입니다.
 
-## softmax attention은 쓰지 않는다
+## KV cache와 고정 크기 상태
 
 용어 하나를 먼저 정해 두겠습니다. token 하나를 처리한 뒤 다음 token으로 넘길 때 들고 가는 것 전부를
 **state**라고 부르겠습니다.
@@ -56,9 +56,9 @@ $d = 64$로 숫자를 세어 보면 차이가 분명합니다. head 하나, laye
 Performer (Choromanski et al., 2021)는 축이 조금 다릅니다. 쓰기가 아니라 **읽기**를 고치는 논문이라
 뒤에서 따로 짧게 봅니다.
 
-## Linear attention — 더해서 쌓는 memory
+## Linear attention: 정보를 누적하는 메모리
 
-### exp를 내적으로 바꾸기
+### 유사도 함수를 내적으로 표현하기
 
 attention의 한 행을 일반적인 꼴로 쓰면 이렇습니다. "Transformers are RNNs" 논문의 식 (3)입니다.
 
@@ -167,7 +167,7 @@ $M$개만 남기는 sliding window와 다릅니다. 첫 번째 token의 정보�
 종이 한 장에 문장을 계속 덧쓰는 것과 같습니다. 전부 거기 있는데 겹쳐서 흐릿합니다. 얼마나 겹치면
 못 읽게 되는지가 다음 논문의 주제입니다.
 
-### 길이에 선형, 생성은 수천 배
+### 시퀀스 길이별 비용과 이미지 생성 속도
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/trnn_fig1.png" alt="sequence 길이에 따른 시간과 GPU 메모리" className="rounded-lg mx-auto" />
@@ -190,9 +190,9 @@ bits/dim은 픽셀 하나를 표현하는 데 드는 비트 수로, 낮을수록
 수백 배에서 수천 배 차이 납니다. 이미지 생성은 픽셀을 하나씩 뽑는 작업이라 추론 전체가 순차적이고,
 token 하나당 $O(1)$과 $O(N)$의 차이가 그대로 쌓이기 때문입니다.
 
-## Fast weight — 지우고 쓰는 memory
+## Fast weight: 저장된 값을 갱신하는 메모리
 
-### 같은 식, 30년 된 이름
+### Linear attention과 Fast Weight Programmer의 관계
 
 Schlag et al. (2021)의 출발점은 앞 절의 $S$가 새로운 것이 아니라는 관찰입니다. 전치하고 정규화
 항을 빼서 쓰면 이렇습니다. 논문의 식 (17)과 (19)에 해당합니다.
@@ -220,7 +220,7 @@ fast 쪽을 자라는 리스트로 들고 있느냐 고정 크기 행렬로 들�
 그리고 위의 update는 Hebb 규칙(1949) 그대로입니다. 순수하게 **더하기만** 합니다. 한 번 쓴 것을
 고칠 방법이 없습니다.
 
-### 고정된 memory는 언제 넘치나
+### 고정 크기 메모리의 용량 한계
 
 앞에서 본 읽기 식을 다시 가져오겠습니다.
 
@@ -237,7 +237,7 @@ $$W\phi(k_3) = \lVert\phi(k_3)\rVert^2\, v_3 \;+\; \sum_{j \ne 3} \big(\phi(k_j)
 $d_{\text{dot}}$을 넘는 상태를 overcapacity라고 부릅니다.
 
 실제 sequence는 거의 항상 key 차원보다 깁니다. 그러니 이 한계는 예외가 아니라 기본 상황입니다.
-softmax에는 이 한계가 없습니다. 저장 공간이 자라니까요. 처음에 본 맞교환의 값을 여기서 치릅니다.
+softmax에는 이 한계가 없습니다. 저장 공간이 자라니까요. 저장 공간을 고정한 대신 정보 간 간섭이 생기는 것입니다.
 고정 크기 state는 속도를 위한 트릭이기 전에 **기억할 수 있는 양의 상한**입니다.
 
 ### 실험으로 보이는 용량 한계
@@ -316,7 +316,7 @@ weight 모델입니다. 범례의 "Schlag (2021)"은 이 논문이 아니라 같
 softmax attention에는 갱신이라는 개념이 없습니다. 논문의 표현대로 key와 value 쌍을 바꿀 수 없는
 채로 이어 붙일 뿐이에요. 고정 크기 memory는 그럴 수 없어서 갱신 규칙이 있어야 합니다.
 
-## RetNet — 오래된 것을 잊는 memory
+## RetNet: 과거 정보의 기여를 줄이는 메모리
 
 ### 매 step 곱해지는 γ
 
@@ -392,7 +392,7 @@ $V_m$들의 가중합이고, 가중치가 "내용으로 정해지는 값"과 "�
 perplexity는 1.3B, 2.7B, 6.7B 세 크기에서 Transformer와 비슷했고 2B를 넘으면 RetNet이 앞서는
 경향이 있었다고 합니다.
 
-### 같은 증상에 다른 진단
+### 성능 저하에 대한 서로 다른 설명
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/ret_tri.png" alt="불가능한 삼각형" className="rounded-lg mx-auto max-w-sm" />
@@ -429,7 +429,7 @@ RetNet의 주장은 이 삼각형으로 요약됩니다. 세 꼭짓점을 다 �
 각자의 처방이 자기 진단을 그대로 따릅니다. 어느 쪽이 맞는지는 이 논문들만으로는 가릴 수 없습니다.
 두 진단을 같은 조건에서 맞세운 실험이 없으니까요.
 
-## Performer — 쓰기가 아니라 읽기
+## Performer: softmax kernel의 근사
 
 앞에서 미뤄 둔 질문이 있습니다. $\phi$를 아무 양수 함수로 바꾸면 그건 더 이상 softmax가 아닙니다.
 softmax에 가까운 $\phi$는 없을까요.
@@ -450,7 +450,7 @@ $\omega$를 $r$개 뽑아 평균을 내면 기댓값이 정확히 softmax kernel
 다만 근사에는 대가가 있습니다. 앞의 용량 실험에서 FAVOR+는 어떤 설정에서도 loss 0에 닿지
 못했습니다. 정확히 꺼내야 하는 과제에서는 추정 오차가 그대로 남습니다.
 
-## delta rule은 gradient step 한 번이다
+## Delta rule을 경사하강법으로 해석하기
 
 마지막으로 delta rule을 다른 각도에서 보겠습니다. memory $W$가 하는 일을 회귀 문제로 적어 봅니다.
 $\phi(k)$를 넣었을 때 $v$가 나오게 하고 싶습니다.
@@ -461,17 +461,17 @@ $W$로 미분하면
 
 $$\nabla_W\, \ell = \big(\underbrace{W\phi(k)}_{\bar{v}} - v\big)\,\phi(k)^\top$$
 
-이고, 괄호 안의 $W\phi(k)$가 앞에서 "먼저 읽은 값" $\bar{v}$입니다. learning rate $\beta$로 gradient
-descent를 한 걸음 밟으면 이렇게 됩니다.
+이고, 괄호 안의 $W\phi(k)$가 앞에서 "먼저 읽은 값" $\bar{v}$입니다. learning rate $\beta$로 경사하강법으로 한 번
+갱신하면 이렇게 됩니다.
 
 $$W \leftarrow W - \beta\,\nabla_W\, \ell = W + \beta\,(v - \bar{v})\,\phi(k)^\top$$
 
-**delta rule의 식 (24)와 글자 하나까지 같습니다.** write strength라고 부르던 $\beta$는
-learning rate였던 거예요. memory에 쓴다는 것은 학습한다는 뜻입니다. 이 모델은 생성하는 동안 token
-하나마다 SGD를 한 걸음씩 밟고 있었습니다.
+**앞에서 본 delta rule과 같은 갱신식입니다.** write strength라고 부르던 $\beta$는
+이 해석에서는 학습률에 해당합니다. 메모리 갱신을 학습 단계로 볼 수 있는 것이죠. 이 모델은 생성하는 동안 token
+하나마다 SGD 갱신에 해당하는 연산을 하고 있었던 것입니다.
 
 순수한 linear attention도 같은 틀에 들어갑니다. $\bar{v}$를 뺀 꼴이죠. 이미 무엇이 들어 있는지
-확인하지 않고 밟는 걸음입니다. 그래서 겹쳐 쓰다가 망가집니다.
+확인하지 않고 정보를 더합니다. 그래서 저장한 정보가 겹치면서 간섭이 생깁니다.
 
 여기서 다음 질문이 나옵니다. state가 행렬이고 쓰기가 gradient 한 걸음이라면, state를 더 표현력
 있는 것으로 바꾸고 쓰기를 제대로 된 학습으로 바꾸면 어떻게 될까요. Test-Time Training 계열이 그
@@ -498,18 +498,17 @@ step으로 정의합니다. 다음에 읽을 논문입니다.
 - 고정 크기 state에는 용량이 있습니다. key 차원보다 많은 연관을 넣으면 꺼낼 때 섞입니다
 - 그 뒤는 설계 결정 하나입니다. 무엇을 쓰고 무엇을 포기할 것인가
 
-softmax attention은 아무것도 쓰지 않는 대가로 완벽한 기억을 얻습니다. 쓰기 시작하는 순간부터는
-무엇을 잊을지 정해야 합니다.
+softmax attention은 key와 value를 개별 항목으로 보관하는 대신 저장 공간이 계속 늘어납니다. 고정 크기 상태로 정보를 합치면 어떤 정보를 남기고 어떻게 갱신할지 정해야 합니다.
 
-근거의 무게도 적어 둡니다. Katharopoulos et al.의 속도 수치는 이미지 생성 과제에서 나왔고 Schlag et
+실험 결과를 해석할 때는 과제와 평가 조건도 구분해야 합니다. Katharopoulos et al.의 속도 수치는 이미지 생성 과제에서 나왔고 Schlag et
 al.의 용량 실험은 합성 과제입니다. 큰 언어 모델에서 linear attention이 softmax에 뒤진다는 것은
 RetNet의 표에 기호로만 나옵니다. 그 이유는 두 논문의 설명이 서로 다르고요.
 
 ## 이어지는 글
 
-- [MoE · MoD · MoR — 모든 token에 같은 계산을 써야 하는가](/posts/2026-10-12-moe-mod-mor-dynamic-compute)
-- [GPT-1 · BERT · GPT-2 · GPT-3 — 모델은 무슨 task인지 어디서 아는가](/posts/2026-10-12-gpt-bert-in-context-learning)
-- [Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
+- [MoE·MoD·MoR: 토큰별 계산 경로와 계산량 조절](/posts/2026-10-12-moe-mod-mor-dynamic-compute)
+- [GPT-1부터 GPT-3까지: 미세조정에서 In-Context Learning으로](/posts/2026-10-12-gpt-bert-in-context-learning)
+- [Attention Is All You Need: 공부하며 남긴 질문들](/posts/2026-09-01-attention-is-all-you-need)
 
 ## 참고문헌
 

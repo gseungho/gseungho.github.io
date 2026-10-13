@@ -1,17 +1,17 @@
 ---
-title: "GPT-1 · BERT · GPT-2 · GPT-3 — 모델은 무슨 task인지 어디서 아는가"
+title: "GPT-1부터 GPT-3까지: 미세조정에서 In-Context Learning으로"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Language Model"
 tags: ["논문리뷰", "GPT", "BERT", "In-Context Learning"]
-description: "네 논문을 하나의 질문으로 읽었습니다. 모델은 자기가 지금 무슨 task를 해야 하는지를 어디에서 아는가. 답이 weight에서 prompt로 옮겨가는 과정과, 그 과정에서 논문들이 끝내 보여주지 못한 것까지."
+description: "GPT-1과 BERT의 미세조정에서 GPT-2와 GPT-3의 프롬프트 기반 적응으로 이어지는 변화를 구조, 학습 목적, 평가 결과로 비교했습니다."
 ---
 
 Transformer 자체는 2017년 이후 거의 바뀌지 않았습니다. 그런데 2018년의 GPT-1과 2020년의 GPT-3는
 쓰는 방식이 완전히 다릅니다. 하나는 dataset마다 모델을 통째로 다시 학습시키고, 다른 하나는 weight를
 한 번도 건드리지 않고 예시 몇 개만 보여줍니다.
 
-그래서 이 글은 네 논문을 **하나의 질문**으로 읽습니다.
+네 논문을 읽으면서 궁금했던 것은 다음과 같습니다.
 
 > 모델은 자기가 지금 무슨 task를 해야 하는지를 **어디에서** 아는가?
 > 번역인지 분류인지를 알려주는 정보는 어디에 담겨 있는가?
@@ -33,19 +33,18 @@ Transformer 자체는 2017년 이후 거의 바뀌지 않았습니다. 그런데
 backbone 줄을 보면 BERT만 encoder이고 나머지는 전부 decoder입니다. 구조는 거의 안 바뀌었죠.
 정작 달라진 건 아래 두 줄, **task 정보가 weight에 들어가는가 context에 들어가는가**입니다.
 
-이 글은 그 이동을 따라갑니다. task in weights에서 task in context로요.
+과제에 맞게 가중치를 바꾸는 방식에서, 입력 문맥으로 과제를 알려주는 방식으로 이어지는 변화입니다.
 
-## GPT-1 — 먼저 읽고, 나중에 배우는 recipe
+## GPT-1: 사전학습과 과제별 미세조정
 
-### 두 단계 recipe, 그리고 보조 loss
+### 두 단계 학습과 보조 손실
 
 1단계는 label 없는 텍스트에서 다음 token을 예측하는 pre-training입니다. 데이터는 출간되지 않은
 책 7,000권 이상을 모은 BooksCorpus고, 모델은 12층 decoder에 768차원, head 12개입니다.
 
 $$L_1(\mathcal{U}) = \sum_i \log P(u_i \mid u_{i-k}, \dots, u_{i-1};\, \Theta)$$
 
-2단계는 dataset마다 output layer를 붙여 supervised fine-tuning을 하는 건데, 여기서 loss를 그냥
-쓰지 않습니다.
+2단계에서는 데이터셋마다 출력층을 붙여 지도 미세조정을 합니다. 이때 손실 함수에는 분류 항과 언어 모델링 항을 함께 사용합니다.
 
 $$L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda\, L_1(\mathcal{C}), \qquad \lambda = 0.5$$
 
@@ -142,7 +141,7 @@ pre-training update 횟수에 따라 이 zero-shot 성능을 그린 게 위 그�
 물론 GPT-1의 주력 결과는 여전히 fine-tuning입니다. 12개 dataset 중 9개에서 SOTA를 갱신했고
 Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었습니다.
 
-## BERT — 문맥은 양쪽으로, fine-tuning은 그대로
+## BERT: 양방향 문맥을 활용한 사전학습
 
 ### 왼쪽만 보면 어디서 손해를 보나
 
@@ -158,7 +157,7 @@ Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었습니다.
 오른쪽 ELMo는 양방향 LSTM을 **따로** 학습해서 마지막에만 이어붙입니다. 왼쪽 BERT는 encoder라서
 모든 층에서 양쪽 문맥을 동시에 봅니다.
 
-그런데 여기 함정이 있습니다. 모든 token이 양쪽을 다 본다면 자기 자신도 보게 되고, 그러면
+모든 token이 양쪽 문맥을 보면 자기 자신도 보게 됩니다. 그러면
 "이 token을 맞혀라"는 문제가 공짜가 됩니다. 그래서 **다른 objective가 필요합니다.**
 
 ### segment embedding은 순서가 아니라 소속을 표시한다
@@ -173,7 +172,7 @@ BERT의 입력은 세 임베딩의 합입니다. token embedding은 어떤 subwo
 
 헷갈리기 쉬운 건 segment embedding이에요. 이건 **순서가 아닙니다.** `[CLS] A [SEP] B [SEP]`처럼
 두 문장을 넣었을 때 각 token이 A에 속하는지 B에 속하는지를 표시하는 값입니다. 그림의 $E_A$, $E_B$가
-그거고요. 순서는 position embedding이 이미 담당하고 있습니다.
+그 값입니다. 순서는 position embedding이 이미 담당하고 있습니다.
 
 두 문장을 한 번에 넣는 이유는 NSP(Next Sentence Prediction) 때문입니다. B가 실제로 A 다음 문장인지
 맞히는 이진 분류이고, 절반은 진짜 다음 문장, 절반은 무작위 문장입니다. 최종 모델은 97~98% 정확도를
@@ -234,9 +233,9 @@ representation이 좋을수록 데이터가 부족한 task에서 이득이 큽�
 다만 **BERT도 dataset마다 전체 파라미터를 update합니다.** representation은 더 일반적이 됐지만,
 downstream 적응 방식 자체는 GPT-1과 똑같습니다. task 정보는 여전히 weight에 들어갑니다.
 
-## GPT-2 — task를 prompt에 적으면?
+## GPT-2: 프롬프트로 과제 알려주기
 
-### 한 줄짜리 가설과 WebText
+### 과제를 텍스트로 전달한다는 가설과 WebText
 
 GPT-2는 질문 자체를 바꿉니다. 입력만이 아니라 입력과 **task**가 주어졌을 때 출력을 내는 모델,
 즉 $p(\text{output} \mid \text{input}, \text{task})$를 모델링하되 그 task를 별도 head가 아니라
@@ -284,8 +283,7 @@ task 정보가 정말 prompt에 들어 있다는 가장 직접적인 증거가 �
 | Random-3 | 20.98 |
 | **GPT-2, 힌트 제거** | **15.03** |
 
-모델은 완전히 같고 prompt만 달라졌는데 **6.4점이 움직입니다.** 두 토큰짜리 힌트가 그만큼 일을
-하고 있다는 뜻이죠.
+같은 모델에서 프롬프트만 바꾸었는데 **점수가 6.4점 달라집니다.** 두 토큰짜리 힌트가 출력에 영향을 준다는 뜻입니다.
 
 동시에 이 표는 GPT-2의 한계도 같이 보여줍니다. 21.40은 기사 앞 세 문장을 그냥 가져오는
 Lede-3(31.55)보다 한참 낮고, 무작위로 세 문장 뽑는 Random-3(20.98)보다 겨우 0.42 높습니다.
@@ -302,7 +300,7 @@ weight update가 없다는 의미에서는 분명히 zero-shot입니다. 하지�
 용어가 정리되기 전의 과도기라고 보는 게 맞을 것 같습니다. GPT-3가 zero / one / few를 명시적으로
 나눈 게 그래서 의미가 있고요.
 
-### 잘하는 task와 못하는 task
+### 과제별 성능 차이
 
 | Task (metric) | GPT-2 1.5B | 비교 대상 |
 |---|---|---|
@@ -330,9 +328,9 @@ weight update가 없다는 의미에서는 분명히 zero-shot입니다. 하지�
 그래서 GPT-2의 기여는 benchmark 정복이 아닙니다. 고정된 모델 하나가 자연어 지시만으로 여러 task를
 "하기 시작했다"는 방향성입니다.
 
-## GPT-3 — scale, 그리고 context 속 예시
+## GPT-3: 모델 규모와 문맥 속 예시
 
-### demonstration은 gradient step이 아니라 attention의 재료다
+### 예시를 문맥에 넣는 방식과 미세조정의 차이
 
 zero-shot은 task 설명과 query만, one-shot은 예시 하나, few-shot은 예시 여럿을 context에 넣습니다.
 
@@ -358,10 +356,10 @@ demonstration은 **정답이 포함된 입출력 쌍**입니다. 직관적으로
 것으로 보면 됩니다. query 위치의 hidden state가 앞의 예시들을 attention하면서 task의 형식과
 mapping을 추론하는 거죠.
 
-fine-tuning이었다면 예시마다 gradient step을 밟았을 겁니다. 여기서는 세 설정 모두 **weight가
+fine-tuning이었다면 예시를 학습에 사용해 가중치를 갱신했을 겁니다. 여기서는 세 설정 모두 **weight가
 그대로입니다.** context를 지우면 적응한 상태도 같이 사라집니다.
 
-### GPT-2에서 달라진 것 — 거의 전부 scale
+### GPT-2 이후의 모델·데이터 규모 확대
 
 | Model | $n_{\text{params}}$ | Layers | $d_{\text{model}}$ | Heads | Batch | LR |
 |---|---|---|---|---|---|---|
@@ -404,13 +402,13 @@ band 폭도 layer 비율도 적혀 있지 않습니다.
 폭이, 점선으로 그어진 **BERT-Large와 BERT++의 차이**와 비슷합니다.
 
 BERT++는 SuperGLUE 전에 MultiNLI 392k와 SWAG 113k로 추가 fine-tuning을 거친 모델입니다. 수십만 건의
-labeled 데이터로 gradient를 밟아서 얻은 향상 폭을, **예시 7개를 더 넣어서** 비슷하게 얻었다는
+labeled 데이터로 가중치를 갱신해서 얻은 향상 폭을, **예시 7개를 더 넣어서** 비슷하게 얻었다는
 얘기예요.
 
 다만 조심할 게 있습니다. GPT-3 곡선은 dev set이고 점선은 그렇지 않아서 완전히 같은 조건이
 아닙니다. "대체했다"가 아니라 "향상 폭이 비슷하다" 정도로 말하는 게 맞습니다.
 
-### GPT-2에서 GPT-3로 넘어가는 가장 깨끗한 두 숫자
+### GPT-2와 GPT-3의 공통 평가 결과
 
 네 논문을 억지로 한 표에 넣으면 조건이 달라 공정한 비교가 안 됩니다. 그래서 GPT-2와 GPT-3가
 **둘 다 보고한** task만 골랐습니다. LAMBADA와 CoQA 두 개입니다.
@@ -461,7 +459,7 @@ Alice was friends with Bob. Alice went to visit her friend ___. → Bob
 위아래로 뛰는 것을 뜻한다"고 알려주자 그 단어를 넣은 문장을 만들어냅니다. 다만 이건 논문이
 골라서 보여준 사례라 benchmark가 아니라 **demo**로 봐야 합니다.
 
-### 크다고 풀리는 건 아니다
+### 모델을 키워도 해결되지 않은 과제
 
 | | GPT-3 175B | 비교 대상 |
 |---|---|---|
@@ -475,7 +473,7 @@ ANLI Round 3은 사람이 모델을 일부러 틀리게 만들도록 설계한 �
 
 RACE가 더 극적입니다. **175B GPT-3가 이 글 맨 앞에서 본 fine-tuned GPT-1보다 낮습니다.**
 파라미터가 약 1,500배 차이인데, 그 task에 직접 학습한 117M 모델이 이깁니다. 규모가 적응 방식을
-언제나 대체하지는 못한다는 가장 분명한 반례예요.
+언제나 대체하지는 못한다는 보여주는 비교입니다.
 
 그리고 contamination 문제가 있습니다. 웹 데이터로 학습했으니 benchmark 테스트셋이 섞여 들어갔을
 수 있거든요. 저자들도 지우려고 했는데, 논문에 이렇게 적혀 있습니다.
@@ -509,7 +507,7 @@ GPT-2와 GPT-3는 decoder를 유지한 채 task를 prompt로 옮깁니다. GPT-2
 정리하면 이렇습니다. **Transformer 구조는 거의 그대로였고, 바뀐 것은 task 설명을 어디에 두느냐와
 downstream 학습이 언제 일어나느냐입니다.**
 
-## GPT-3가 다시 꺼낸 BERT의 질문
+## 양방향 문맥을 활용할 가능성
 
 흐름이 한 방향으로만 가지는 않습니다. GPT-3 논문의 Limitations 절에 이런 대목이 있습니다.
 
@@ -575,8 +573,8 @@ weight가 바뀌지 않습니다. 적응이 forward pass 안에서 attention으�
 
 ## 이어지는 글
 
-- [Attention Is All You Need — 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
-- [ViT 리뷰 — inductive bias는 데이터로 대체할 수 있는가](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
+- [Attention Is All You Need: 공부하며 남긴 질문들](/posts/2026-09-01-attention-is-all-you-need)
+- [ViT: 데이터 규모와 inductive bias의 관계](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
 
 ## 참고문헌
 
