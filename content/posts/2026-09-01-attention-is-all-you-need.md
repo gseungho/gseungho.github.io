@@ -2,7 +2,7 @@
 title: "Attention Is All You Need — 설명이 항상 멈추는 자리들"
 date: "2026-09-01"
 category: "논문리뷰"
-subcategory: "Deep Learning/Transformer"
+subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "Transformer", "Attention", "딥러닝"]
 description: "위치 인코딩, Q·K·V의 학습, attention scaling과 LayerNorm을 질문별로 정리하고 직접 계산한 결과와 논문에 제시된 근거를 함께 살펴봤습니다."
 ---

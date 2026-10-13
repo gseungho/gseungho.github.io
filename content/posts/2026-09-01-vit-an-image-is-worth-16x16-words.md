@@ -2,7 +2,7 @@
 title: "ViT 리뷰 — inductive bias는 데이터로 대체할 수 있는가"
 date: "2026-09-01"
 category: "논문리뷰"
-subcategory: "Deep Learning/Vision Transformer"
+subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "ViT", "Transformer", "컴퓨터비전"]
 description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN보다 이미지에 대한 사전 가정이 적은 모델이 대규모 데이터로 성능을 높이는 과정과 학습된 표현을 살펴봤습니다."
 ---
