@@ -36,8 +36,22 @@ function countPosts(folder: Folder): number {
   return total;
 }
 
+// date of the newest post anywhere under the folder ("YYYY-MM-DD" compares as text)
+function latestDate(folder: Folder): string {
+  let latest = "";
+  for (const post of folder.posts) if (post.date > latest) latest = post.date;
+  for (const child of folder.folders.values()) {
+    const date = latestDate(child);
+    if (date > latest) latest = date;
+  }
+  return latest;
+}
+
+// most recently updated folder first; same date falls back to the name
 function sortedFolders(folder: Folder): Folder[] {
-  return [...folder.folders.values()].sort((a, b) => a.name.localeCompare(b.name));
+  return [...folder.folders.values()].sort(
+    (a, b) => latestDate(b).localeCompare(latestDate(a)) || a.name.localeCompare(b.name)
+  );
 }
 
 function PostRows({ posts }: { posts: PostMeta[] }) {
@@ -45,10 +59,17 @@ function PostRows({ posts }: { posts: PostMeta[] }) {
     <ul>
       {posts.map((post) => (
         <li key={post.slug}>
-          <Link href={`/posts/${post.slug}`} className="group flex items-baseline gap-4 py-2">
+          <Link href={`/posts/${post.slug}`} className="group flex items-baseline gap-4 py-2.5">
             <span className="font-mono text-xs text-(--text-muted) shrink-0">{post.date}</span>
-            <span className="text-sm text-(--text-strong) leading-relaxed transition-colors duration-200 group-hover:text-(--accent)">
-              {post.title}
+            <span className="min-w-0">
+              <span className="block text-sm text-(--text-strong) leading-relaxed transition-colors duration-200 group-hover:text-(--accent)">
+                {post.title}
+              </span>
+              {post.description && (
+                <span className="mt-0.5 text-[13px] text-(--text-muted) leading-relaxed line-clamp-2">
+                  {post.description}
+                </span>
+              )}
             </span>
           </Link>
         </li>
