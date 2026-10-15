@@ -38,9 +38,20 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = getPostBySlug(slug);
   const headings = getHeadings(post.content);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    keywords: post.tags.join(", "),
+    url: `https://gseungho.github.io/posts/${slug}`,
+    author: { "@type": "Person", name: "고승호", url: "https://gseungho.github.io/about" },
+  };
 
   return (
     <article className="space-y-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <TableOfContents headings={headings} />
 
       {/* Post Header */}

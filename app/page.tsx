@@ -4,10 +4,22 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
+// tells Google the site's name (otherwise results show "GitHub" for *.github.io)
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Tensors & Notebooks",
+  url: "https://gseungho.github.io/",
+};
+
 export default function Home() {
   const posts = getAllPosts();
   return (
     <div className="space-y-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
+      />
       {/* Voltagent Hero Band */}
       <section className="py-6">
         <div className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#00d992] mb-3">
