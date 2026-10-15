@@ -38,9 +38,9 @@ function PostRows({ posts }: { posts: PostMeta[] }) {
     <ul className="border-y border-(--border) divide-y divide-(--border)">
       {posts.map((post) => (
         <li key={post.slug}>
-          <Link href={`/posts/${post.slug}`} className="group flex items-baseline gap-4 py-3">
-            <span className="font-mono text-xs text-(--text-muted) shrink-0">{post.date}</span>
-            <span className="text-sm text-(--text-strong) leading-relaxed transition-colors duration-200 group-hover:text-(--accent)">
+          <Link href={`/posts/${post.slug}`} className="group flex flex-col gap-1 py-3.5 sm:flex-row sm:items-baseline sm:gap-4">
+            <span className="font-mono text-sm text-(--text-muted) shrink-0">{post.date}</span>
+            <span className="text-base font-medium text-(--text-strong) leading-relaxed break-keep transition-colors duration-200 group-hover:text-(--accent)">
               {post.title}
             </span>
           </Link>
@@ -54,26 +54,27 @@ export default function AboutPage() {
   const posts = getAllPosts();
   const reviews = posts.filter((p) => p.category === "논문리뷰");
   const projects = posts.filter((p) => p.category === "프로젝트");
+  const studies = posts.filter((p) => p.category === "공부");
 
   return (
     <div className="space-y-10">
       <section className="py-2">
-        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-(--accent) mb-2">
+        <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
           about
         </div>
-        <h1 className="text-2xl md:text-3xl font-normal leading-tight text-(--text-strong) tracking-tight mb-1">
+        <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-(--text-strong) tracking-tight mb-1">
           고승호
         </h1>
-        <div className="font-mono text-xs text-(--text-muted) mb-5">Seung Ho Go</div>
+        <div className="font-mono text-sm text-(--text-muted) mb-5">Seung Ho Go</div>
         <p className="text-base text-(--text) leading-relaxed max-w-xl">
-          매주 ISDS Lab 세미나에서 논문을 발표하고, 그 내용을 이 블로그에 글로 남깁니다.
+          매주 ISDS Lab 세미나에서 발표한 논문을 리뷰로 정리합니다. 학교에서 듣는 과목의 공부 노트와 직접 만든 프로젝트의 기록도 함께 남깁니다.
         </p>
 
         <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
       </section>
 
       <Section label="Affiliation">
-        <ul className="space-y-1.5 text-sm text-(--text)">
+        <ul className="space-y-2 text-base text-(--text)">
           {AFFILIATION.map(({ name, href, note }) => (
             <li key={name}>
               {href ? (
@@ -88,14 +89,14 @@ export default function AboutPage() {
               ) : (
                 name
               )}
-              {note && <span className="ml-2 font-mono text-xs text-(--text-muted)">{note}</span>}
+              {note && <span className="ml-2 font-mono text-sm text-(--text-muted)">{note}</span>}
             </li>
           ))}
         </ul>
       </Section>
 
       <Section label="Research Interests">
-        <ul className="space-y-1.5 text-sm text-(--text)">
+        <ul className="space-y-2 text-base text-(--text)">
           {INTERESTS.map(({ name, note }) => (
             <li key={name}>
               <span className="text-(--text-strong)">{name}</span>
@@ -108,9 +109,9 @@ export default function AboutPage() {
       <Section label="Awards">
         <ul className="border-y border-(--border) divide-y divide-(--border)">
           {AWARDS.map((award) => (
-            <li key={`${award.date}-${award.title}`} className="flex items-baseline gap-4 py-3">
-              <span className="font-mono text-xs text-(--text-muted) shrink-0">{award.date}</span>
-              <div className="text-sm leading-relaxed">
+            <li key={`${award.date}-${award.title}`} className="flex flex-col gap-1 py-3.5 sm:flex-row sm:items-baseline sm:gap-4">
+              <span className="font-mono text-sm text-(--text-muted) shrink-0">{award.date}</span>
+              <div className="text-base leading-relaxed">
                 <div className="text-(--text-strong)">
                   {award.title} · {award.venue}
                 </div>
@@ -135,15 +136,21 @@ export default function AboutPage() {
         </Section>
       )}
 
+      {studies.length > 0 && (
+        <Section label="Study">
+          <PostRows posts={studies} />
+        </Section>
+      )}
+
       <Section label="Contact">
-        <ul className="space-y-1.5 text-sm text-(--text)">
+        <ul className="space-y-2 text-base text-(--text)">
           <li>
-            <span className="inline-block w-16 font-mono text-xs text-(--text-muted)">Email</span>
+            <span className="inline-block w-20 font-mono text-sm text-(--text-muted)">Email</span>
             {/* written out rather than linked, to keep it away from address scrapers */}
             <span className="font-mono">gseungho999 [at] gmail.com</span>
           </li>
           <li>
-            <span className="inline-block w-16 font-mono text-xs text-(--text-muted)">GitHub</span>
+            <span className="inline-block w-20 font-mono text-sm text-(--text-muted)">GitHub</span>
             <a
               href="https://github.com/gseungho"
               target="_blank"
