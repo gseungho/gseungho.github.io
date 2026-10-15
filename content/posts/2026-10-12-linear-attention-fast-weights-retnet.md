@@ -4,12 +4,12 @@ date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Sequence Models"
 tags: ["논문리뷰", "Linear Attention", "Fast Weight", "RetNet"]
-description: "Linear Attention, Fast Weight와 RetNet의 고정 크기 state를 비교하고 정보의 누적·갱신·감쇠와 delta rule의 gradient descent 해석을 정리했다."
+description: "Linear Attention, Fast Weight와 RetNet의 고정 크기 state를 비교하고 정보의 누적·update·감쇠와 delta rule의 gradient descent 해석을 정리했다."
 ---
 
 softmax attention은 **과거의 key와 value를 개별 항목으로 보관한다.** 지나간
 token의 key와 value를 손대지 않고 쌓아 두었다가 새 token이 올 때마다 전부 다시 읽는다. 요약하지도
-고치지도 잊지도 않는다.
+update하지도 잊지도 않는다.
 
 그래서 저장 공간이 sequence 길이 $N$에 비례해 늘어나고 token 하나를 만들 때마다 $N$개를 훑는다.
 KV cache가 커지는 이유다.
@@ -190,7 +190,7 @@ bits/dim은 픽셀 하나를 표현하는 데 드는 비트 수로 낮을수록 
 수백 배에서 수천 배 차이 난다. 이미지 생성은 픽셀을 하나씩 뽑는 작업이라 추론 전체가 순차적이고
 token 하나당 $O(1)$과 $O(N)$의 차이가 그대로 쌓이기 때문이다.
 
-## Fast weight: 저장된 값을 갱신하는 memory
+## Fast weight: 저장된 값을 update하는 memory
 
 ### Linear attention과 Fast Weight Programmer의 관계
 
@@ -211,7 +211,7 @@ slow network가 입력에서 $k, v, q$를 만들면 이 셋이 fast weight를 �
 
 헷갈리기 쉬운 점이 있다. **$W$는 파라미터가 아니다.** forward 중에 만들어졌다 사라지는 중간
 계산값이고 checkpoint에 저장되지 않는다. 학습되는 파라미터는 softmax Transformer와 똑같이 다
-있고 개수도 같다. gradient는 $W$를 갱신하려고 흐르는 게 아니라 $W$를 **통과해서** $W_k$와
+있고 개수도 같다. gradient는 $W$를 update하려고 흐르는 게 아니라 $W$를 **통과해서** $W_k$와
 $W_v$까지 간다. 생긴 것이 행렬이고 벡터에 곱해서 쓰니까 weight라는 이름이 붙었을 뿐이다.
 
 softmax attention도 구조는 같다. $W_k, W_v, W_q$가 slow이고 KV cache가 fast 쪽이다. 차이는
@@ -260,7 +260,7 @@ softmax에는 이 한계가 없다. 저장 공간이 늘어나니까. 저장 공
 
 앞 절의 논증이 그림 한 장에 그대로 나타난다.
 
-### Delta rule로 저장된 값 갱신하기
+### Delta rule로 저장된 값 update하기
 
 논문은 쓰는 규칙을 바꾸자고 제안한다. 식 (20)부터 (24)다.
 
@@ -295,7 +295,7 @@ $\beta^{(i)}$는 그 시점 이후의 모든 loss에서 신호를 받는다.
 
 state 크기는 그대로다. 용량이 늘어난 게 아니라 **관리되기 시작한** 것이다.
 
-### 같은 key의 값을 갱신하는 실험
+### 같은 key의 값을 update하는 실험
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig3.png" alt="update 규칙별 학습 곡선" className="rounded-lg mx-auto max-w-xl" />
@@ -303,7 +303,7 @@ state 크기는 그대로다. 용량이 늘어난 게 아니라 **관리되기 �
 </figure>
 
 delta rule이 필요한 상황을 직접 만든 실험이다. 같은 key가 sequence 안에서 여러 번 나오고 그때마다
-다른 value가 붙는다. 모델은 가장 최근 값을 답해야 한다. 누적이 아니라 **갱신**이 필요한
+다른 value가 붙는다. 모델은 가장 최근 값을 답해야 한다. 누적이 아니라 **update**가 필요한
 task다. sequence 길이가 40이고 key가 20종류라 용량 자체는 넘지 않는다.
 
 - **주황(DPFP-1 delta)**: 이 논문의 규칙이다. 수백 step 만에 loss가 $10^{-3}$ 아래로 내려간다
@@ -313,8 +313,8 @@ task다. sequence 길이가 40이고 key가 20종류라 용량 자체는 넘지 
 weight 모델이다. 범례의 "Schlag (2021)"은 이 논문이 아니라 같은 저자가 같은 해에 낸 다른
 논문(Schlag, Munkhdalai & Schmidhuber, ICLR 2021)을 가리킨다.
 
-softmax attention에는 갱신이라는 개념이 없다. 논문의 표현대로 key와 value 쌍을 바꿀 수 없는
-채로 이어 붙일 뿐이다. 고정 크기 memory는 그럴 수 없어서 갱신 규칙이 있어야 한다.
+softmax attention에는 update라는 개념이 없다. 논문의 표현대로 key와 value 쌍을 바꿀 수 없는
+채로 이어 붙일 뿐이다. 고정 크기 memory는 그럴 수 없어서 update 규칙이 있어야 한다.
 
 ## RetNet: 오래된 정보를 감쇠시키는 memory
 
@@ -462,13 +462,13 @@ $W$로 미분하면
 $$\nabla_W\, \ell = \big(\underbrace{W\phi(k)}_{\bar{v}} - v\big)\,\phi(k)^\top$$
 
 이고 괄호 안의 $W\phi(k)$가 앞에서 "먼저 읽은 값" $\bar{v}$다. learning rate가 $\beta$인 gradient descent로 한 번
-갱신하면 이렇게 된다.
+update하면 이렇게 된다.
 
 $$W \leftarrow W - \beta\,\nabla_W\, \ell = W + \beta\,(v - \bar{v})\,\phi(k)^\top$$
 
-**앞에서 본 delta rule과 같은 갱신식이다.** write strength라고 부르던 $\beta$는
-이 해석에서는 learning rate에 해당한다. memory 갱신을 학습 단계로 볼 수 있는 셈이다. 이 모델은 생성하는 동안 token
-하나마다 SGD 갱신에 해당하는 연산을 하고 있었던 것이다.
+**앞에서 본 delta rule과 같은 update 식이다.** write strength라고 부르던 $\beta$는
+이 해석에서는 learning rate에 해당한다. memory update를 학습 단계로 볼 수 있는 셈이다. 이 모델은 생성하는 동안 token
+하나마다 SGD update에 해당하는 연산을 하고 있었던 것이다.
 
 순수한 linear attention도 같은 틀에 들어간다. $\bar{v}$를 뺀 꼴이다. 이미 무엇이 들어 있는지
 확인하지 않고 정보를 더한다. 그래서 저장한 정보가 겹치면서 간섭이 생긴다.
@@ -498,7 +498,7 @@ step을 받아야 할까?
 - 고정 크기 state에는 용량이 있다. key 차원보다 많은 연관을 넣으면 꺼낼 때 섞인다
 - 그 뒤는 설계 결정 하나다. 무엇을 쓰고 무엇을 포기할 것인가
 
-softmax attention은 key와 value를 개별 항목으로 보관하는 대신 저장 공간이 계속 늘어난다. 고정 크기 state로 정보를 합치면 어떤 정보를 남기고 어떻게 갱신할지 정해야 한다.
+softmax attention은 key와 value를 개별 항목으로 보관하는 대신 저장 공간이 계속 늘어난다. 고정 크기 state로 정보를 합치면 어떤 정보를 남기고 어떻게 update할지 정해야 한다.
 
 실험 결과를 해석할 때는 task와 평가 조건도 구분해야 한다. Katharopoulos et al.의 속도 수치는 이미지 생성 task에서 나왔고 Schlag et
 al.의 용량 실험은 합성 task다. 큰 언어 모델에서 linear attention이 softmax에 뒤진다는 것은
