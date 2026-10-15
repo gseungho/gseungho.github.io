@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import GoatCounter from "@/components/GoatCounter";
 
 export const metadata: Metadata = {
   title: "Tensors & Notebooks",
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </footer>
+        <GoatCounter />
       </body>
     </html>
   );
