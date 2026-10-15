@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { getAllPosts, type PostMeta } from "@/lib/posts";
 
-const AFFILIATION = ["세종대학교 소프트웨어학과", "수학통계학과 복수전공", "ISDS Lab"];
+const AFFILIATION: { name: string; href?: string; note?: string }[] = [
+  { name: "세종대학교 소프트웨어학과" },
+  { name: "수학통계학과 복수전공" },
+  { name: "ISDS Lab", href: "https://sites.google.com/view/isdslab/home", note: "2025.02 ~" },
+];
 
 const INTERESTS: { name: string; note?: string }[] = [
+  { name: "Model Compression", note: "Pruning" },
   { name: "Class-Imbalanced Learning", note: "Loss Reweighting" },
   { name: "Dynamic Compute" },
   { name: "Efficient Sequence Models", note: "Linear Attention, State Space Models" },
-  { name: "Test-Time Training" },
 ];
 
 const AWARDS = [
@@ -70,8 +74,22 @@ export default function AboutPage() {
 
       <Section label="Affiliation">
         <ul className="space-y-1.5 text-sm text-(--text)">
-          {AFFILIATION.map((line) => (
-            <li key={line}>{line}</li>
+          {AFFILIATION.map(({ name, href, note }) => (
+            <li key={name}>
+              {href ? (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-(--text-strong) underline decoration-(--border) underline-offset-4 transition-colors duration-200 hover:text-(--accent) hover:decoration-(--accent)"
+                >
+                  {name}
+                </a>
+              ) : (
+                name
+              )}
+              {note && <span className="ml-2 font-mono text-xs text-(--text-muted)">{note}</span>}
+            </li>
           ))}
         </ul>
       </Section>
