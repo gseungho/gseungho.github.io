@@ -22,9 +22,9 @@ export default async function TagPage({ params }: { params: Promise<{ name: stri
   const posts = getAllPosts().filter((p) => p.tags.map(t => t.normalize("NFC")).includes(tag));
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-2">
       {/* Tag Header Band */}
-      <section className="py-2">
+      <section className="pt-2">
         <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
           folder / tags
         </div>
@@ -41,7 +41,7 @@ export default async function TagPage({ params }: { params: Promise<{ name: stri
 
       {/* Posts Section */}
       <section className="space-y-6">
-        <div className="divide-y divide-(--border) border-y border-(--border)">
+        <div className="divide-y divide-(--border) border-b border-(--border)">
           {posts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}
