@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import Link from "next/link";
 import { getAllPosts, type PostMeta } from "@/lib/posts";
 
@@ -24,10 +26,18 @@ const AWARDS = [
   },
 ];
 
+// Profile photo: drop public/images/profile.{jpg,jpeg,png,webp} in and it shows up next to the name.
+const PHOTO = ["jpg", "jpeg", "png", "webp"]
+  .map((ext) => `/images/profile.${ext}`)
+  .find((p) => fs.existsSync(path.join(process.cwd(), "public", p)));
+
 function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="space-y-4">
-      <h2 className="text-xs font-semibold uppercase tracking-[0.25em] text-(--text-muted)">{label}</h2>
+    <section className="space-y-5">
+      <h2 className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-(--text-strong)">
+        <span className="h-4 w-1 rounded-full bg-(--accent)" aria-hidden="true" />
+        {label}
+      </h2>
       {children}
     </section>
   );
@@ -57,15 +67,26 @@ export default function AboutPage() {
   const studies = posts.filter((p) => p.category === "공부");
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-14">
       <section className="py-2">
         <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
           about
         </div>
-        <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-(--text-strong) tracking-tight mb-1">
-          고승호
-        </h1>
-        <div className="font-mono text-sm text-(--text-muted) mb-5">Seung Ho Go</div>
+        <div className="flex items-center gap-5 md:gap-6 mb-6">
+          {PHOTO && (
+            <img
+              src={PHOTO}
+              alt="고승호"
+              className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border border-(--border) shrink-0"
+            />
+          )}
+          <div>
+            <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-(--text-strong) tracking-tight mb-1">
+              고승호
+            </h1>
+            <div className="font-mono text-sm text-(--text-muted)">Seung Ho Go</div>
+          </div>
+        </div>
         <p className="text-base text-(--text) leading-relaxed max-w-xl">
           매주 ISDS Lab 세미나에서 발표한 논문을 리뷰로 정리합니다. 공부 중인 내용을 정리한 노트와 직접 만든 프로젝트의 기록도 함께 남깁니다.
         </p>
