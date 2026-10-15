@@ -382,7 +382,7 @@ $$
 
 뉴스에서 보는 "계절 조정 실업률" 같은 수치가 이렇게 만든 값이다. 계절 조정한 계열은 추세와 잔차만 남아서 이번 달 수치가 계절 탓인지 실제 변화인지 가려 보기 좋다.
 
-그렇다면 $T_t$와 $S_t$는 실제로 어떻게 구할까? 다음 글 [시계열분석 (2)](/posts/2026-10-15-time-series-2-decomposition-trend-regression)에서 이동평균으로 성분을 나누는 방법과 시간에 회귀해서 추세와 계절성을 구하는 방법을 다룬다.
+그렇다면 $T_t$와 $S_t$는 실제로 어떻게 구할까? 다음 글 [시계열분석 (2)](/posts/2026-10-15-time-series-2-decomposition)에서는 이동평균으로 성분을 나누는 방법을, [시계열분석 (3)](/posts/2026-10-15-time-series-3-trend-regression)에서는 시간에 회귀해서 추세와 계절성을 구하는 방법을 다룬다.
 
 [^1]: 음수가 섞인 자료에는 부호를 따로 떼어 낸 변형을 쓴다. $\lambda \neq 0$이면 $w_t = (\operatorname{sign}(y_t)\,\lvert y_t \rvert^{\lambda} - 1)/\lambda$이고 $\lambda = 0$이면 $\ln y_t$다. $\operatorname{sign}(y_t)$는 $y_t$의 부호(+1 또는 -1)다.
 
