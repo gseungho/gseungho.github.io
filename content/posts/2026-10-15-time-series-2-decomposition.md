@@ -4,7 +4,7 @@ date: "2026-10-15"
 category: "공부"
 subcategory: "Statistics/Time Series Analysis"
 tags: ["시계열분석", "시계열 분해", "이동평균", "STL"]
-description: "이동평균으로 추세를 뽑고 classical decomposition의 네 단계와 STL로 시계열을 추세, 계절, 나머지로 나누는 과정을 정리했다."
+description: "이동평균으로 추세를 뽑는 데서 시작해 classical decomposition의 네 단계를 따라간다. 계절 성분의 합을 0으로 맞추는 조정이 왜 필요한지 짚고 loess를 반복해 해마다 달라지는 계절 패턴까지 잡는 STL과 비교한다."
 ---
 
 시계열분석 시리즈의 두 번째 글이다. 세종대학교 인공지능데이터사이언스학과 2026년 2학기 시계열분석 수업을 따라가며 공부한 내용이고 주 교재 [FPP3](https://otexts.com/fpp3/)(Hyndman & Athanasopoulos, *Forecasting: Principles and Practice*, 3rd ed.)를 함께 참고했다.

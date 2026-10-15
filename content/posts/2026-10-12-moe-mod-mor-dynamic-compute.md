@@ -4,7 +4,7 @@ date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Dynamic Compute"
 tags: ["논문리뷰", "Mixture-of-Experts", "Mixture-of-Depths", "Mixture-of-Recursions"]
-description: "MoE의 expert 선택, MoD의 block 생략, MoR의 반복 횟수 조절을 비교하고 각 routing 방식의 학습 방법과 제약을 살펴봤다."
+description: "모든 token에 같은 계산을 쓰지 않는 세 가지 방법을 비교한다. MoE는 token마다 expert를 고르고 MoD는 일부 token만 block에 통과시키며 MoR은 token마다 block을 반복하는 횟수를 정한다. 각 routing 방식을 어떻게 학습하고 어떤 제약이 따르는지도 함께 살펴본다."
 ---
 
 dense Transformer는 모든 token을 똑같이 다룬다. "the" 같은 흔한 단어든 처음 보는 고유명사든 같은

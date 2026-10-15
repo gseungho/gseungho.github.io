@@ -4,7 +4,7 @@ date: "2026-10-15"
 category: "공부"
 subcategory: "Statistics/Time Series Analysis"
 tags: ["시계열분석", "추세 회귀", "OLS", "AIC"]
-description: "추세를 시간의 함수로, 계절성을 dummy 변수로 두고 OLS로 추정하는 회귀 모형과 AIC, SIC로 모형을 고르는 과정을 정리했다."
+description: "추세를 시간의 함수로, 계절성을 dummy 변수로 두고 OLS로 추정하는 회귀 모형을 다룬다. 행렬로 쓴 추정량, 소매 판매 예제에서 AIC와 SIC로 추세 모형을 고르는 과정, dummy trap을 차례로 정리한다. 이동평균 분해와 회귀가 무엇이 다른지도 비교한다."
 ---
 
 시계열분석 시리즈의 세 번째 글이다. 세종대학교 인공지능데이터사이언스학과 2026년 2학기 시계열분석 수업을 따라가며 공부한 내용이고 주 교재 [FPP3](https://otexts.com/fpp3/)(Hyndman & Athanasopoulos, *Forecasting: Principles and Practice*, 3rd ed.)를 함께 참고했다.

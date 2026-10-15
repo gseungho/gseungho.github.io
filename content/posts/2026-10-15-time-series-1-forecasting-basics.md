@@ -4,7 +4,7 @@ date: "2026-10-15"
 category: "공부"
 subcategory: "Statistics/Time Series Analysis"
 tags: ["시계열분석", "예측", "Box-Cox", "FPP3"]
-description: "예측값을 확률분포로 보는 관점, 멀리 예측할수록 불확실해지는 이유, 로그와 Box-Cox 변환, 추세와 계절성 같은 시계열 성분을 정리했다."
+description: "예측값을 숫자 하나가 아니라 확률분포로 보는 관점에서 출발한다. 멀리 예측할수록 불확실성이 커지는 이유를 AR 모형으로 계산하고 로그와 Box-Cox 변환으로 변동의 크기를 고르게 만드는 방법을 다룬다. 끝으로 시계열을 추세, 계절성, 주기, 나머지 성분으로 나눠 보는 틀을 정리한다."
 ---
 
 2026년 2학기에 세종대학교 인공지능데이터사이언스학과에서 시계열분석을 듣고 있다. 공부한 내용을 단원마다 한 편씩 정리해 올린다. 수업의 주 교재는 Hyndman과 Athanasopoulos의 [Forecasting: Principles and Practice, 3rd ed.](https://otexts.com/fpp3/)(이하 FPP3)다. 온라인에 무료로 공개된 책이라 함께 보면 좋다.

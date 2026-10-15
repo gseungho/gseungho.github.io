@@ -4,7 +4,7 @@ date: "2026-10-15"
 category: "공부"
 subcategory: "Statistics/Time Series Analysis"
 tags: ["시계열분석", "ETS", "상태공간모형", "Kalman filter"]
-description: "지수평활법에 오차 분포를 붙인 ETS 모형으로 예측구간을 유도하고 모수 추정, 베이즈 해석, 회귀와의 차이를 정리했다."
+description: "지수평활법에 오차 분포를 붙여 통계 모형인 ETS로 만들고 예측구간이 왜 점점 넓어지는지 유도한다. 모수를 SSE와 우도로 추정하는 방법, 수준을 베이즈로 업데이트하는 관점, 3편의 추세 회귀와 무엇이 다른지도 함께 다룬다."
 ---
 
 세종대학교 인공지능데이터사이언스학과 2026년 2학기 시계열분석 수업을 따라가며 정리하는 시리즈의 다섯 번째 글이다. 수업 내용과 교재 [Forecasting: Principles and Practice, 3rd ed.](https://otexts.com/fpp3/)(이하 FPP3) 8장 뒷부분(8.5~8.7절)을 바탕으로 썼다.

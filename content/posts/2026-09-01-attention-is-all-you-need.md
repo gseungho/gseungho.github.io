@@ -4,7 +4,7 @@ date: "2026-09-01"
 category: "논문리뷰"
 subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "Transformer", "Attention", "딥러닝"]
-description: "위치 인코딩, Q·K·V의 학습, attention scaling과 LayerNorm을 질문별로 정리하고 직접 계산한 결과와 논문에 제시된 근거를 함께 살펴봤다."
+description: "Transformer를 공부하다 보면 설명이 멈추는 자리가 몇 군데 있다. 위치 인코딩을 임베딩에 더하는 이유, Q·K·V가 서로 다르게 학습되는 방식, attention scaling, residual connection과 LayerNorm의 역할을 질문별로 짚는다. 직접 계산한 결과와 논문이 제시하는 근거를 함께 본다."
 ---
 
 Transformer를 공부하면서 구조 설명만으로 이해하기 어려운 부분이 있었다.

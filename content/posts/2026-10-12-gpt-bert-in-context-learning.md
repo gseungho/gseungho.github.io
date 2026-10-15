@@ -4,7 +4,7 @@ date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "GPT", "BERT", "In-Context Learning"]
-description: "GPT-1과 BERT의 fine-tuning에서 GPT-2와 GPT-3의 prompt 기반 적응으로 이어지는 변화를 구조, 학습 목적, 평가 결과로 비교했다."
+description: "GPT-1과 BERT는 task마다 fine-tuning을 하고 GPT-2와 GPT-3는 prompt만으로 task에 적응한다. 네 모델의 구조, 학습 목적, 평가 결과를 나란히 놓고 모델이 무슨 task인지 어디서 알아내는지 비교한다. GPT-3의 in-context learning이 weight update 없이 성능을 끌어올리는 방식도 정리한다."
 ---
 
 Transformer 자체는 2017년 이후 거의 바뀌지 않았다. 그런데 2018년의 GPT-1과 2020년의 GPT-3는

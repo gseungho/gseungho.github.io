@@ -4,7 +4,7 @@ date: "2026-10-15"
 category: "공부"
 subcategory: "Statistics/Time Series Analysis"
 tags: ["시계열분석", "지수평활법", "SES", "Holt-Winters"]
-description: "SES, Holt, Holt-Winters를 유도하며 관측값이 들어올 때마다 수준, 기울기, 계절 성분을 업데이트하는 지수평활법을 정리했다."
+description: "관측값이 하나 들어올 때마다 수준을 업데이트하는 단순 지수평활(SES)에서 출발한다. 여기에 기울기를 더한 Holt 방법과 damped trend, 계절 성분까지 다루는 Holt-Winters를 차례로 유도하고 추세와 계절의 조합 아홉 가지를 정리한다."
 ---
 
 세종대학교 인공지능데이터사이언스학과 2026년 2학기 시계열분석 수업을 따라가며 정리하는 시리즈의 네 번째 글이다. 수업 내용과 교재 [Forecasting: Principles and Practice, 3rd ed.](https://otexts.com/fpp3/)(이하 FPP3) 8장 앞부분(8.1~8.4절)을 바탕으로 썼다.

@@ -4,7 +4,7 @@ date: "2026-09-01"
 category: "논문리뷰"
 subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "ViT", "Transformer", "컴퓨터비전"]
-description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN보다 이미지 구조를 덜 가정한 모델이 대규모 데이터로 성능을 높이는 과정과 학습된 표현을 살펴봤다."
+description: "An Image is Worth 16×16 Words(ICLR 2021) 리뷰다. CNN보다 이미지 구조를 덜 가정한 Transformer가 대규모 pre-training으로 CNN을 넘어서는 과정을 따라간다. 데이터 규모에 따라 결론이 뒤집히는 실험과 ViT가 학습한 위치 임베딩, attention distance도 함께 살펴본다."
 ---
 
 학부 논문 리뷰 세미나에서 발표한 **An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale** (Dosovitskiy et al., ICLR 2021) 리뷰다. 발표 내용을 글로 옮기면서 발표 때 시간에 쫓겨 줄였던 부분을 다시 채워 넣었다.

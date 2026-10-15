@@ -4,7 +4,7 @@ date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Sequence Models"
 tags: ["논문리뷰", "Linear Attention", "Fast Weight", "RetNet"]
-description: "Linear Attention, Fast Weight와 RetNet의 고정 크기 state를 비교하고 정보의 누적·update·감쇠와 delta rule의 gradient descent 해석을 정리했다."
+description: "softmax attention은 과거 token의 key와 value를 모두 쌓아 두지만 linear attention 계열은 크기가 고정된 state 하나에 정보를 쓴다. Linear Attention의 누적, Fast Weight의 update, RetNet의 감쇠를 비교하며 고정된 memory에 무엇을 어떻게 쓸지 살펴본다. 마지막으로 delta rule을 gradient descent로 해석하는 관점까지 정리한다."
 ---
 
 softmax attention은 **과거의 key와 value를 개별 항목으로 보관한다.** 지나간
