@@ -15,13 +15,13 @@ const WEBSITE_JSON_LD = {
 export default function Home() {
   const posts = getAllPosts();
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }}
       />
       {/* Voltagent Hero Band */}
-      <section className="py-6">
+      <section className="pt-6">
         <div className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#00d992] mb-3">
           npx tensors-and-notebooks --log
         </div>
@@ -33,7 +33,7 @@ export default function Home() {
         </p>
         
         {/* Voltagent Signature Dashed Divider */}
-        <div className="mt-12 border-b border-dashed border-(--border) w-full opacity-60" />
+        <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
       </section>
 
       {/* Posts Section */}
