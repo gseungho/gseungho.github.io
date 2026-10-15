@@ -4,7 +4,7 @@ date: "2026-09-01"
 category: "논문리뷰"
 subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "ViT", "Transformer", "컴퓨터비전"]
-description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN보다 이미지에 대한 사전 가정이 적은 모델이 대규모 데이터로 성능을 높이는 과정과 학습된 표현을 살펴봤다."
+description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN보다 이미지 구조를 덜 가정한 모델이 대규모 데이터로 성능을 높이는 과정과 학습된 표현을 살펴봤다."
 ---
 
 학부 논문 리뷰 세미나에서 발표한 **An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale** (Dosovitskiy et al., ICLR 2021) 리뷰다. 발표 내용을 글로 옮기면서 발표 때 시간에 쫓겨 줄였던 부분을 다시 채워 넣었다.
@@ -13,27 +13,27 @@ description: "An Image is Worth 16×16 Words (ICLR 2021) 리뷰. CNN보다 이�
 
 이 글 전체를 관통하는 질문은 하나다.
 
-> **ViT에는 2D 구조에 대한 사전 지식이 얼마나 필요한가?**
+> **ViT에는 2D 구조를 얼마나 미리 알려 줘야 하는가?**
 
 구조와 실험 결과를 이 질문에 맞춰 살펴보자.
 
-이 글은 [Attention Is All You Need 리뷰](/posts/2026-09-01-attention-is-all-you-need)의 다음 편이다. 거기서 다룬 Pre-LN, positional encoding, skip-connection 이야기가 여기서 그대로 이어지니 트랜스포머 구조가 낯설다면 그쪽을 먼저 봐도 좋다.
+이 글은 [Attention Is All You Need 리뷰](/posts/2026-09-01-attention-is-all-you-need)의 다음 편이다. 거기서 다룬 Pre-LN, positional encoding, residual connection 이야기가 여기서 그대로 이어지니 Transformer 구조가 낯설다면 그쪽을 먼저 봐도 좋다.
 
 ## 2020년의 NLP와 컴퓨터 비전
 
 2020년 당시 상황을 보면 NLP와 Vision이 완전히 다른 길을 가고 있었다.
 
-**NLP 쪽**은 트랜스포머가 이미 표준이었다. 큰 코퍼스로 pre-train하고 작은 task로 fine-tune하는 방식이 정착됐고 파라미터를 100B까지 키워도 성능이 포화될 기미가 보이지 않았다.
+**NLP 쪽**은 Transformer가 이미 표준이었다. 큰 코퍼스로 pre-train하고 작은 task로 fine-tune하는 방식이 정착됐고 파라미터를 100B까지 키워도 성능이 포화될 기미가 보이지 않았다.
 
 **Vision 쪽**은 여전히 CNN이 지배하고 있었다. attention을 붙이려는 시도는 많았지만 대부분 CNN 구조를 그대로 두고 일부만 교체하는 식이었다. 아예 conv를 다 걷어낸 연구들도 있었는데 특수한 attention 패턴을 쓰다 보니 GPU/TPU에서 가속이 잘 되지 않았다. 이론적으로 효율적이어도 실제로는 느렸던 것이다.
 
-그래서 이 논문의 질문은 단순하다. **CNN을 완전히 버리고 표준 트랜스포머를 최소한만 고쳐서 그대로 쓰면 어떻게 되는가?**
+그래서 이 논문의 질문은 단순하다. **CNN을 완전히 버리고 표준 Transformer를 최소한만 고쳐서 그대로 쓰면 어떻게 되는가?**
 
 ## 이 논문의 진짜 기여는 아키텍처가 아니다
 
 ViT의 기여를 이해하려면 앞선 연구와 무엇이 다른지 살펴봐야 한다.
 
-초록만 읽으면 "트랜스포머를 이미지에 처음 적용했다"로 들린다. 그런데 그건 사실이 아니다.
+초록만 읽으면 "Transformer를 이미지에 처음 적용했다"로 들린다. 그런데 그건 사실이 아니다.
 
 Related Work에서 저자들이 직접 밝히고 있는데 **Cordonnier et al. (2020)이** 이미 2×2 패치를 뽑아 full self-attention을 적용했다. 구조적으로 ViT와 매우 유사하고 논문도 "most related to ours"라고 인정한다.
 
@@ -42,18 +42,18 @@ Related Work에서 저자들이 직접 밝히고 있는데 **Cordonnier et al. (
 - 패치가 2×2로 너무 작아서 **저해상도 이미지에만** 쓸 수 있었다
 - 결정적으로 **대규모 pre-training을 하지 않았다**
 
-그래서 **이 논문의 진짜 기여는 아키텍처가 아니라 증거다.** "vanilla 트랜스포머도 pre-training 규모만 충분하면 SOTA CNN을 이긴다"는 것을 중간 해상도에서 3억 장 규모로 실증한 것이다.
+그래서 **이 논문의 진짜 기여는 아키텍처가 아니라 증거다.** "vanilla Transformer도 pre-training 규모만 충분하면 SOTA CNN을 이긴다"는 것을 중간 해상도에서 3억 장 규모로 실증한 것이다.
 
-이 글에서는 특히 대규모 사전학습이 성능에 어떤 영향을 주었는지 살펴본다.
+이 글에서는 특히 대규모 pre-training이 성능에 어떤 영향을 주었는지 살펴본다.
 
 ## 이미지 패치에서 분류 결과까지
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_overview.png" alt="ViT 전체 구조와 Transformer Encoder 블록" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 1. 왼쪽이 ViT 전체, 오른쪽이 encoder 블록 하나 (Dosovitskiy et al., 2021)</figcaption>
+  <img src="/images/posts/vit-16x16-words/fig_overview.png" alt="ViT 전체 구조와 Transformer Encoder block" className="rounded-lg mx-auto" />
+  <figcaption className="mt-2 text-sm text-gray-500">Figure 1. 왼쪽이 ViT 전체, 오른쪽이 encoder block 하나 (Dosovitskiy et al., 2021)</figcaption>
 </figure>
 
-ViT는 **트랜스포머의 encoder만 쓴다.** decoder가 없다.
+ViT는 **Transformer의 encoder만 쓴다.** decoder가 없다.
 
 번역기는 출력이 문장이니까 한 단어씩 순차적으로 뽑아야 했고 그래서 masked self-attention과 decoder가 필요했다. 그런데 **분류는 출력이 클래스 하나**다. 순차적으로 뽑을 게 없으니 decoder가 할 일이 없다. 덕분에 masking, decoder self-attention, encoder-decoder attention이 전부 사라진다. 그만큼 단순해진다.
 
@@ -61,14 +61,14 @@ ViT는 **트랜스포머의 encoder만 쓴다.** decoder가 없다.
 
 ### 1단계: 이미지를 패치로 나누기
 
-트랜스포머는 `(B, 시퀀스 길이, D)` 이 모양만 받는다. 이미지를 어떻게든 그 모양으로 바꾸는 게 첫 번째 문제다.
+Transformer는 `(B, sequence 길이, D)` 이 모양만 받는다. 이미지를 어떻게든 그 모양으로 바꾸는 게 첫 번째 문제다.
 
 224×224 이미지를 16×16 패치로 자르면 다음과 같다.
 
 - 패치 개수 $N = 224 \times 224 / 16^2 = 196$
 - 패치 하나를 펴면 길이가 $16 \times 16 \times 3 = 768$
 
-그래서 `(B, 3, 224, 224)` → `(B, 196, 768)`이 된다. **여기서 196이 곧 시퀀스 길이다.** 문장에서 단어 개수에 해당하는 자리다. 패치 하나 = 단어 하나. 제목의 "16×16 words"가 이 얘기다.
+그래서 `(B, 3, 224, 224)` → `(B, 196, 768)`이 된다. **여기서 196이 곧 sequence 길이다.** 문장에서 단어 개수에 해당하는 자리다. 패치 하나 = 단어 하나. 제목의 "16×16 words"가 이 얘기다.
 
 **여기서 vanilla와 첫 번째 차이가 나온다.** NLP에서는 단어가 one-hot 인덱스로 들어와서 `nn.Embedding`이 테이블에서 행을 뽑아온다. 그런데 패치는 연속적인 픽셀 값이다. 1482번째 행 같은 걸 뽑을 수가 없다. 그래서 lookup이 아니라 **선형변환**이 필요하다.
 
@@ -83,7 +83,7 @@ patch_embed = nn.Conv2d(3, D, kernel_size=16, stride=16)
 
 ### 2단계: 패치 임베딩
 
-Figure 1의 분홍색 박스에 "Linear Projection of Flattened Patches"라고 적혀 있는데 **이게 patch embedding이다.** 같은 변환을 가리킨다. 나는 처음에 이게 patch embedding 앞에 오는 별도 단계인 줄 알았는데 아니었다.
+Figure 1의 분홍색 박스에 "Linear Projection of Flattened Patches"라고 적혀 있는데 **이게 패치 임베딩이다.** 같은 변환을 가리킨다. 나는 처음에 이게 패치 임베딩 앞에 오는 별도 단계인 줄 알았는데 아니었다.
 
 `(B, 196, 768)`을 행렬 $E$에 통과시키면 `(B, 196, D)`가 된다. 두 가지만 짚고 넘어가자.
 
@@ -93,35 +93,35 @@ Figure 1의 분홍색 박스에 "Linear Projection of Flattened Patches"라고 �
 
 여기서 입출력 차원이 같다고 변환이 없는 것은 아니다. ViT-B/16은 우연히 $16^2 \times 3 = 768$이고 $D$도 768이라 입출력 차원이 똑같다. "그냥 통과시키는 거 아닌가" 싶지만 우연의 일치일 뿐이고 여전히 학습되는 선형변환이다. ViT-L/16을 보면 768 → 1024로 명확히 바뀐다.
 
-### 3단계: CLS 토큰과 위치 임베딩
+### 3단계: CLS token과 위치 임베딩
 
 논문의 식 (1)이다.
 
 $$\mathbf{z}_0 = [\,\mathbf{x}_{\text{class}};\ \mathbf{x}_p^1 E;\ \mathbf{x}_p^2 E;\ \cdots;\ \mathbf{x}_p^N E\,] + E_{\text{pos}}$$
 
-식에서 연결과 덧셈을 구분해야 한다. **대괄호는 concat**, 세로로 쌓는 것이다. 그런데 뒤에 붙은 $+\,E_{\text{pos}}$는 **진짜 덧셈**이다. 한 줄에 두 개의 다른 연산이 섞여 있다. Figure 1 그림에서는 position embedding이 concat처럼 보이게 그려져 있는데 더하는 게 맞다.
+식에서 concat과 덧셈을 구분해야 한다. **대괄호는 concat**, 세로로 쌓는 것이다. 그런데 뒤에 붙은 $+\,E_{\text{pos}}$는 **진짜 덧셈**이다. 한 줄에 두 개의 다른 연산이 섞여 있다. Figure 1 그림에서는 위치 임베딩이 concat처럼 보이게 그려져 있는데 더하는 게 맞다.
 
-- $\mathbf{x}_{\text{class}}$는 BERT의 `[class]` 토큰이다. 이미 $D$차원인 **학습 파라미터**라서 $E$를 통과하지 않는다. 통과시킬 원본 픽셀이 없기 때문이다.
+- $\mathbf{x}_{\text{class}}$는 BERT의 `[class]` token이다. 이미 $D$차원인 **학습 파라미터**라서 $E$를 통과하지 않는다. 통과시킬 원본 픽셀이 없기 때문이다.
 - $E_{\text{pos}}$는 $(N+1) \times D$, 즉 **197행**이다. CLS 자리까지 포함한 수다.
 
 정리하면 `(B, 196, D)` → CLS 붙여서 `(B, 197, D)` → $E_{\text{pos}}$ 더해서 그대로 `(B, 197, D)`.
 
-**여기가 vanilla와의 두 번째 차이다.** 2017년 트랜스포머는 sin/cos 공식으로 만든 **고정된** positional **encoding**을 썼다. ViT는 **학습되는** positional **embedding**을 쓴다. 공식이 아니라 파라미터다. 뒤에서는 학습된 위치 임베딩의 패턴을 살펴본다.
+**여기가 vanilla와의 두 번째 차이다.** 2017년 Transformer는 sin/cos 공식으로 만든 **고정된** positional **encoding**을 썼다. ViT는 **학습되는** positional **embedding**을 쓴다. 공식이 아니라 파라미터다. 뒤에서는 학습된 위치 임베딩의 패턴을 살펴본다.
 
-### CLS 토큰은 왜 필요한가
+### CLS token은 왜 필요한가
 
 분류를 하려면 결국 고정 크기 벡터 하나가 필요한데 encoder를 나오면 197개가 남아 있다. 이 중에 뭘 써야 할까?
 
-가장 단순한 방법은 196개를 그냥 평균내는 것(GAP)이다. 그런데 이건 모든 패치를 똑같은 가중치 $1/196$으로 취급하는 것이다. 배경 하늘 패치나 고양이 얼굴 패치나 똑같이.
+가장 단순한 방법은 196개를 그냥 평균내는 것(GAP)이다. 그런데 이건 모든 패치를 똑같은 weight $1/196$으로 취급하는 것이다. 배경 하늘 패치나 고양이 얼굴 패치나 똑같이.
 
-CLS는 다른 접근이다. **정보가 하나도 없는 빈 슬롯**을 앞에 하나 끼워 넣고 self-attention을 거치면서 다른 패치들의 정보를 **학습된 가중치로** 끌어모으게 한다. 즉 "무엇을 요약할지"까지 학습 대상이 되는 것이다. attention의 weighted sum을 요약이라는 목적에 그대로 쓰는 셈이다.
+CLS는 다른 접근이다. **정보가 하나도 없는 빈 슬롯**을 앞에 하나 끼워 넣고 self-attention을 거치면서 다른 패치들의 정보를 **학습된 weight로** 끌어모으게 한다. 즉 "무엇을 요약할지"까지 학습 대상이 되는 것이다. attention의 weighted sum을 요약이라는 목적에 그대로 쓰는 셈이다.
 
-여기서 decoder의 `<sos>` 토큰과 헷갈리면 안 된다.
+여기서 decoder의 `<sos>` token과 헷갈리면 안 된다.
 
-- `<sos>`는 **masking 아래에서** 다음 토큰을 하나씩 예측하기 시작하는 신호다
+- `<sos>`는 **masking 아래에서** 다음 token을 하나씩 예측하기 시작하는 신호다
 - **CLS는 masking이 없어서** 첫 layer부터 196개 패치를 전부 본다. 그리고 한 번의 최종 출력으로 끝난다
 
-둘 다 "앞에 붙이는 특수 토큰"이라 비슷해 보이지만 역할이 완전히 다르다.
+둘 다 "앞에 붙이는 특수 token"이라 비슷해 보이지만 역할이 완전히 다르다.
 
 ### 4단계: Transformer encoder
 
@@ -133,7 +133,7 @@ $$\mathbf{z}_\ell = \text{MLP}(\text{LN}(\mathbf{z}'_\ell)) + \mathbf{z}'_\ell, 
 
 $$\mathbf{y} = \text{LN}(\mathbf{z}_L^0)$$
 
-식 (2)가 attention 블록, 식 (3)이 MLP 블록이다. 보면 **LN을 먼저 하고 블록을 통과하고 그 다음에 더한다.** 2017년 논문의 순서와 다르다. 이건 다음 절에서 따로 다루겠다.
+식 (2)가 attention block, 식 (3)이 MLP block이다. 보면 **LN을 먼저 하고 block을 통과하고 그 다음에 더한다.** 2017년 논문의 순서와 다르다. 이건 다음 절에서 따로 다루겠다.
 
 식 (4)가 중요하다. $\mathbf{z}_L$의 위첨자 0, 즉 마지막 layer의 **0번째 행**이다. **CLS 자리다.** 나머지 196개는 분류에 쓰지 않고 버린다. 여기에 LN을 한 번 더 걸고 MLP head로 보낸다.
 
@@ -145,9 +145,9 @@ $$\mathbf{y} = \text{LN}(\mathbf{z}_L^0)$$
 | ViT-Large | 24 | 1024 | 4096 | 16 | 307M |
 | ViT-Huge | 32 | 1280 | 5120 | 16 | 632M |
 
-Base와 Large는 **BERT의 설정을 그대로 가져온 것**이고 Huge만 새로 추가했다. "최소한만 바꾼다"는 논문의 태도와 일관된다.
+Base와 Large는 **BERT의 설정을 그대로 가져온 것**이고 Huge만 새로 추가했다. "최소한만 바꾼다"는 논문의 태도와 맞아떨어진다.
 
-모델 이름의 표기도 살펴보자. ViT-L/16은 "Large 크기 + 패치 16×16"이다. 그리고 시퀀스 길이는 패치 크기의 제곱에 반비례하니까 /16이 /32보다 패치가 4배 많고 훨씬 비싸다.
+모델 이름의 표기도 살펴보자. ViT-L/16은 "Large 크기 + 패치 16×16"이다. 그리고 sequence 길이는 패치 크기의 제곱에 반비례하니까 /16이 /32보다 패치가 4배 많고 훨씬 비싸다.
 
 ## 원래 Transformer와 달라진 여섯 가지
 
@@ -155,34 +155,34 @@ Base와 Large는 **BERT의 설정을 그대로 가져온 것**이고 Huge만 새
 |---|---|---|
 | 구성 | encoder + decoder | **encoder만** |
 | LayerNorm | Post-LN | **Pre-LN** |
-| 활성함수 | ReLU | **GELU** |
+| activation 함수 | ReLU | **GELU** |
 | 위치 정보 | sinusoidal encoding (고정) | **learned embedding** |
-| 요약 토큰 | 없음 | **CLS 토큰** |
+| 요약 token | 없음 | **CLS token** |
 | 입력 임베딩 | 테이블에서 행 뽑기 | **선형변환** |
 
 **Pre-LN과 GELU 조합은 ViT가 발명한 게 아니다.** GPT-2가 이미 쓰던 방식이다. 즉 저자들은 새로운 걸 만든 게 아니라 **NLP에서 이미 검증된 걸 그대로 들고 온 것**이다.
 
-이것도 논문의 태도와 일관된다. Method 섹션 첫 문장이 "원래 트랜스포머를 가능한 한 가깝게 따랐다"인데 NLP에서 쓰던 구현을 거의 그대로 활용할 수 있다는 실용적인 이유도 제시한다.
+이것도 논문의 태도와 맞아떨어진다. Method 섹션 첫 문장이 "원래 Transformer를 가능한 한 가깝게 따랐다"인데 NLP에서 쓰던 구현을 거의 그대로 활용할 수 있다는 실용적인 이유도 제시한다.
 
 ### 왜 Pre-LN인가
 
-LN을 앞에 두느냐 뒤에 두느냐, 괄호 위치만 바뀐 것처럼 보이는데 왜 중요할까? skip-connection을 통과하는 gradient를 보면 드러난다.
+LN을 앞에 두느냐 뒤에 두느냐, 괄호 위치만 바뀐 것처럼 보이는데 왜 중요할까? residual connection을 통과하는 gradient를 보면 드러난다.
 
-**Post-LN**은 $\text{LN}(x + F(x))$ 형태다. 미분하면 identity 항 $I$가 **LayerNorm의 Jacobian과 곱해진다.** skip-connection을 만든 이유가 "$I$를 남겨서 gradient가 사라지지 않게 하는 것"이었는데 그 $I$가 다른 것과 곱해지면서 보장이 깨지는 것이다.
+**Post-LN**은 $\text{LN}(x + F(x))$ 형태다. 미분하면 identity 항 $I$가 **LayerNorm의 Jacobian과 곱해진다.** residual connection을 만든 이유가 "$I$를 남겨서 gradient가 사라지지 않게 하는 것"이었는데 그 $I$가 다른 것과 곱해지면서 보장이 깨지는 것이다.
 
 **Pre-LN**은 $x + F(\text{LN}(x))$ 형태다. 여기서는 $x$ 자체가 LN을 거치지 않는다. LN은 $F$의 입력을 만드는 데만 쓰이고 $x$는 더하기 직전까지 원본 그대로 살아남는다. 그래서 미분하면 $I + \delta$로 깔끔하게 남는다.
 
-$L$개 층을 지나면 차이가 명확해진다.
+$L$개 layer를 지나면 차이가 명확해진다.
 
 $$\prod_{\ell=1}^{L} (I + \delta_\ell) \qquad \text{vs.} \qquad \prod_{\ell=1}^{L} J_{\text{LN}}^{(\ell)} (I + \delta_\ell)$$
 
-왼쪽은 $\delta$가 0이어도 각 항이 최소 1이라 절대 0으로 가지 않는다. 오른쪽은 $J_{\text{LN}}$이 층마다 한 번씩 곱해지면서 누적된다.
+왼쪽은 $\delta$가 0이어도 각 항이 최소 1이라 절대 0으로 가지 않는다. 오른쪽은 $J_{\text{LN}}$이 layer마다 한 번씩 곱해지면서 누적된다.
 
-층 수가 늘어나면 이 차이가 더 중요해진다. 2017년 encoder는 6층이라 Post-LN으로도 견뎠다. 그런데 ViT-Huge는 32층이다. 이 정도 깊이에서는 Pre-LN이 아니면 학습이 불안정해진다.
+layer 수가 늘어나면 이 차이가 더 중요해진다. 2017년 encoder는 6 layer라 Post-LN으로도 견뎠다. 그런데 ViT-Huge는 32 layer다. 이 정도 깊이에서는 Pre-LN이 아니면 학습이 불안정해진다.
 
 대가가 없는 건 아니다. Pre-LN은 residual stream이 정규화 없이 계속 누적되니까 마지막에 LN을 한 번 더 걸어 줘야 한다. 그게 식 (4)의 $\text{LN}(\mathbf{z}_L^0)$이다. 습관적으로 붙인 게 아니라 이유가 있는 것이다.
 
-LayerNorm의 Jacobian을 층수만큼 곱하면 6층과 32층에서 각각 얼마가 되는지, skip-connection이 아예 없으면 어떻게 되는지는 [앞 글의 Add & Norm 절](/posts/2026-09-01-attention-is-all-you-need)에서 수치로 확인했다.
+LayerNorm의 Jacobian을 layer 수만큼 곱하면 6 layer와 32 layer에서 각각 얼마가 되는지, residual connection이 아예 없으면 어떻게 되는지는 [앞 글의 Add & Norm 절](/posts/2026-09-01-attention-is-all-you-need)에서 수치로 확인했다.
 
 ## CNN과 ViT의 inductive bias
 
@@ -201,7 +201,7 @@ LayerNorm의 Jacobian을 층수만큼 곱하면 6층과 32층에서 각각 얼�
 1. 이미지를 패치로 자를 때
 2. fine-tuning에서 해상도를 바꿀 때 (마지막 절에서 다룬다)
 
-그 외에는 self-attention이 **첫 layer부터 전역**(global)이다. 196개 패치가 서로를 다 볼 수 있다. 그리고 $E_{\text{pos}}$는 초기화 시점에 2D 위치에 대해 아무것도 모른다. 그냥 197개의 랜덤 벡터다. 인접한 패치가 무엇인지 임베딩 구조로 지정하지 않는다.
+그 외에는 self-attention이 **첫 layer부터 전역**(global)이다. 196개 패치가 서로를 다 볼 수 있다. 그리고 $E_{\text{pos}}$는 초기화 시점에 2D 위치를 전혀 모른다. 그냥 197개의 랜덤 벡터다. 인접한 패치가 무엇인지 임베딩 구조로 지정하지 않는다.
 
 **여기서 예측이 하나 나온다.**
 
@@ -209,7 +209,7 @@ LayerNorm의 Jacobian을 층수만큼 곱하면 6층과 32층에서 각각 얼�
 
 이 예측이 맞는지가 실험 파트 전체의 주제다.
 
-## 정확도와 사전학습 비용 비교
+## 정확도와 pre-training 비용 비교
 
 Table 2다. 정확도부터 보면 ViT-H/14가 ImageNet 88.55%로 BiT-L의 87.54%를 이긴다. 그런데 Noisy Student가 88.4~88.5니까 **정확도만 보면 사실 큰 차이가 아니다.**
 
@@ -221,7 +221,7 @@ Table 2다. 정확도부터 보면 ViT-H/14가 ImageNet 88.55%로 BiT-L의 87.54
 | VTAB (19 tasks) | 77.63 | 76.28 | 72.72 | 76.29 | - |
 | **TPUv3-core-days** | **2.5k** | **0.68k** | **0.23k** | **9.9k** | **12.3k** |
 
-사전학습 비용은 맨 아랫줄에 있다. ViT-L/16은 BiT-L을 **모든 task에서 이기면서 pre-training 비용은 약 1/15**이다. Noisy Student 대비로는 거의 1/18이다.
+pre-training 비용은 맨 아랫줄에 있다. ViT-L/16은 BiT-L을 **모든 task에서 이기면서 pre-training 비용은 약 1/15**이다. Noisy Student 대비로는 거의 1/18이다.
 
 정확도 차이와 함께 그 성능에 도달하는 데 드는 연산량도 살펴봐야 한다.
 
@@ -244,7 +244,7 @@ Table 2다. 정확도부터 보면 ViT-H/14가 ImageNet 88.55%로 BiT-L의 87.54
 
 <div className="flex flex-col md:flex-row gap-4 justify-center my-6">
   <figure className="text-center m-0 flex-1">
-    <img src="/images/posts/vit-16x16-words/fig_dataset.png" alt="pre-training 데이터셋 크기별 ImageNet 정확도" className="rounded-lg mx-auto" />
+    <img src="/images/posts/vit-16x16-words/fig_dataset.png" alt="pre-training dataset 크기별 ImageNet 정확도" className="rounded-lg mx-auto" />
     <figcaption className="mt-2 text-sm text-gray-500">Figure 3. 회색 띠가 BiT ResNet들의 범위</figcaption>
   </figure>
   <figure className="text-center m-0 flex-1">
@@ -253,7 +253,7 @@ Table 2다. 정확도부터 보면 ViT-H/14가 ImageNet 88.55%로 BiT-L의 87.54
   </figure>
 </div>
 
-Figure 3의 x축이 pre-training 데이터셋 크기다.
+Figure 3의 x축이 pre-training dataset 크기다.
 
 - **ImageNet(130만 장)만 쓰면**: ViT가 CNN보다 **못하다.** 심지어 **ViT-Large가 ViT-Base보다 나쁘다.** 모델을 키웠는데 성능이 떨어진 것이다
 - **ImageNet-21k(1400만 장)**: 비슷해진다
@@ -269,7 +269,7 @@ Figure 4도 같은 얘기다. **ResNet은 작은 데이터에서 더 좋지만 �
 
 자연스럽게 나오는 질문이 있다. "그럼 CNN의 inductive bias를 다시 넣어 주면 더 좋아지지 않을까?" 논문도 이걸 실험했다.
 
-**hybrid**는 raw 패치 대신 **ResNet이 뽑은 feature map**을 토큰으로 쓴다. 이때 패치 크기가 $P=1$이다. feature map의 공간 위치 하나하나가 토큰 하나가 되는 것이다. 그래서 flatten이랄 것도 없이 채널 수가 그대로 $E$의 입력 차원이 된다. **CNN의 locality를 명시적으로 주입해 준 셈이다.**
+**hybrid**는 raw 패치 대신 **ResNet이 뽑은 feature map**을 token으로 쓴다. 이때 패치 크기가 $P=1$이다. feature map의 공간 위치 하나하나가 token 하나가 되는 것이다. 그래서 flatten이랄 것도 없이 채널 수가 그대로 $E$의 입력 차원이 된다. **CNN의 locality를 명시적으로 주입해 준 셈이다.**
 
 | 모델 | ImageNet | exaFLOPs |
 |---|---|---|
@@ -294,7 +294,7 @@ Figure 4도 같은 얘기다. **ResNet은 작은 데이터에서 더 좋지만 �
 
 ### 1. Attention이 보는 범위
 
-**attention distance**는 CNN의 receptive field에 대응하는 지표다. attention weight로 가중한, query 패치와 key 패치 사이의 평균 픽셀 거리다. 작으면 "가까운 것만 본다", 크면 "멀리까지 본다"는 뜻이다.
+**attention distance**는 CNN의 receptive field에 대응하는 지표다. query 패치와 key 패치 사이의 픽셀 거리를 attention weight로 가중평균한 값이다. 작으면 "가까운 것만 본다", 크면 "멀리까지 본다"는 뜻이다.
 
 <figure className="my-6 text-center">
   <img src="/images/posts/vit-16x16-words/fig_attndist.png" alt="layer 깊이별 mean attention distance" className="rounded-lg mx-auto" />
@@ -311,13 +311,13 @@ Figure 4도 같은 얘기다. **ResNet은 작은 데이터에서 더 좋지만 �
 ### 2. 학습된 패치 임베딩 필터
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_pca.png" alt="학습된 patch embedding 필터의 주성분 28개" className="rounded-lg mx-auto" />
+  <img src="/images/posts/vit-16x16-words/fig_pca.png" alt="학습된 패치 임베딩 필터의 주성분 28개" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">Figure 7 (left). ViT-L/32의 RGB embedding filters, 상위 28개 주성분</figcaption>
 </figure>
 
 이 그림은 패치 임베딩 행렬 $E$의 필터를 분석한 결과다. $E$의 각 열이 conv filter 하나에 대응한다. ViT-L/32면 $32 \times 32 \times 3 = 3072$차원짜리 필터가 $D$개 있는 셈이다. 이걸 다 보여 줄 순 없으니 **$D$개 필터를 데이터 포인트로 삼아 PCA를 돌리고** 나온 주성분을 다시 패치 모양으로 되돌려 그린 것이다.
 
-여기서 표현 하나를 정정하고 싶다. 흔히 "각 필터에 대해 PCA를 했다"고 설명하는데 **PCA는 샘플이 여러 개 있어야 계산된다.** 필터 하나로는 PCA를 할 수 없다. 정확히는 **$D$개 필터의 집합에 대한 PCA**다.
+여기서 표현 하나를 정정하고 싶다. 흔히 "각 필터에 대해 PCA를 했다"고 설명하는데 **PCA는 샘플이 여러 개 있어야 계산된다.** 필터 하나로는 PCA를 할 수 없다. 정확히는 **$D$개 필터를 모아서 한 PCA**다.
 
 convolution의 locality를 전혀 주지 않았는데 **CNN 초기 layer가 수렴하는 것과 똑같은 패턴**이 나타난다. 선, 격자, 색 대비 blob 같은 것들이다.
 
@@ -326,7 +326,7 @@ convolution의 locality를 전혀 주지 않았는데 **CNN 초기 layer가 수�
 개인적으로 이 논문에서 제일 인상적이었던 부분이다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_posemb.png" alt="학습된 position embedding의 코사인 유사도" className="rounded-lg mx-auto" />
+  <img src="/images/posts/vit-16x16-words/fig_posemb.png" alt="학습된 위치 임베딩의 코사인 유사도" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">Figure 7 (center). ViT-L/32의 position embedding similarity</figcaption>
 </figure>
 
@@ -391,7 +391,7 @@ convolution의 locality를 전혀 주지 않았는데 **CNN 초기 layer가 수�
 
 ## 해상도를 바꿀 때 필요한 위치 임베딩 보간
 
-미세조정에서 입력 해상도를 바꾸면 위치 임베딩도 조정해야 한다.
+fine-tuning에서 입력 해상도를 바꾸면 위치 임베딩도 조정해야 한다.
 
 fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 성능이 좋아진다. 그런데 패치 크기는 16으로 고정이다. 그러면 $384 / 16 = 24$, 즉 패치가 **576개**가 된다.
 
@@ -406,9 +406,9 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 3. **bilinear로 `(24, 24, D)`로 확대**
 4. 다시 flatten하고 CLS를 앞에 붙인다
 
-**이게 정당한 이유가 앞 절에 있다.** 가까운 위치의 embedding이 실제로 비슷하다는 게 확인됐기 때문에 공간적으로 보간하는 게 의미가 있는 것이다. 만약 이웃한 행들이 아무 관계 없는 랜덤 벡터였다면 그 둘을 반반 섞어 봐야 아무 의미 없는 값이 나온다.
+**이게 정당한 이유가 앞 절에 있다.** 가까운 위치의 임베딩이 실제로 비슷하다는 게 확인됐기 때문에 공간적으로 보간하는 게 의미가 있는 것이다. 만약 이웃한 행들이 아무 관계 없는 랜덤 벡터였다면 그 둘을 반반 섞어 봐야 아무 의미 없는 값이 나온다.
 
-그리고 이 지점이 중요하다. 패치 자르기와 **바로 여기**가 ViT에 2D inductive bias가 수동으로 주입되는 **유일한 두 곳**이다. 논문이 직접 그렇게 밝히고 있다.
+그리고 이 지점이 중요하다. ViT에 2D inductive bias를 손으로 넣어 주는 곳은 패치 자르기와 **바로 여기, 딱 두 군데**다. 논문이 직접 그렇게 밝히고 있다.
 
 ## 정리
 
@@ -422,24 +422,24 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 | Table 8 | 그래서 **어떻게 알려 주든 차이가 없다** |
 | §3.2 interpolation | 단, 해상도가 바뀌면 **손으로 넣어 줘야 한다** |
 
-이 결과에서는 **대규모 데이터가 이미지에 대한 사전 가정의 부족을 보완한다.** 둘 중 하나는 있어야 하는데 3억 장이 있으면 구조에 박아 둘 필요가 없다는 것이다.
+이 결과에서는 **데이터가 충분하면 이미지에 관한 가정을 구조에 넣지 않아도 된다.** 둘 중 하나는 있어야 하는데 3억 장이 있으면 구조에 박아 둘 필요가 없다는 것이다.
 
 ### 실험의 한계
 
-- **JFT-300M은 구글 내부 비공개 데이터셋이다.** 이 논문의 핵심 결과를 **외부에서 재현할 수 없다.** 논문 리뷰 관점에서 이건 꽤 큰 문제다
+- **JFT-300M은 구글 내부 비공개 dataset이다.** 이 논문의 핵심 결과를 **외부에서 재현할 수 없다.** 논문 리뷰 관점에서 이건 꽤 큰 문제다
 - **Table 2의 비교는 통제되지 않았다.** optimizer, 스케줄, weight decay가 전부 다르다
 - **self-supervised pre-training은 supervised보다 여전히 4%p 뒤처진다.** NLP에서 BERT가 self-supervised로 성공한 것과 대비되는 지점이고 논문도 future work로 남겼다
 
 ### 학습된 위치 패턴은 설정에 따라 달라진다
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_hparam.png" alt="hyperparameter에 따라 달라지는 position embedding 패턴" className="rounded-lg mx-auto" />
+  <img src="/images/posts/vit-16x16-words/fig_hparam.png" alt="hyperparameter에 따라 달라지는 위치 임베딩 패턴" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">Figure 10. 같은 ViT-L/16인데 learning rate와 weight decay에 따라 패턴이 달라진다</figcaption>
 </figure>
 
-앞에서 감탄했던 "위치 임베딩이 2D를 재발견한다"에 대한 반증에 가까운 자료다. 같은 ViT-L/16인데 learning rate와 weight decay를 바꾸면 패턴이 눈에 띄게 달라진다. **"2D를 스스로 배운다"는 건 경험적 관찰이지 보장된 성질이 아니다.**
+앞에서 감탄했던 "위치 임베딩이 2D를 재발견한다"를 반박하는 쪽에 가까운 자료다. 같은 ViT-L/16인데 learning rate와 weight decay를 바꾸면 패턴이 눈에 띄게 달라진다. **"2D를 스스로 배운다"는 건 경험적 관찰이지 보장된 성질이 아니다.**
 
-보간과 관련해서도 살펴볼 점이 있다. **이 격자 구조가 흐릿한 모델일수록 앞 절의 interpolation이 위험하다.** 보간은 "가까운 위치끼리 비슷하다"는 가정 위에서만 말이 되기 때문이다.
+보간과 관련해서도 살펴볼 점이 있다. **이 격자 구조가 흐릿한 모델일수록 앞 절의 interpolation이 위험하다.** 보간은 "가까운 위치끼리 비슷하다"는 가정이 있어야만 말이 되기 때문이다.
 
 ## 세미나에서 나온 질문들
 
@@ -447,7 +447,7 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 
 **Q. 패치 임베딩과 위치 임베딩을 더하면 정보가 섞여서 구분이 안 되지 않을까?**
 
-스칼라라면 맞다. 100이 99+1인지 98+2인지 모르니까. 그런데 고차원에서는 다르다. 첫째, 선형연산은 분배되니까 $(a+b)W = aW + bW$이고 attention score가 자동으로 네 항으로 쪼개진다. 둘째, $D=768$에서 무작위 두 벡터의 코사인 유사도는 대략 $1/\sqrt{768} \approx 0.036$으로 거의 직교한다. "복원한다"기보다 **"거의 직교한 방향에 겹쳐 저장해서 간섭이 거의 없다"가** 정확한 표현이다.
+스칼라라면 맞다. 100이 99+1인지 98+2인지 모르니까. 그런데 고차원에서는 다르다. 첫째, 선형연산에는 분배법칙이 성립하니까 $(a+b)W = aW + bW$이고 attention score가 자동으로 네 항으로 쪼개진다. 둘째, $D=768$에서 무작위 두 벡터의 코사인 유사도는 대략 $1/\sqrt{768} \approx 0.036$으로 거의 직교한다. "복원한다"기보다 **"거의 직교한 방향에 겹쳐 저장해서 간섭이 거의 없다"가** 정확한 표현이다.
 
 **Q. CLS 대신 그냥 평균 내면 안 될까?**
 
@@ -457,7 +457,7 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 
 **Q. sinusoidal PE를 ViT에 쓰면 어떨까?**
 
-Table 8에 직접 비교는 없지만 반대 방향 실험은 원래 트랜스포머 논문에 있다. sinusoidal 대신 learned를 썼는데 BLEU 차이가 거의 없었다. 그리고 sinusoidal을 쓰면 interpolation 문제가 애초에 생기지 않는다. 공식이니까 몇 번째 위치든 그냥 계산하면 되기 때문이다.
+Table 8에 직접 비교는 없지만 반대 방향 실험은 원래 Transformer 논문에 있다. sinusoidal 대신 learned를 썼는데 BLEU 차이가 거의 없었다. 그리고 sinusoidal을 쓰면 interpolation 문제가 애초에 생기지 않는다. 공식이니까 몇 번째 위치든 그냥 계산하면 되기 때문이다.
 
 ## 앞 글
 

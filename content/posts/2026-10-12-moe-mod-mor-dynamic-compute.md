@@ -13,7 +13,7 @@ weight로, 같은 수의 layer를 전부 통과시킨다. 예측하기 쉬운 �
 
 이 글이 따라가는 질문은 하나다.
 
-> **모든 토큰에 같은 계산량이 필요한가?**
+> **모든 token에 같은 계산량이 필요한가?**
 
 세 논문은 모두 **router**라는 작은 부품을 붙여서 이 질문에 답한다. 그런데 router에게 맡기는 결정이
 서로 다르다. MoE는 **어떤 weight**를 쓸지를, MoD는 **계산을 할지 말지**를, MoR은 **몇 번
@@ -41,7 +41,7 @@ MoR부터다. MoR은 block을 재사용하기까지 해서 파라미터가 오�
 그러니까 MoE는 처음 질문의 답이 아니라 **출발점**이다. router라는 부품과 그 학습 방법이
 MoE에서 나왔고 뒤의 두 논문이 그걸 가져다 다른 결정에 쓴다. 그래서 MoE부터 보자.
 
-## MoE: 토큰마다 다른 FFN 선택하기
+## MoE: token마다 다른 FFN 선택하기
 
 ### 여러 expert 중 하나만 선택하는 Switch Transformer
 
@@ -93,7 +93,7 @@ $j \neq i^\ast$여도 0이 아니다. 그래서 $W_r$의 모든 행이 gradient�
 Shazeer et al. (2017)은 expert를 둘 이상 비교해야 routing이 학습될 거라고 추측했다. Switch는
 $k = 1$로도 품질이 유지된다는 걸 실험으로 보였다.
 
-### Expert 용량을 초과한 토큰의 처리
+### Expert capacity를 넘긴 token의 처리
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig3.png" alt="capacity factor에 따른 token routing" className="rounded-lg mx-auto" />
@@ -113,14 +113,14 @@ router가 한 expert에 그보다 많이 보내면 넘친다. 논문은 이 경�
 
 > 계산을 건너뛰고 token 표현을 residual connection으로 다음 layer에 그대로 넘긴다.
 
-**용량을 넘긴 token은 그 layer의 FFN을 통과하지 않는다.** Switch 입장에서는 피하고 싶은 부작용이다.
+**capacity를 넘긴 token은 그 layer의 FFN을 통과하지 않는다.** Switch 입장에서는 피하고 싶은 부작용이다.
 capacity factor를 키우면 덜 넘치지만 빈 자리에 쓰는 계산과 메모리가 늘어난다. 논문은 실험
 전반에서 넘치는 비율이 보통 1% 미만이었다고 보고한다.
 
 이 경우 token은 FFN 계산 없이 residual 경로로 지나간다. 뒤에서 MoD가 바로 이 동작을 설계의
 중심으로 가져간다.
 
-### Expert 간 부하를 맞추는 보조 손실
+### load balancing을 위한 보조 loss
 
 router를 language model loss만으로 학습시키면 몇몇 expert만 계속 고른다. 많이 뽑힌 expert가 더
 빨리 좋아지고 좋아진 만큼 더 뽑히니까. 그래서 보조 loss를 더한다. 논문의 식 (4)부터
@@ -164,9 +164,9 @@ Switch가 보여준 건 이것이다. **파라미터 수와 계산량은 따로 
 다만 처음 질문으로 돌아가 보면 달라진 게 없다. 쉬운 token과 어려운 token 모두 **같은 양의
 계산**을 수행한다. 계산량을 token마다 다르게 쓰는 건 다음 논문부터다.
 
-## MoD: 일부 토큰만 block에 통과시키기
+## MoD: 일부 token만 block에 통과시키기
 
-### 블록을 건너뛰는 방식과 early-exit의 차이
+### block을 건너뛰는 방식과 early-exit의 차이
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig1.png" alt="Mixture-of-Depths 구조와 routing 결과" className="rounded-lg mx-auto" />
@@ -185,7 +185,7 @@ layer를 전부 건너뛴다. 한 번 빠지면 돌아오지 않는다. MoD의 t
 **뒤쪽 block에 다시 들어올 수 있다.** 논문은 이 점을 early-exit 방식과 구별되는 특징으로
 든다.
 
-### 처리할 토큰 수를 미리 정하는 top-C routing
+### 처리할 token 수를 미리 정하는 top-C routing
 
 어떤 token을 통과시킬지는 top-$k$로 정한다. layer $l$에서 router가 token마다 scalar 점수를 낸다.
 
@@ -244,7 +244,7 @@ token이 넘치게 두는 쪽보다 분명히 좋았다. 저자들의 해석은 
 > token이 residual 경로를 **스스로 고르도록 배우는 것**과, 원하는 expert가 있었는데 **밀려나는 것**은
 > 다르다.
 
-같은 "계산 없이 지나감"이라도 학습으로 선택한 경로인지 용량 제한으로 밀려난 것인지에 따라 결과가 달라진다는 이야기다.
+같은 "계산 없이 지나감"이라도 학습으로 선택한 경로인지 capacity 제한으로 밀려난 것인지에 따라 결과가 달라진다는 이야기다.
 
 ### 생성 중에는 알 수 없는 top-k 순위
 
@@ -267,7 +267,7 @@ cross-entropy를 건다. 뽑힌 token의 점수는 sigmoid 기준 0.5 위로, �
 학습된 모델의 router 점수 분포를 보면 약 12.5%가 0.5 위, 87.5%가 아래에 놓인다. 보조 loss가
 의도한 대로다.
 
-### 블록 생략 비율에 따른 성능 비교
+### block 생략 비율에 따른 성능 비교
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig3.png" alt="MoD hyperparameter 탐색 결과" className="rounded-lg mx-auto" />
@@ -290,7 +290,7 @@ token이 참여하는 block이 자주 있기만 하면 capacity는 과감하게 
 두 번째가 중요하다. 계산을 줄인 것 자체가 좋은 게 아니다. **무엇을 줄일지를 학습했기 때문에**
 손해가 없는 것이다.
 
-### 어떤 토큰에 계산을 더 배정하는가
+### 어떤 token에 계산을 더 배정하는가
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig5.png" alt="MoD의 routing 결정과 router 점수 분포" className="rounded-lg mx-auto" />
@@ -306,7 +306,7 @@ entropy가 높았다**고 보고한다. 다음 token을 맞히기 어려운 자�
 다만 논문 스스로 "preliminary analyses"라고 단서를 달았다. 수치나 그림으로 제시된 결과가
 아니어서 확인된 사실로 받아들이기는 이르다.
 
-## MoR: 토큰마다 block 반복 횟수 조절하기
+## MoR: token마다 block 반복 횟수 조절하기
 
 ### block 하나를 반복해서 쓰기
 
@@ -314,21 +314,21 @@ Mixture-of-Recursions (Bae et al., 2025)는 Recursive Transformer에서 출발�
 weight를 두는 대신 **같은 layer 묶음을 $N_r$번 반복**해서 통과시키는 구조다. 깊이는 그대로인데
 고유 파라미터는 줄어든다.
 
-논문의 360M 설정으로 계산해 보자. 원래 모델은 32층에 non-embedding 파라미터가 315M이다.
-첫 층과 마지막 층만 따로 두고 가운데를 공유하면 이렇게 된다.
+논문의 360M 설정으로 계산해 보자. 원래 모델은 32 layer에 non-embedding 파라미터가 315M이다.
+첫 layer와 마지막 layer만 따로 두고 가운데를 공유하면 이렇게 된다.
 
-| $N_r$ | 층 구성 | 고유 층 수 | 파라미터 |
+| $N_r$ | layer 구성 | 고유 layer 수 | 파라미터 |
 |---|---|---|---|
 | 1 (vanilla) | 32 | 32 | 315M |
 | 2 | 1 + 15 × 2 + 1 | 17 | 167M |
 | 3 | 1 + 10 × 3 + 1 | 12 | 118M |
 
-층 하나가 약 9.8M이니 17층이면 167M, 12층이면 118M으로 맞아떨어진다.
+layer 하나가 약 9.8M이니 17 layer면 167M, 12 layer면 118M으로 맞아떨어진다.
 
-### 네 가지 가중치 공유 방식 비교
+### 네 가지 weight 공유 방식 비교
 
-어느 layer를 어떻게 공유할지는 정해진 답이 없다. 논문은 네 가지를 비교한다. 9층을 3번
-반복하는 경우로 적으면,
+어느 layer를 어떻게 공유할지는 정해진 답이 없다. 논문은 네 가지를 비교한다. 9 layer를 3번
+반복하는 경우로 적으면 다음과 같다.
 
 - **Cycle**: (0 1 2)(0 1 2)(0 1 2). 묶음 전체를 다시 돈다
 - **Sequence**: (0 0 0)(1 1 1)(2 2 2). 한 layer를 연달아 쓰고 다음으로 넘어간다
@@ -345,14 +345,14 @@ weight를 두는 대신 **같은 layer 묶음을 $N_r$번 반복**해서 통과�
 loss와 같은 뜻이다.
 
 Sequence 계열이 뚜렷하게 나쁘다. 같은 변환을 연달아 적용하면 비슷한 feature가 반복될 뿐이라는
-게 논문의 설명이다. Middle-Cycle이 가장 낮은데 입력을 받는 층과 출력을 내는 층에는 고유한 변환이
+게 논문의 설명이다. Middle-Cycle이 가장 낮은데 입력을 받는 layer와 출력을 내는 layer에는 고유한 변환이
 필요하다는 해석이 붙는다.
 
 항상 이기는 건 아니다. 135M 모델, $N_r = 2$에서는 Cycle이 3.0071로 Middle-Cycle의 3.0330보다
-좋았다. 논문도 최적의 공유 방식은 열린 문제라고 적는다. 이후 실험은 전부 Middle-Cycle을
+좋았다. 논문도 최적의 공유 방식은 아직 풀리지 않은 문제라고 적는다. 이후 실험은 전부 Middle-Cycle을
 쓴다.
 
-### Router로 토큰별 반복 횟수 정하기
+### Router로 token별 반복 횟수 정하기
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig1.png" alt="Mixture-of-Recursions 개요" className="rounded-lg mx-auto" />
@@ -387,7 +387,7 @@ g_t^r\, f(\mathcal{H}_t^r, \Phi') + \mathcal{H}_t^r, & g_t^r > P_\beta(G^r) \\[1
 $$
 
 $g_t^r = \mathcal{G}(\theta_r^\top \mathcal{H}_t^r)$는 단계 $r$에서 token $t$가 받은 점수이고
-$\mathcal{G}$는 sigmoid 같은 활성함수다. $\Phi'$는 공유되는 block의 파라미터다. MoD의 식과
+$\mathcal{G}$는 sigmoid 같은 activation 함수다. $\Phi'$는 공유되는 block의 파라미터다. MoD의 식과
 모양이 같다. 다른 점은 **이전 단계에서 뽑힌 token만 다음 단계의 후보가 된다**는 점이다. 한 번
 빠진 token은 돌아오지 않는다. 그래서 단계가 올라갈수록 남는 token이 줄어든다.
 
@@ -402,14 +402,14 @@ $N_r = 3$이면 세 단계가 차례로 $3/3$, $2/3$, $1/3$을 처리한다.
 | expert-choice | **2.7925** | **42.6** |
 | token-choice | 2.9163 | 40.0 |
 
-few-shot 평균은 LAMBADA, HellaSwag, PIQA, WinoGrande, ARC, MMLU 여섯 벤치마크의 정확도
+few-shot 평균은 LAMBADA, HellaSwag, PIQA, WinoGrande, ARC, MMLU 여섯 benchmark의 정확도
 평균이다. expert-choice가 뚜렷하게 좋다.
 
 두 방식은 앞 논문들의 문제를 하나씩 물려받는다. token-choice는 Switch가 겪은 쏠림 문제를 그대로
 가져와서 balancing loss가 필요하다. expert-choice는 MoD가 겪은 문제를 가져온다. top-$k$가
 non-causal이라 보조 loss나 보조 router가 있어야 한다.
 
-### 반복을 일찍 끝낸 토큰의 KV cache
+### 반복을 일찍 끝낸 token의 KV cache
 
 MoR에만 있는 문제가 하나 더 생긴다. 생성할 때는 이전 token들의 key와 value를 cache해 두고 쓴다.
 그런데 어떤 token이 첫 단계에서 빠졌다면 그 token의 둘째, 셋째 단계 key와 value는 **계산된 적이
@@ -479,7 +479,7 @@ NLL이 2.7749로 vanilla의 2.7824보다 낮다. 논문은 이 설정에서 학�
 </figure>
 
 모델 크기를 네 가지로 바꿔 가며 본 결과다. 이 실험은 반복을 세 번으로 고정했다. 가장 작은
-135M에서는 MoR이 vanilla보다 나쁘다. 논문은 재귀 구조의 용량이 부족해서일 것으로 본다. 규모가
+135M에서는 MoR이 vanilla보다 나쁘다. 논문은 재귀 구조의 capacity가 부족해서일 것으로 본다. 규모가
 커지면 격차가 빠르게 줄고 360M부터는 vanilla와 같거나 앞서는 경우가 많다. FLOPs 예산이 작거나
 중간일 때 특히 그렇다.
 
@@ -510,7 +510,7 @@ MoR이 이번에도 token을 더 봤는데도(26B 대 20B) 그렇다. 저자들�
 | token당 FLOPs | 고정 | **가변** | **가변** |
 | 파라미터 | 크게 늘어남 | 그대로 | 줄어듦 |
 | routing 방식 | token-choice | expert-choice | expert-choice |
-| 그래서 생기는 문제 | load balance | top-$k$의 인과성 | KV cache |
+| 그래서 생기는 문제 | load balance | top-$k$가 non-causal | KV cache |
 
 마지막 두 행을 이어서 읽으면 흐름이 보인다.
 
