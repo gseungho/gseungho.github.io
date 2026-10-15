@@ -4,14 +4,14 @@ date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Sequence Models"
 tags: ["논문리뷰", "Linear Attention", "Fast Weight", "RetNet"]
-description: "Linear Attention, Fast Weight와 RetNet의 고정 크기 상태를 비교하고 정보의 누적·갱신·감쇠와 delta rule의 경사하강법 해석을 정리했다."
+description: "Linear Attention, Fast Weight와 RetNet의 고정 크기 state를 비교하고 정보의 누적·갱신·감쇠와 delta rule의 gradient descent 해석을 정리했다."
 ---
 
 softmax attention은 **과거의 key와 value를 개별 항목으로 보관한다.** 지나간
 token의 key와 value를 손대지 않고 쌓아 두었다가 새 token이 올 때마다 전부 다시 읽는다. 요약하지도
 고치지도 잊지도 않는다.
 
-그래서 저장 공간이 sequence 길이 $N$에 비례해 자라고 token 하나를 만들 때마다 $N$개를 훑는다.
+그래서 저장 공간이 sequence 길이 $N$에 비례해 늘어나고 token 하나를 만들 때마다 $N$개를 훑는다.
 KV cache가 커지는 이유다.
 
 이 글에서 다루는 논문들은 반대로 간다. 들고 다니는 memory의 크기를 **먼저 고정한다.** 그러면
@@ -23,15 +23,15 @@ KV cache가 커지는 이유다.
 마지막에는 그 "쓰기"가 사실 gradient descent 한 step이었다는 데까지 간다. 다음에 읽을 Test-Time
 Training으로 이어지는 지점이다.
 
-## KV cache와 고정 크기 상태
+## KV cache와 고정 크기 state
 
 용어 하나를 먼저 정해 두자. token 하나를 처리한 뒤 다음 token으로 넘길 때 들고 가는 것 전부를
 **state**라고 부르겠다.
 
 - softmax attention의 state는 KV cache다. token이 올 때마다 key와 value가 리스트에 하나씩
-  덧붙어서 크기가 $N \times d$로 자란다
-- 이 글의 모델들은 state가 $d \times d$ 행렬 하나다. 새 token이 와도 리스트에 붙이지 않고 그 행렬
-  위에 더한다. 크기가 변하지 않는다
+  덧붙어서 크기가 $N \times d$로 커진다
+- 이 글의 모델들은 state가 $d \times d$ 행렬 하나다. 새 token이 와도 리스트에 붙이지 않고 그 행렬에
+  더한다. 크기가 변하지 않는다
 
 $d = 64$로 숫자를 세어 보면 차이가 분명하다. head 하나, layer 하나 기준이다.
 
@@ -56,7 +56,7 @@ $d = 64$로 숫자를 세어 보면 차이가 분명하다. head 하나, layer �
 Performer (Choromanski et al., 2021)는 축이 조금 다르다. 쓰기가 아니라 **읽기**를 고치는 논문이라
 뒤에서 따로 짧게 본다.
 
-## Linear attention: 정보를 누적하는 메모리
+## Linear attention: 정보를 누적하는 memory
 
 ### 유사도 함수를 내적으로 표현하기
 
@@ -66,8 +66,8 @@ $$V_i' = \frac{\sum_{j=1}^{N} \text{sim}(Q_i, K_j)\, V_j}{\sum_{j=1}^{N} \text{s
 
 softmax attention은 $\text{sim}(q, k) = \exp(q^\top k / \sqrt{D})$인 특수한 경우다.
 
-관찰이 하나 필요하다. attention이 $\text{sim}$에 요구하는 건 **음수가 아니라는 것**뿐이다.
-가중평균의 가중치니까. 그래서 유사도를 feature map $\phi$ 두 개의 내적으로 바꾼다.
+먼저 짚을 점이 있다. attention이 $\text{sim}$에 요구하는 건 **음수가 아니라는 것**뿐이다.
+가중평균의 weight니까. 그래서 유사도를 feature map $\phi$ 두 개의 내적으로 바꾼다.
 
 $$\text{sim}(q, k) = \phi(q)^\top \phi(k), \qquad \phi(x) = \text{elu}(x) + 1$$
 
@@ -125,32 +125,32 @@ $S \in \mathbb{R}^{d \times d}$, $z \in \mathbb{R}^{d}$이고 둘 다 $N$과 무
 
 $$h_i = f(h_{i-1},\, x_i), \qquad y_i = g(h_i,\, x_i)$$
 
-RNN의 조건은 둘이다. 다음 상태가 **직전 상태와 지금 입력만으로** 정해질 것, 출력이 그 상태에서
-나올 것. 위의 세 줄은 $(S, z)$를 상태로 두면 이 조건을 그대로 만족한다.
+RNN의 조건은 둘이다. 다음 state가 **직전 state와 지금 입력만으로** 정해질 것, 출력이 그 state에서
+나올 것. 위의 세 줄은 $(S, z)$를 state로 두면 이 조건을 그대로 만족한다.
 
 | | RNN | linear attention |
 |---|---|---|
-| 상태 | 벡터 $h$ | 행렬 $S$와 벡터 $z$ |
+| state | 벡터 $h$ | 행렬 $S$와 벡터 $z$ |
 | update $f$ | 학습되는 $W_h$를 거치는 비선형 함수 | $\phi(k)\,v^\top$를 **더한다** |
-| 출력 $g$ | $W_y h_i$ | $\phi(q_i)$로 상태를 읽는다 |
+| 출력 $g$ | $W_y h_i$ | $\phi(q_i)$로 state를 읽는다 |
 
 차이는 update가 덧셈이라는 점인데 이게 오히려 결정적이다. 재귀가 선형이고 덧셈이면 $S_i$는
 누적합이고 누적합은 순서대로 돌지 않아도 한 번에 계산할 수 있다. 그래서 **학습은 Transformer처럼
 병렬로 하고 생성만 RNN처럼** 할 수 있다. tanh가 끼어 있는 보통의 RNN은 앞 step을 끝내야 다음
 step을 시작할 수 있다.
 
-### 상태 행렬 S에 저장되는 정보
+### state 행렬 S에 저장되는 정보
 
-$S$를 풀어 쓰면 바깥곱(outer product)의 합이다.
+$S$를 풀어 쓰면 outer product의 합이다.
 
 $$S_i = \sum_{j \le i} \phi(k_j)\, v_j^\top$$
 
-key와 value를 짝지어 행렬에 더해 넣는 이 구조는 고전적인 **연상 메모리**(associative memory)
+key와 value를 짝지어 행렬에 더해 넣는 이 구조는 고전적인 **associative memory**
 그대로다. 읽는 쪽을 풀어 쓰면 무슨 일이 일어나는지 보인다.
 
 $$S_i^\top \phi(q) = \sum_{j \le i} \big(\phi(k_j)^\top \phi(q)\big)\, v_j$$
 
-읽은 결과는 저장된 **모든** value의 가중합이고 가중치는 각 key와 query의 내적이다. query가
+읽은 결과는 저장된 **모든** value의 가중합이고 weight는 각 key와 query의 내적이다. query가
 저장된 key 하나와 같고 key들이 서로 직교한다면 다른 항이 전부 0이 되어 원하는 value만 나온다.
 그렇지 않으면 섞여서 나온다.
 
@@ -160,14 +160,14 @@ $M$개만 남기는 sliding window와 다르다. 첫 번째 token의 정보도 $
 
 | | 저장하는 것 | 잃는 것 |
 |---|---|---|
-| softmax | $(k_j, v_j)$ 쌍 $N$개를 그대로 | 없음. 대신 공간이 자람 |
+| softmax | $(k_j, v_j)$ 쌍 $N$개를 그대로 | 없음. 대신 공간이 늘어남 |
 | sliding window | 최근 $M$개만 그대로 | 오래된 token 전체 |
 | linear attention | 전부를 하나로 합산 | 개별 token을 분리해 꺼내는 능력 |
 
 종이 한 장에 문장을 계속 덧쓰는 것과 같다. 전부 거기 있는데 겹쳐서 흐릿하다. 얼마나 겹치면
 못 읽게 되는지가 다음 논문의 주제다.
 
-### 시퀀스 길이별 비용과 이미지 생성 속도
+### sequence 길이별 비용과 이미지 생성 속도
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/trnn_fig1.png" alt="sequence 길이에 따른 시간과 GPU 메모리" className="rounded-lg mx-auto" />
@@ -190,7 +190,7 @@ bits/dim은 픽셀 하나를 표현하는 데 드는 비트 수로 낮을수록 
 수백 배에서 수천 배 차이 난다. 이미지 생성은 픽셀을 하나씩 뽑는 작업이라 추론 전체가 순차적이고
 token 하나당 $O(1)$과 $O(N)$의 차이가 그대로 쌓이기 때문이다.
 
-## Fast weight: 저장된 값을 갱신하는 메모리
+## Fast weight: 저장된 값을 갱신하는 memory
 
 ### Linear attention과 Fast Weight Programmer의 관계
 
@@ -202,7 +202,7 @@ $$W^{(i)} = W^{(i-1)} + v^{(i)} \otimes \phi(k^{(i)}), \qquad y^{(i)} = W^{(i)}\
 이 구조는 Schmidhuber가 1991년에 제안한 **Fast Weight Programmer**와 같다. 이름에 뜻이 다
 들어 있다.
 
-- **slow weight**: $W_k, W_v, W_q$ 같은 보통의 파라미터다. 경사하강법으로 학습되고 학습이 끝나면
+- **slow weight**: $W_k, W_v, W_q$ 같은 보통의 파라미터다. gradient descent로 학습되고 학습이 끝나면
   고정된다
 - **fast weight**: $W$다. 문장이 시작될 때 0에서 출발해 token마다 바뀌고 문장이 끝나면 버려진다
 
@@ -215,12 +215,12 @@ slow network가 입력에서 $k, v, q$를 만들면 이 셋이 fast weight를 �
 $W_v$까지 간다. 생긴 것이 행렬이고 벡터에 곱해서 쓰니까 weight라는 이름이 붙었을 뿐이다.
 
 softmax attention도 구조는 같다. $W_k, W_v, W_q$가 slow이고 KV cache가 fast 쪽이다. 차이는
-fast 쪽을 자라는 리스트로 들고 있느냐 고정 크기 행렬로 들고 있느냐뿐이다.
+fast 쪽을 늘어나는 리스트로 들고 있느냐 고정 크기 행렬로 들고 있느냐뿐이다.
 
 그리고 위의 update는 Hebb 규칙(1949) 그대로다. 순수하게 **더하기만** 한다. 한 번 쓴 것을
 고칠 방법이 없다.
 
-### 고정 크기 메모리의 용량 한계
+### 고정 크기 memory의 용량 한계
 
 앞에서 본 읽기 식을 다시 가져와 보자.
 
@@ -237,17 +237,17 @@ $$W\phi(k_3) = \lVert\phi(k_3)\rVert^2\, v_3 \;+\; \sum_{j \ne 3} \big(\phi(k_j)
 $d_{\text{dot}}$을 넘는 상태를 overcapacity라고 부른다.
 
 실제 sequence는 거의 항상 key 차원보다 길다. 그러니 이 한계는 예외가 아니라 기본 상황이다.
-softmax에는 이 한계가 없다. 저장 공간이 자라니까. 저장 공간을 고정한 대신 정보 간 간섭이 생기는 것이다.
+softmax에는 이 한계가 없다. 저장 공간이 늘어나니까. 저장 공간을 고정한 대신 정보 간 간섭이 생기는 것이다.
 고정 크기 state는 속도를 위한 트릭이기 전에 **기억할 수 있는 양의 상한**이다.
 
-### 저장한 key 수에 따른 검색 성능
+### 저장한 key 수에 따른 retrieval 성능
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig2.png" alt="저장한 key 수에 따른 retrieval loss" className="rounded-lg mx-auto max-w-xl" />
   <figcaption className="mt-2 text-sm text-gray-500">Figure 2. 가로축이 저장한 key-value 쌍의 수, 세로축이 retrieval loss (Schlag et al., 2021)</figcaption>
 </figure>
 
-합성 과제다. 서로 다른 key-value 쌍을 20개부터 600개까지 늘려 가며 전부 저장하게 한 뒤 제대로
+합성 task다. 서로 다른 key-value 쌍을 20개부터 600개까지 늘려 가며 전부 저장하게 한 뒤 제대로
 꺼내는지를 본다.
 
 - **초록(Linear)**: $d_{\text{key}} = d_{\text{dot}} = 64$인 linear attention이다. **60개쯤부터**
@@ -255,7 +255,7 @@ softmax에는 이 한계가 없다. 저장 공간이 자라니까. 저장 공간
 - **DPFP-1, 2, 3**: 이 논문이 제안한 feature map으로 key를 각각 128, 256, 384차원으로 펼친다.
   무너지기 시작하는 지점도 그 근처다
 - **회색(Softmax)**: 500개 근처까지 거의 0을 유지한다
-- **FAVOR+**: Performer의 random feature다. 이 과제에서는 어떤 설정에서도 loss가 0에 닿지
+- **FAVOR+**: Performer의 random feature다. 이 task에서는 어떤 설정에서도 loss가 0에 닿지
   못했다
 
 앞 절의 논증이 그림 한 장에 그대로 나타난다.
@@ -304,7 +304,7 @@ state 크기는 그대로다. 용량이 늘어난 게 아니라 **관리되기 �
 
 delta rule이 필요한 상황을 직접 만든 실험이다. 같은 key가 sequence 안에서 여러 번 나오고 그때마다
 다른 value가 붙는다. 모델은 가장 최근 값을 답해야 한다. 누적이 아니라 **갱신**이 필요한
-과제다. sequence 길이가 40이고 key가 20종류라 용량 자체는 넘지 않는다.
+task다. sequence 길이가 40이고 key가 20종류라 용량 자체는 넘지 않는다.
 
 - **주황(DPFP-1 delta)**: 이 논문의 규칙이다. 수백 step 만에 loss가 $10^{-3}$ 아래로 내려간다
 - **초록(DPFP-1 sum)**: 더하기만 하는 규칙이다. $10^{-1}$ 근처에서 움직이지 않는다
@@ -316,7 +316,7 @@ weight 모델이다. 범례의 "Schlag (2021)"은 이 논문이 아니라 같은
 softmax attention에는 갱신이라는 개념이 없다. 논문의 표현대로 key와 value 쌍을 바꿀 수 없는
 채로 이어 붙일 뿐이다. 고정 크기 memory는 그럴 수 없어서 갱신 규칙이 있어야 한다.
 
-## RetNet: 오래된 정보를 감쇠시키는 메모리
+## RetNet: 오래된 정보를 감쇠시키는 memory
 
 ### 감쇠 계수 γ와 기억 범위
 
@@ -335,7 +335,7 @@ $\gamma$는 학습하지 않는다. head마다 다른 값을 고정해서 쓴다
 $$\gamma = 1 - 2^{-5 - \text{arange}(0,\, h)}$$
 
 앞의 세 head는 $\gamma$가 $1 - 1/32$, $1 - 1/64$, $1 - 1/128$이다. 기여가 절반으로 줄어드는
-거리로 바꾸면 각각 약 22, 44, 88 token이다. 가까운 문맥을 보는 head와 먼 문맥을 보는 head를
+거리로 바꾸면 각각 약 22, 44, 88 token이다. 가까운 context를 보는 head와 먼 context를 보는 head를
 섞어 두는 셈이다.
 
 ### 재귀식에서 감쇠 행렬 D 유도하기
@@ -359,7 +359,7 @@ $m$번째에 써 넣은 항은 $n$번째에 읽힐 때까지 $\gamma$가 $n - m$
 
 $$S_n = \sum_{m \le n} \gamma^{\,n-m} K_m^\top V_m, \qquad Q_n S_n = \sum_{m \le n} \underbrace{\gamma^{\,n-m}}_{\text{위치}}\, \underbrace{\big(Q_n K_m^\top\big)}_{\text{내용}}\, V_m$$
 
-$V_m$들의 가중합이고 가중치가 "내용으로 정해지는 값"과 "위치로 정해지는 값"의 곱이다. 앞의
+$V_m$들의 가중합이고 weight가 "내용으로 정해지는 값"과 "위치로 정해지는 값"의 곱이다. 앞의
 것이 $QK^\top$의 $(n, m)$ 성분, 뒤의 것이 $D$의 $(n, m)$ 성분이다. 쌍마다 계수가 따로 있으니
 성분별 곱이어야 한다.
 
@@ -368,7 +368,7 @@ $V_m$들의 가중합이고 가중치가 "내용으로 정해지는 값"과 "위
 감쇠다. softmax의 mask는 볼 수 있느냐 없느냐 둘 중 하나인데 $D$는 "볼 수는 있지만 멀수록
 흐리게"를 표현한다.
 
-### 병렬·재귀·청크 단위 계산
+### 병렬·재귀·chunk 단위 계산
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/ret_dual.png" alt="RetNet의 병렬 형태와 재귀 형태" className="rounded-lg mx-auto" />
@@ -392,14 +392,14 @@ $V_m$들의 가중합이고 가중치가 "내용으로 정해지는 값"과 "위
 perplexity는 1.3B, 2.7B, 6.7B 세 크기에서 Transformer와 비슷했고 2B를 넘으면 RetNet이 앞서는
 경향이 있었다고 한다.
 
-### 성능 저하에 대한 서로 다른 설명
+### linear attention은 왜 성능이 떨어지는가: 두 가지 진단
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/ret_tri.png" alt="불가능한 삼각형" className="rounded-lg mx-auto max-w-sm" />
   <figcaption className="mt-2 text-sm text-gray-500">Figure 2. 학습 병렬성, 저렴한 추론, 좋은 성능을 동시에 얻기 어렵다는 "impossible triangle" (Sun et al., 2023)</figcaption>
 </figure>
 
-RetNet의 주장은 이 삼각형으로 요약된다. 세 꼭짓점을 다 가진 구조가 없었는데 RetNet이 그 자리에
+RetNet의 주장은 이 삼각형으로 요약된다. 세 꼭짓점을 모두 만족하는 구조가 없었는데 RetNet이 그 자리에
 들어간다는 것이다. 그 주장을 표로 적은 것이 논문의 Table 1이다.
 
 | 구조 | 학습 병렬화 | 추론 비용 | 긴 sequence 메모리 | 성능 |
@@ -448,9 +448,9 @@ $\omega$를 $r$개 뽑아 평균을 내면 기댓값이 정확히 softmax kernel
 양수 feature에 직교성을 더한 것이 FAVOR+다. 이름의 positive와 orthogonal이 그 두 가지다.
 
 다만 근사에는 대가가 있다. 앞의 용량 실험에서 FAVOR+는 어떤 설정에서도 loss 0에 닿지
-못했다. 정확히 꺼내야 하는 과제에서는 추정 오차가 그대로 남는다.
+못했다. 정확히 꺼내야 하는 task에서는 추정 오차가 그대로 남는다.
 
-## Delta rule을 경사하강법으로 해석하기
+## Delta rule을 gradient descent로 해석하기
 
 마지막으로 delta rule을 다른 각도에서 보자. memory $W$가 하는 일을 회귀 문제로 적어 본다.
 $\phi(k)$를 넣었을 때 $v$가 나오게 하고 싶다.
@@ -461,21 +461,21 @@ $W$로 미분하면
 
 $$\nabla_W\, \ell = \big(\underbrace{W\phi(k)}_{\bar{v}} - v\big)\,\phi(k)^\top$$
 
-이고 괄호 안의 $W\phi(k)$가 앞에서 "먼저 읽은 값" $\bar{v}$다. learning rate $\beta$로 경사하강법으로 한 번
+이고 괄호 안의 $W\phi(k)$가 앞에서 "먼저 읽은 값" $\bar{v}$다. learning rate가 $\beta$인 gradient descent로 한 번
 갱신하면 이렇게 된다.
 
 $$W \leftarrow W - \beta\,\nabla_W\, \ell = W + \beta\,(v - \bar{v})\,\phi(k)^\top$$
 
 **앞에서 본 delta rule과 같은 갱신식이다.** write strength라고 부르던 $\beta$는
-이 해석에서는 학습률에 해당한다. 메모리 갱신을 학습 단계로 볼 수 있는 셈이다. 이 모델은 생성하는 동안 token
+이 해석에서는 learning rate에 해당한다. memory 갱신을 학습 단계로 볼 수 있는 셈이다. 이 모델은 생성하는 동안 token
 하나마다 SGD 갱신에 해당하는 연산을 하고 있었던 것이다.
 
 순수한 linear attention도 같은 틀에 들어간다. $\bar{v}$를 뺀 꼴이다. 이미 무엇이 들어 있는지
 확인하지 않고 정보를 더한다. 그래서 저장한 정보가 겹치면서 간섭이 생긴다.
 
-여기서 다음 질문이 나온다. state가 행렬이고 쓰기가 gradient step 한 번이라면 state를 더 표현력
-있는 것으로 바꾸고 쓰기를 제대로 된 학습으로 바꾸면 어떻게 될까? Test-Time Training 계열이 그
-방향이다. state를 행렬이 아니라 작은 model의 파라미터로 두고 쓰기를 그 model을 학습시키는 gradient
+여기서 다음 질문이 나온다. state가 행렬이고 쓰기가 gradient step 한 번이라면 state를 표현력이 더
+큰 구조로 바꾸고 쓰기를 제대로 된 학습으로 바꾸면 어떻게 될까? Test-Time Training 계열이 그
+방향이다. state를 행렬이 아니라 작은 모델의 파라미터로 두고 쓰기를 그 모델을 학습시키는 gradient
 step으로 정의한다. 다음에 읽을 논문이다.
 
 그리고 쓰기 한 번이 gradient step 한 번의 비용이라면
@@ -493,15 +493,15 @@ step을 받아야 할까?
 
 첫 줄 아래의 셋은 사실상 같은 구조다. 다른 것은 memory에 무엇을 남길지 정하는 **한 줄**뿐이다.
 
-- 유사도를 내적으로 바꾸면 attention은 고정 크기 state를 가진 RNN이 된다. 유도는 행렬곱 결합법칙
+- 유사도를 내적으로 바꾸면 attention은 고정 크기 state를 쓰는 RNN이 된다. 유도는 행렬곱 결합법칙
   하나다
 - 고정 크기 state에는 용량이 있다. key 차원보다 많은 연관을 넣으면 꺼낼 때 섞인다
 - 그 뒤는 설계 결정 하나다. 무엇을 쓰고 무엇을 포기할 것인가
 
-softmax attention은 key와 value를 개별 항목으로 보관하는 대신 저장 공간이 계속 늘어난다. 고정 크기 상태로 정보를 합치면 어떤 정보를 남기고 어떻게 갱신할지 정해야 한다.
+softmax attention은 key와 value를 개별 항목으로 보관하는 대신 저장 공간이 계속 늘어난다. 고정 크기 state로 정보를 합치면 어떤 정보를 남기고 어떻게 갱신할지 정해야 한다.
 
-실험 결과를 해석할 때는 과제와 평가 조건도 구분해야 한다. Katharopoulos et al.의 속도 수치는 이미지 생성 과제에서 나왔고 Schlag et
-al.의 용량 실험은 합성 과제다. 큰 언어 모델에서 linear attention이 softmax에 뒤진다는 것은
+실험 결과를 해석할 때는 task와 평가 조건도 구분해야 한다. Katharopoulos et al.의 속도 수치는 이미지 생성 task에서 나왔고 Schlag et
+al.의 용량 실험은 합성 task다. 큰 언어 모델에서 linear attention이 softmax에 뒤진다는 것은
 RetNet의 표에 기호로만 나온다. 그 이유는 두 논문의 설명이 서로 다르다.
 
 ## 이어지는 글

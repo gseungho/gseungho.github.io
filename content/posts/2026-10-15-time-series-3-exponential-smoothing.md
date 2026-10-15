@@ -15,7 +15,7 @@ description: "SES, Holt, Holt-Winters를 유도하고 오차 분포를 붙인 ET
 
 ## 성분마다 하나씩 붙는 평활 모수
 
-지수평활법은 시계열을 세 성분으로 나눠 들고 다닌다. 수준(level) $\ell_t$, 기울기(trend) $b_t$, 계절(seasonality) $s_t$다. **성분마다 평활 모수가 하나씩 붙고 그 모수가 성분이 얼마나 빨리 바뀌는지를 정한다.**
+지수평활법은 시계열을 세 성분으로 나눠 따로 추적한다. 수준(level) $\ell_t$, 기울기(trend) $b_t$, 계절(seasonality) $s_t$다. **성분마다 평활 모수가 하나씩 붙고 그 모수가 성분이 얼마나 빨리 바뀌는지를 정한다.**
 
 | 모수 | 성분 | 0이면 | 1이면 |
 | --- | --- | --- | --- |
@@ -105,7 +105,7 @@ $$
 
 딥러닝을 공부했다면 낯익은 식이다. Adam의 1차 모멘트 $m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t$나 BatchNorm의 running mean이 같은 점화식이다. Adam의 기본값 $\beta_1 = 0.9$는 $\alpha = 0.1$인 SES와 같다.
 
-### 같은 식, 세 가지 모양
+### 같은 식, 세 가지 꼴
 
 위 합을 점화식으로 쓰면 다음 예측은 최근 관측값과 직전 예측의 가중평균이 된다. 이 꼴을 weighted average form이라고 부른다.
 
@@ -133,7 +133,7 @@ $$
 
 $T$가 크면 $\ell_0$의 가중치 $(1-\alpha)^T$는 거의 0이 된다.
 
-세 번째 모양이 component form이다. 예측식과 평활식을 나눠 쓰고 평활식이 바로 식 (1)이다.
+세 번째 꼴이 component form이다. 예측식과 평활식을 나눠 쓰고 평활식이 바로 식 (1)이다.
 
 $$
 \text{Forecast: } \hat{y}_{t+h|t} = \ell_t, \qquad \text{Smoothing: } \ell_t = \alpha y_t + (1-\alpha)\ell_{t-1}
@@ -190,7 +190,7 @@ $\hat\alpha = 0.84$는 꽤 큰 값이라 수준이 최근 관측값을 빠르게
 
 ## 추세를 따라가는 Holt 방법
 
-Holt(1957)는 SES에 기울기를 더해 추세가 있는 자료로 넓혔다.
+Holt(1957)는 SES에 기울기를 더해 추세가 있는 자료로 확장했다.
 
 $$
 \begin{aligned}
@@ -450,8 +450,8 @@ $$
 $$
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-3-exponential-smoothing/interval-width.png" alt="α = 0.2, 0.5, 1일 때 예측 시점 h에 따른 95% 예측구간 반폭" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 5. h = 12에서 95% 구간 반폭은 α = 0.2면 2.35, 0.5면 3.80, 1이면 6.79다(σ = 1). 시작은 모두 1.96이다.</figcaption>
+  <img src="/images/posts/2026-10-15-time-series-3-exponential-smoothing/interval-width.png" alt="α = 0.2, 0.5, 1일 때 예측 시점 h에 따른 95% 예측구간 half-width" className="rounded-lg mx-auto" />
+  <figcaption className="mt-2 text-sm text-gray-500">그림 5. h = 12에서 95% 구간 half-width는 α = 0.2면 2.35, 0.5면 3.80, 1이면 6.79다(σ = 1). 시작은 모두 1.96이다.</figcaption>
 </figure>
 
 **멀리 볼수록 아직 일어나지 않은 충격이 수준에 쌓이니 구간이 넓어진다.** 그림 5에서 보듯 얼마나 빨리 넓어지는지는 $\alpha$가 정한다. 양 끝을 보면 앞 글들과 이어진다.
@@ -469,7 +469,7 @@ $$
 
 $\boldsymbol\theta$에 들어가는 값은 방법마다 늘어난다. **평활 모수만이 아니라 초기 상태도 추정 대상이다.**
 
-| 방법 | 평활 모수 | 초기 상태 | 자유로운 값의 개수 |
+| 방법 | 평활 모수 | 초기 상태 | 자유 모수(free parameter)의 수 |
 | --- | --- | --- | --- |
 | SES | $\alpha$ | $\ell_0$ | 2 |
 | Holt | $\alpha, \beta^*$ | $\ell_0, b_0$ | 4 |
@@ -519,7 +519,7 @@ $$
 
 ## 베이즈 업데이트로 다시 읽기
 
-관측값이 들어올 때마다 상태를 고친다는 설명을 듣다 보면 이런 생각이 든다. 수준을 모르는 모수로 보고 한 스텝마다 베이즈 업데이트를 하는 것과 같지 않을까? 그렇게 볼 수 있다. 다만 고정된 모수가 아니라 매 시점 조금씩 움직이는 모수로 봐야 SES와 같은 식이 나온다.
+관측값이 들어올 때마다 상태를 고친다는 설명을 듣다 보면 이런 생각이 든다. 수준을 모르는 모수로 보고 한 step마다 베이즈 업데이트를 하는 것과 같지 않을까? 그렇게 볼 수 있다. 다만 고정된 모수가 아니라 매 시점 조금씩 움직이는 모수로 봐야 SES와 같은 식이 나온다.
 
 잡음이 두 개인 local level model로 따져 보자. $\mu_t$가 수준이다.
 
@@ -527,7 +527,7 @@ $$
 y_t = \mu_t + v_t,\ \ v_t \sim N(0, V) \qquad\qquad \mu_t = \mu_{t-1} + w_t,\ \ w_t \sim N(0, W)
 $$
 
-$V$는 관측 잡음의 분산이고 $W$는 수준이 한 시점에 움직이는 정도다. 시점 $t-1$까지 본 뒤 수준의 사후분포가 $N(m_{t-1}, C_{t-1})$이라고 하면 한 스텝은 이렇게 돈다.
+$V$는 관측 잡음의 분산이고 $W$는 수준이 한 시점에 움직이는 정도다. 시점 $t-1$까지 본 뒤 수준의 사후분포가 $N(m_{t-1}, C_{t-1})$이라고 하면 한 step은 이렇게 돈다.
 
 1. 사전분포: 수준이 $w_t$만큼 움직이므로 $\mu_t \mid y_{1:t-1} \sim N(m_{t-1}, R_t)$, $R_t = C_{t-1} + W$다.
 2. 가능도: $y_t \mid \mu_t \sim N(\mu_t, V)$다.
@@ -537,9 +537,9 @@ $$
 m_t = K_t\, y_t + (1 - K_t)\, m_{t-1}, \qquad K_t = \frac{R_t}{R_t + V}, \qquad C_t = K_t V
 $$
 
-사후 평균은 사전 평균 $m_{t-1}$과 새 관측값 $y_t$의 가중평균이고 가중치는 각자의 정밀도(분산의 역수)에 비례한다. 식 (1)의 $\alpha$ 자리에 $K_t$가 들어간 꼴이다. 수준을 잘 모를수록($R_t$가 클수록) 새 관측값을 많이 믿고 관측값이 시끄러울수록($V$가 클수록) 덜 믿는다.
+사후 평균은 사전 평균 $m_{t-1}$과 새 관측값 $y_t$의 가중평균이고 가중치는 각자의 정밀도(분산의 역수)에 비례한다. 식 (1)의 $\alpha$ 자리에 $K_t$가 들어간 꼴이다. 수준을 잘 모를수록($R_t$가 클수록) 새 관측값을 많이 믿고 관측 잡음의 분산 $V$가 클수록 덜 믿는다.
 
-$K_t$는 처음 몇 스텝만 바뀌고 곧 상수로 수렴한다. 수렴하면 $R = KV + W$이고 $K = R/(R+V)$에서 $R = KV/(1-K)$다. 두 식을 같게 놓고 $q = W/V$로 두면 $K^2 + qK - q = 0$이 나오고 그 양의 근이 SES의 $\alpha$다.
+$K_t$는 처음 몇 step만 바뀌고 곧 상수로 수렴한다. 수렴하면 $R = KV + W$이고 $K = R/(R+V)$에서 $R = KV/(1-K)$다. 두 식을 같게 놓고 $q = W/V$로 두면 $K^2 + qK - q = 0$이 나오고 그 양의 근이 SES의 $\alpha$다.
 
 $$
 \alpha = \frac{-q + \sqrt{q^2 + 4q}}{2}, \qquad q = \frac{\alpha^2}{1-\alpha}
@@ -551,7 +551,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-15-time-series-3-exponential-smoothing/kalman-gain.png" alt="q = 0.1, 1, 10일 때 칼만 이득 K_t가 상수 α로 수렴하는 모습" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 6. 칼만 이득 K_t는 몇 스텝 만에 상수로 수렴하고 그 값이 SES의 α다. q = 1이면 1, 0.667, 0.625, 0.619, 0.618로 수렴한다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 6. 칼만 이득 K_t는 몇 step 만에 상수로 수렴하고 그 값이 SES의 α다. q = 1이면 1, 0.667, 0.625, 0.619, 0.618로 수렴한다.</figcaption>
 </figure>
 
 그림 6은 처음 사전분포를 아주 넓게 두고 $K_t$를 계산한 것이다. $q = 1$이면 1, 0.667, 0.625, 0.619, 0.618로 금방 수렴하고 $q = 0.1$은 0.270, $q = 10$은 0.916에 붙는다. 수렴한 뒤로는 SES와 같은 점화식이다[^sim]. **SES의 $\alpha$는 결국 "수준이 움직이는 정도 대 관측 잡음"의 비율로 정해지는 셈이다.** 호주 인구에서 $\hat\alpha$가 거의 1이었던 것도 이 관점으로 보면 관측 잡음 $V$가 아주 작은 계열이라는 뜻이다.
@@ -565,7 +565,7 @@ $$
 
 **주의:** ETS(A,N,N) 자체는 이 모형과 다르다. ETS는 식 (2)처럼 관측식과 상태식에 같은 $\varepsilon_t$ 하나가 들어가서 $\ell_0$와 $\alpha$가 정해지면 $\ell_t$가 자료로 정확히 계산된다. $\ell_t$의 사후분포라는 것이 따로 없다. 베이지안 해석은 잡음이 두 개인 위 모형의 것이고 수렴한 뒤에 두 모형의 점예측과 예측 분산이 같아지는 것이다. ETS의 $\sigma^2$를 1-step 예측오차의 분산 $R + V$로 맞추면 $\alpha^2\sigma^2 = R^2/(R+V) = W$라서 식 (3)의 $\sigma^2[1 + \alpha^2(h-1)]$이 $R + V + (h-1)W$가 된다. 위 모형에서 직접 구한 $h$-step 예측 분산과 같은 값이다.
 
-추세와 계절성이 있으면 상태가 벡터가 되고 같은 계산을 행렬로 한다. 선형 정규 상태공간모형에서 상태의 사후분포를 한 스텝씩 구하는 이 계산이 Kalman filter이고 베이지안 쪽에서는 West와 Harrison의 동적선형모형(dynamic linear model)이 같은 틀이다.
+추세와 계절성이 있으면 상태가 벡터가 되고 같은 계산을 행렬로 한다. 선형 정규 상태공간모형에서 상태의 사후분포를 한 step씩 구하는 이 계산이 Kalman filter이고 베이지안 쪽에서는 West와 Harrison의 동적선형모형(dynamic linear model)이 같은 틀이다.
 
 ## 2편의 회귀와 무엇이 다를까
 

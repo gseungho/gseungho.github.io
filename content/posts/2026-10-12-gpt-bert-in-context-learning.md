@@ -4,7 +4,7 @@ date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Foundations"
 tags: ["논문리뷰", "GPT", "BERT", "In-Context Learning"]
-description: "GPT-1과 BERT의 미세조정에서 GPT-2와 GPT-3의 프롬프트 기반 적응으로 이어지는 변화를 구조, 학습 목적, 평가 결과로 비교했다."
+description: "GPT-1과 BERT의 fine-tuning에서 GPT-2와 GPT-3의 prompt 기반 적응으로 이어지는 변화를 구조, 학습 목적, 평가 결과로 비교했다."
 ---
 
 Transformer 자체는 2017년 이후 거의 바뀌지 않았다. 그런데 2018년의 GPT-1과 2020년의 GPT-3는
@@ -16,11 +16,11 @@ Transformer 자체는 2017년 이후 거의 바뀌지 않았다. 그런데 2018�
 > 모델은 자기가 지금 무슨 task를 해야 하는지를 **어디에서** 아는가?
 > 번역인지 분류인지를 알려주는 정보는 어디에 담겨 있는가?
 
-구조를 순서대로 훑는 글은 이미 많다. 여기서는 그 질문에 대한 답이 네 논문을 거치며 어떻게
+구조를 순서대로 훑는 글은 이미 많다. 여기서는 그 질문의 답이 네 논문을 거치며 어떻게
 이동하는지, 그리고 각 논문이 자기 주장을 실제로 어떤 숫자로 뒷받침했는지를 본다. 뒷받침하지
 못한 것도 같이 적었다.
 
-## 네 모델의 구조와 과제 적응 방식
+## 네 모델의 구조와 task 적응 방식
 
 | | GPT-1 (2018) | BERT (2018) | GPT-2 (2019) | GPT-3 (2020) |
 |---|---|---|---|---|
@@ -33,18 +33,18 @@ Transformer 자체는 2017년 이후 거의 바뀌지 않았다. 그런데 2018�
 backbone 줄을 보면 BERT만 encoder이고 나머지는 전부 decoder다. 구조는 거의 안 바뀌었다.
 정작 달라진 건 아래 두 줄, **task 정보가 weight에 들어가는가 context에 들어가는가**이다.
 
-과제에 맞게 가중치를 바꾸는 방식에서, 입력 문맥으로 과제를 알려주는 방식으로 이어지는 변화다.
+task에 맞게 weight를 바꾸는 방식에서 입력 context로 task를 알려 주는 방식으로 이어지는 변화다.
 
-## GPT-1: 사전학습과 과제별 미세조정
+## GPT-1: pre-training과 task별 fine-tuning
 
-### 두 단계 학습과 보조 손실
+### 두 단계 학습과 보조 loss
 
 1단계는 label 없는 텍스트에서 다음 token을 예측하는 pre-training이다. 데이터는 출간되지 않은
-책 7,000권 이상을 모은 BooksCorpus이고 모델은 12층 decoder에 768차원, head 12개다.
+책 7,000권 이상을 모은 BooksCorpus이고 모델은 12 layer decoder에 768차원, head 12개다.
 
 $$L_1(\mathcal{U}) = \sum_i \log P(u_i \mid u_{i-k}, \dots, u_{i-1};\, \Theta)$$
 
-2단계에서는 데이터셋마다 출력층을 붙여 지도 미세조정을 한다. 이때 손실 함수에는 분류 항과 언어 모델링 항을 함께 사용한다.
+2단계에서는 dataset마다 output layer를 붙여 supervised fine-tuning을 한다. 이때 loss에는 분류 항과 언어 모델링 항을 함께 사용한다.
 
 $$L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda\, L_1(\mathcal{C}), \qquad \lambda = 0.5$$
 
@@ -52,8 +52,8 @@ $$L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda\, L_1(\mathcal{C}), \qquad \lamb
 다르고 output head $W_y$도 다르다. 반면 $L_1$은 모든 task에서 똑같은 next-token prediction이고
 representation이 pre-training에서 너무 멀어지지 않게 잡아두는 보조 regularizer다.
 
-fine-tuning 때 새로 생기는 파라미터는 $W_y$와 delimiter embedding뿐이다. 그런데 **학습은 전체
-파라미터에 대해 일어난다.** 그래서 dataset 하나당 fine-tuned checkpoint 하나가 생긴다. 12개
+fine-tuning 때 새로 생기는 파라미터는 $W_y$와 delimiter embedding뿐이다. 그런데 **학습 때는 파라미터
+전체를 update한다.** 그래서 dataset 하나당 fine-tuned checkpoint 하나가 생긴다. 12개
 dataset이면 12개 모델이다.
 
 보조 loss가 실제로 얼마나 기여하는지는 논문 Table 5에 있다.
@@ -73,14 +73,14 @@ dataset이면 12개 모델이다.
 바꾸면 5.6점이다. "Transformer가 좋아서인가, pre-training이 좋아서인가"라는 질문에는 이 두
 숫자로 답이 된다. 둘 다지만 pre-training 쪽이 두 배 반쯤 크다.
 
-### 과제별 입력 형식과 출력층
+### task별 입력 형식과 output layer
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/g1_fig1_right.png" alt="GPT-1의 task별 입력 변환" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">Figure 1 (right). task마다 입력을 하나의 token sequence로 바꾼다 (Radford et al., 2018)</figcaption>
 </figure>
 
-GPT-1의 덜 유명하지만 중요한 아이디어다. task마다 모델 구조를 새로 설계하는 대신, **입력을
+잘 알려지지 않았지만 중요한 GPT-1의 아이디어다. task마다 모델 구조를 새로 설계하는 대신 **입력을
 전부 하나의 token sequence로 직렬화한다.**
 
 - **Entailment**: 전제와 가설 사이에 delimiter를 끼운다.
@@ -118,7 +118,7 @@ $$m \sim \mathrm{Bernoulli}(p) \;\Rightarrow\; \mathbb{E}[m\,x] = p\,x$$
 그래프에서 눈에 띄는 건 GELU가 **단조증가가 아니라는 점**이다. 음수 구간에서 한 번 내려갔다가
 올라온다. ReLU는 음수를 전부 0으로 죽이고 dropout의 기댓값은 원점을 지나는 직선이다.
 
-### 미세조정 없이 평가한 성능
+### fine-tuning 없이 평가한 성능
 
 개인적으로 GPT-1에서 가장 흥미로웠던 분석이다.
 
@@ -141,9 +141,9 @@ pre-training update 횟수에 따라 이 zero-shot 성능을 그린 게 위 그�
 물론 GPT-1의 주력 결과는 여전히 fine-tuning이다. 12개 dataset 중 9개에서 SOTA를 갱신했고
 Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었다.
 
-## BERT: 양방향 문맥을 활용한 사전학습
+## BERT: 양방향 context를 활용한 pre-training
 
-### 양방향 문맥이 필요한 이유
+### 양방향 context가 필요한 이유
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/b_fig3.png" alt="BERT, GPT, ELMo의 pre-training 구조 비교" className="rounded-lg mx-auto" />
@@ -155,9 +155,9 @@ Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었다.
 오른쪽 정보를 쓰는 게 유리할 수 있다.
 
 오른쪽 ELMo는 양방향 LSTM을 **따로** 학습해서 마지막에만 이어붙인다. 왼쪽 BERT는 encoder라서
-모든 층에서 양쪽 문맥을 동시에 본다.
+모든 layer에서 양쪽 context를 동시에 본다.
 
-모든 token이 양쪽 문맥을 보면 자기 자신도 보게 된다. 그러면
+모든 token이 양쪽 context를 보면 자기 자신도 보게 된다. 그러면
 "이 token을 맞혀라"는 문제가 공짜가 된다. 그래서 **다른 objective가 필요하다.**
 
 ### segment embedding은 순서가 아니라 소속을 표시한다
@@ -233,9 +233,9 @@ representation이 좋을수록 데이터가 부족한 task에서 이득이 크�
 다만 **BERT도 dataset마다 전체 파라미터를 update한다.** representation은 더 일반적이 됐지만
 downstream 적응 방식 자체는 GPT-1과 똑같다. task 정보는 여전히 weight에 들어간다.
 
-## GPT-2: 프롬프트로 과제 알려주기
+## GPT-2: prompt로 task 알려 주기
 
-### 과제를 텍스트로 전달한다는 가설과 WebText
+### task를 텍스트로 전달한다는 가설과 WebText
 
 GPT-2는 질문 자체를 바꾼다. 입력만이 아니라 입력과 **task**가 주어졌을 때 출력을 내는 모델,
 즉 $p(\text{output} \mid \text{input}, \text{task})$를 모델링하되 그 task를 별도 head가 아니라
@@ -246,7 +246,7 @@ GPT-2는 질문 자체를 바꾼다. 입력만이 아니라 입력과 **task**�
 충분히 크고 다양한 텍스트로 학습하면 이런 대응 관계도 함께 배운다는 가정이다.
 
 그래서 WebText를 만든다. Reddit에서 3 karma 이상 받은 외부 링크를 모은 것으로 약 800만 문서
-40GB다. 모델은 최대 48층 1,542M이고 context는 512에서 **1,024로** 늘렸다. vocab은 50,257이다.
+40GB다. 모델은 최대 48 layer 1,542M이고 context는 512에서 **1,024로** 늘렸다. vocab은 50,257이다.
 
 | Params | Layers | $d_{\text{model}}$ |
 |---|---|---|
@@ -283,7 +283,7 @@ task 정보가 정말 prompt에 들어 있다는 가장 직접적인 증거가 �
 | Random-3 | 20.98 |
 | **GPT-2, 힌트 제거** | **15.03** |
 
-같은 모델에서 프롬프트만 바꾸었는데 **점수가 6.4점 달라진다.** 두 토큰짜리 힌트가 출력에 영향을 준다는 뜻이다.
+같은 모델에서 prompt만 바꾸었는데 **점수가 6.4점 달라진다.** token 두 개짜리 힌트가 출력에 영향을 준다는 뜻이다.
 
 동시에 이 표는 GPT-2의 한계도 같이 보여준다. 21.40은 기사 앞 세 문장을 그냥 가져오는
 Lede-3(31.55)보다 한참 낮고 무작위로 세 문장 뽑는 Random-3(20.98)보다 겨우 0.42 높다.
@@ -293,14 +293,14 @@ prompt가 작동하긴 하는데 잘하지는 못한다.
 
 위 표에서 번역 prompt를 다시 보자. `en = fr` 예시 쌍을 **여러 개 넣고** 시작한다.
 
-weight update가 없다는 의미에서는 분명히 zero-shot이다. 하지만 context에 풀린 예시가 들어
+weight update가 없다는 의미에서는 분명히 zero-shot이다. 하지만 context에 답까지 달린 예시가 들어
 있다는 점에서는 GPT-3가 1년 뒤에 few-shot이라고 부르게 될 바로 그 구조다. 같은 논문 안에서도
 요약은 `TL;DR:`만 붙이는 진짜 zero-shot인데 번역은 예시를 넣는다.
 
 용어가 정리되기 전의 과도기라고 보는 게 맞을 것 같다. GPT-3가 zero / one / few를 명시적으로
 나눈 게 그래서 의미가 있다.
 
-### 과제별 성능 차이
+### task별 성능 차이
 
 | Task (metric) | GPT-2 1.5B | 비교 대상 |
 |---|---|---|
@@ -328,9 +328,9 @@ weight update가 없다는 의미에서는 분명히 zero-shot이다. 하지만 
 그래서 GPT-2의 기여는 benchmark 정복이 아니다. 고정된 모델 하나가 자연어 지시만으로 여러 task를
 "하기 시작했다"는 방향성이다.
 
-## GPT-3: 모델 규모와 문맥 속 예시
+## GPT-3: 모델 규모와 context 속 예시
 
-### 예시를 문맥에 넣는 방식과 미세조정의 차이
+### 예시를 context에 넣는 방식과 fine-tuning의 차이
 
 zero-shot은 task 설명과 query만, one-shot은 예시 하나, few-shot은 예시 여럿을 context에 넣는다.
 
@@ -356,7 +356,7 @@ demonstration은 **정답이 포함된 입출력 쌍**이다. 직관적으로는
 것으로 보면 된다. query 위치의 hidden state가 앞의 예시들을 attention하면서 task의 형식과
 mapping을 추론하는 것이다.
 
-fine-tuning이었다면 예시를 학습에 사용해 가중치를 갱신했을 것이다. 여기서는 세 설정 모두 **weight가
+fine-tuning이었다면 예시를 학습에 사용해 weight를 갱신했을 것이다. 여기서는 세 설정 모두 **weight가
 그대로다.** context를 지우면 적응한 상태도 같이 사라진다.
 
 ### GPT-2 이후의 모델·데이터 규모 확대
@@ -391,7 +391,7 @@ band 폭도 layer 비율도 적혀 있지 않다.
 보편 법칙이라기보다 큰 모델의 학습 안정성을 위한 경험적 선택, 즉 이 논문의 recipe로 보는 게
 정확하다.
 
-### 문맥 속 예시를 늘렸을 때의 성능 변화
+### context 속 예시를 늘렸을 때의 성능 변화
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/g3_fig3_8.png" alt="SuperGLUE 성능과 context 내 예시 수" className="rounded-lg mx-auto" />
@@ -402,7 +402,7 @@ band 폭도 layer 비율도 적혀 있지 않다.
 폭이, 점선으로 그어진 **BERT-Large와 BERT++의 차이**와 비슷하다.
 
 BERT++는 SuperGLUE 전에 MultiNLI 392k와 SWAG 113k로 추가 fine-tuning을 거친 모델이다. 수십만 건의
-labeled 데이터로 가중치를 갱신해서 얻은 향상 폭을, **예시 7개를 더 넣어서** 비슷하게 얻었다는
+labeled 데이터로 weight를 갱신해서 얻은 향상 폭을, **예시 7개를 더 넣어서** 비슷하게 얻었다는
 이야기다.
 
 다만 조심할 게 있다. GPT-3 곡선은 dev set이고 점선은 그렇지 않아서 완전히 같은 조건이
@@ -459,7 +459,7 @@ Alice was friends with Bob. Alice went to visit her friend ___. → Bob
 위아래로 뛰는 것을 뜻한다"고 알려주자 그 단어를 넣은 문장을 만들어낸다. 다만 이건 논문이
 골라서 보여준 사례라 benchmark가 아니라 **demo**로 봐야 한다.
 
-### 모델을 키워도 해결되지 않은 과제
+### 모델을 키워도 해결되지 않은 task
 
 | | GPT-3 175B | 비교 대상 |
 |---|---|---|
@@ -515,7 +515,7 @@ downstream 학습이 언제 일어나느냐다.**
 > bidirectionality의 덕을 보는 task에서는 성능이 더 나빴을 수 있다.
 
 저자들이 직접 WiC, ANLI, RACE를 그런 task로 지목한다. 두 문장을 비교하거나 긴 지문을 여러 번
-되짚어야 하는 것들이다. 그리고 **few-shot 능력을 가진 큰 bidirectional 모델**이 "두 세계의 장점을
+되짚어야 하는 것들이다. 그리고 **few-shot이 되는 큰 bidirectional 모델**이 "두 세계의 장점을
 모두" 가질 수 있을 거라고 쓴다.
 
 BERT가 2018년에 제기한 문제를, 네 번째 논문이 2020년에 다시 열어둔 채로 끝난다. 네 논문을
@@ -524,7 +524,7 @@ BERT가 2018년에 제기한 문제를, 네 번째 논문이 2020년에 다시 �
 
 ## 세미나에서 다룬 추가 질문
 
-**bigger model은 그냥 overfit하는 것 아닌가?**
+**더 큰 모델은 그냥 overfit하지 않는가?**
 
 BERT 논문 Table 6을 보면 train 데이터가 3,600개뿐인 MRPC에서도 모델이 클수록 계속 좋아진다.
 
