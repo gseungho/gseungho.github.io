@@ -30,7 +30,7 @@ export default async function TagPage({ params }: { params: Promise<{ name: stri
 
       {/* Posts Section */}
       <section className="space-y-6">
-        <div className="grid grid-cols-1 gap-4">
+        <div className="divide-y divide-(--border) border-y border-(--border)">
           {posts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}

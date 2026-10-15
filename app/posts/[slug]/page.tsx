@@ -33,7 +33,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           <span className="font-mono text-xs text-(--text-muted)">{post.date}</span>
         </div>
         
-        <h1 className="text-2xl md:text-3.5xl font-semibold leading-tight text-(--text-strong) tracking-tight">
+        <h1 className="text-3xl md:text-4xl font-semibold leading-tight break-keep text-(--text-strong) tracking-tight">
           {post.title}
         </h1>
         
