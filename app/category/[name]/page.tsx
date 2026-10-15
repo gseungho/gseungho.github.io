@@ -20,15 +20,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
     return (
       <div className="space-y-10">
         <section className="py-2">
-          <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-(--accent) mb-2">
+          <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
             folder / categories
           </div>
-          <h1 className="text-2xl md:text-3xl font-normal leading-tight text-(--text-strong) tracking-tight mb-2">
+          <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-(--text-strong) tracking-tight mb-3">
             {category}
           </h1>
           <div className="flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--text-muted) opacity-50" />
-            <span className="font-mono text-xs text-(--text-muted)">0 index files available</span>
+            <span className="font-mono text-sm text-(--text-muted)">0 index files available</span>
           </div>
 
           <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
@@ -47,15 +47,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
     <div className="space-y-10">
       {/* Category Header Band */}
       <section className="py-2">
-        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-(--accent) mb-2">
+        <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
           folder / categories
         </div>
-        <h1 className="text-2xl md:text-3xl font-normal leading-tight text-(--text-strong) tracking-tight mb-2">
+        <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-(--text-strong) tracking-tight mb-3">
           {category}
         </h1>
         <div className="flex items-center gap-2">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--accent) animate-pulse" />
-          <span className="font-mono text-xs text-(--text-muted)">{posts.length} index files available</span>
+          <span className="font-mono text-sm text-(--text-muted)">{posts.length} index files available</span>
         </div>
 
         <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />

@@ -46,6 +46,9 @@ body {
   font-family: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  /* Korean: break lines at spaces, not inside words; very long tokens may still wrap */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 /* 포스트 본문 스타일 (.prose) - Voltagent 사양 반영 */
