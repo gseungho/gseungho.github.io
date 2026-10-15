@@ -20,7 +20,7 @@ KV cache가 커지는 이유다.
 > **크기가 고정된 memory에 새 정보를 어떻게 쓸 것인가?**
 
 세 논문이 세 가지 답을 낸다. 그냥 더하거나, 지우고 쓰거나, 오래된 것을 잊거나. 그리고 글의
-마지막에는 그 "쓰기"가 사실 gradient descent 한 걸음이었다는 데까지 간다. 다음에 읽을 Test-Time
+마지막에는 그 "쓰기"가 사실 gradient descent 한 step이었다는 데까지 간다. 다음에 읽을 Test-Time
 Training으로 이어지는 지점이다.
 
 ## KV cache와 고정 크기 상태
@@ -473,14 +473,14 @@ $$W \leftarrow W - \beta\,\nabla_W\, \ell = W + \beta\,(v - \bar{v})\,\phi(k)^\t
 순수한 linear attention도 같은 틀에 들어간다. $\bar{v}$를 뺀 꼴이다. 이미 무엇이 들어 있는지
 확인하지 않고 정보를 더한다. 그래서 저장한 정보가 겹치면서 간섭이 생긴다.
 
-여기서 다음 질문이 나온다. state가 행렬이고 쓰기가 gradient 한 걸음이라면 state를 더 표현력
+여기서 다음 질문이 나온다. state가 행렬이고 쓰기가 gradient step 한 번이라면 state를 더 표현력
 있는 것으로 바꾸고 쓰기를 제대로 된 학습으로 바꾸면 어떻게 될까? Test-Time Training 계열이 그
 방향이다. state를 행렬이 아니라 작은 model의 파라미터로 두고 쓰기를 그 model을 학습시키는 gradient
 step으로 정의한다. 다음에 읽을 논문이다.
 
-그리고 쓰기 한 번이 gradient 한 걸음의 비용이라면
+그리고 쓰기 한 번이 gradient step 한 번의 비용이라면
 [앞 글](/posts/2026-10-12-moe-mod-mor-dynamic-compute)의 질문이 그대로 돌아온다. 모든 token이 그
-한 걸음을 받아야 할까?
+step을 받아야 할까?
 
 ## 정리
 

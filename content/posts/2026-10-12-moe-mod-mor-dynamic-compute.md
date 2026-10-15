@@ -60,7 +60,7 @@ Transformer는 이걸 $k = 1$로 줄인다. token 하나는 expert **하나**에
 token당 계산량이 그대로인 이유가 여기 있다. expert가 몇 개든 token 하나는 FFN을 한 번만
 통과하니까.
 
-### router는 어떻게 학습되나
+### router는 어떻게 학습되는가
 
 router는 행렬 하나다. token 표현 $x \in \mathbb{R}^d$에 $W_r \in \mathbb{R}^{N \times d}$를
 곱해 expert 수만큼의 logit을 만들고 softmax를 씌운다. 논문의 식 (1)이다.
@@ -290,7 +290,7 @@ token이 참여하는 block이 자주 있기만 하면 capacity는 과감하게 
 두 번째가 중요하다. 계산을 줄인 것 자체가 좋은 게 아니다. **무엇을 줄일지를 학습했기 때문에**
 손해가 없는 것이다.
 
-### 어떤 토큰에 계산을 더 배정하나
+### 어떤 토큰에 계산을 더 배정하는가
 
 <figure className="my-6 text-center">
   <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig5.png" alt="MoD의 routing 결정과 router 점수 분포" className="rounded-lg mx-auto" />
