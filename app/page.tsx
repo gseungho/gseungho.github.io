@@ -1,5 +1,8 @@
 import { getAllPosts } from "@/lib/posts";
 import PostCard from "@/components/PostCard";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function Home() {
   const posts = getAllPosts();

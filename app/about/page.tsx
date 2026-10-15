@@ -2,6 +2,13 @@ import fs from "fs";
 import path from "path";
 import Link from "next/link";
 import { getAllPosts, type PostMeta } from "@/lib/posts";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "고승호(Seung Ho Go)의 소개, 소속, 관심 연구 분야와 블로그 글 목록입니다.",
+  alternates: { canonical: "/about" },
+};
 
 const AFFILIATION: { name: string; href?: string; note?: string }[] = [
   { name: "세종대학교 소프트웨어학과" },

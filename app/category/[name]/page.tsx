@@ -1,5 +1,6 @@
 import { getAllPosts, getAllCategories } from "@/lib/posts";
 import FolderTree from "@/components/FolderTree";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
   const defaultCategories = ["공부", "프로젝트", "논문리뷰", "창업일지"];
@@ -8,6 +9,16 @@ export async function generateStaticParams() {
     ...getAllCategories()
   ]));
   return allCategories.map((name) => ({ name }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
+  const { name } = await params;
+  const category = decodeURIComponent(name).normalize("NFC");
+  return {
+    title: category,
+    description: `Tensors & Notebooks의 ${category} 글 모음입니다.`,
+    alternates: { canonical: `/category/${encodeURIComponent(category)}` },
+  };
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ name: string }> }) {

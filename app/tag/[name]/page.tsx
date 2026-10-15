@@ -1,8 +1,19 @@
 import { getAllPosts, getAllTags } from "@/lib/posts";
 import PostCard from "@/components/PostCard";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
   return getAllTags().map((name) => ({ name }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
+  const { name } = await params;
+  const tag = decodeURIComponent(name).normalize("NFC");
+  return {
+    title: `#${tag}`,
+    description: `#${tag} 태그가 붙은 글 모음입니다.`,
+    alternates: { canonical: `/tag/${encodeURIComponent(tag)}` },
+  };
 }
 
 export default async function TagPage({ params }: { params: Promise<{ name: string }> }) {

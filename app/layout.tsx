@@ -4,8 +4,11 @@ import Header from "@/components/Header";
 import GoatCounter from "@/components/GoatCounter";
 
 export const metadata: Metadata = {
-  title: "Tensors & Notebooks",
-  description: "AI 논문 리뷰, 고도화된 소프트웨어 프로젝트, 수학통계를 기록하는 공간",
+  metadataBase: new URL("https://gseungho.github.io"),
+  // pages set their own title; the template appends the site name
+  title: { default: "Tensors & Notebooks", template: "%s | Tensors & Notebooks" },
+  description: "AI 논문 리뷰와 공부 중인 내용을 정리한 노트, 직접 만든 프로젝트의 기록을 담는 블로그입니다.",
+  openGraph: { siteName: "Tensors & Notebooks", locale: "ko_KR", type: "website" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
