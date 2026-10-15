@@ -6,10 +6,32 @@ import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import Link from "next/link";
+import type { Metadata } from "next";
 import TableOfContents from "@/components/TableOfContents";
 
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
+}
+
+// Each post gets its own <title>, description and share preview, so search can match it.
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  const url = `/posts/${slug}`;
+  return {
+    title: post.title,
+    description: post.description,
+    keywords: post.tags,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.description,
+      url,
+      publishedTime: post.date,
+      tags: post.tags,
+    },
+  };
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
