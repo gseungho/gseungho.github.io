@@ -29,8 +29,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   // Render Empty State if no posts are found in this category
   if (posts.length === 0) {
     return (
-      <div className="space-y-10">
-        <section className="py-2">
+      <div className="space-y-8">
+        <section className="pt-2">
           <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
             folder / categories
           </div>
@@ -55,9 +55,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* Category Header Band */}
-      <section className="py-2">
+      <section className="pt-2">
         <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
           folder / categories
         </div>
