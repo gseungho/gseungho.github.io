@@ -77,7 +77,7 @@ export default function AboutPage() {
             <img
               src={PHOTO}
               alt="고승호"
-              className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border border-(--border) shrink-0"
+              className="w-30 h-30 md:w-36 md:h-36 rounded-full object-cover border border-(--border) shrink-0"
             />
           )}
           <div>
