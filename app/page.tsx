@@ -29,7 +29,7 @@ export default function Home() {
           </h2>
           <span className="font-mono text-xs text-[#8b949e]">{posts.length} articles</span>
         </div>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="divide-y divide-(--border) border-y border-(--border)">
           {posts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}
