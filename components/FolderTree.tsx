@@ -59,14 +59,14 @@ function PostRows({ posts }: { posts: PostMeta[] }) {
     <ul>
       {posts.map((post) => (
         <li key={post.slug}>
-          <Link href={`/posts/${post.slug}`} className="group flex items-baseline gap-4 py-2.5">
-            <span className="font-mono text-xs text-(--text-muted) shrink-0">{post.date}</span>
+          <Link href={`/posts/${post.slug}`} className="group flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:gap-4">
+            <span className="font-mono text-sm text-(--text-muted) shrink-0">{post.date}</span>
             <span className="min-w-0">
-              <span className="block text-sm text-(--text-strong) leading-relaxed transition-colors duration-200 group-hover:text-(--accent)">
+              <span className="block text-lg font-semibold text-(--text-strong) leading-snug tracking-tight break-keep transition-colors duration-200 group-hover:text-(--accent)">
                 {post.title}
               </span>
               {post.description && (
-                <span className="mt-0.5 text-[13px] text-(--text-muted) leading-relaxed line-clamp-2">
+                <span className="block mt-1.5 text-[0.95rem] text-(--text) leading-relaxed">
                   {post.description}
                 </span>
               )}
@@ -81,17 +81,17 @@ function PostRows({ posts }: { posts: PostMeta[] }) {
 function FolderNode({ folder }: { folder: Folder }) {
   return (
     <details open className="folder">
-      <summary className="flex items-center gap-2 py-2 px-2 -mx-2 rounded-md select-none transition-colors duration-200 hover:bg-(--bg-soft)">
+      <summary className="flex items-center gap-2.5 py-2.5 px-2 -mx-2 rounded-md select-none transition-colors duration-200 hover:bg-(--bg-soft)">
         <svg
-          className="folder-chevron w-2.5 h-2.5 shrink-0 text-(--text-muted)"
+          className="folder-chevron w-3 h-3 shrink-0 text-(--text-muted)"
           viewBox="0 0 10 10"
           fill="currentColor"
           aria-hidden="true"
         >
           <path d="M3 1l5 4-5 4z" />
         </svg>
-        <span className="font-mono text-sm text-(--accent)">{folder.name}</span>
-        <span className="ml-auto font-mono text-xs text-(--text-muted)">{countPosts(folder)}</span>
+        <span className="font-mono text-base text-(--accent)">{folder.name}</span>
+        <span className="ml-auto font-mono text-sm text-(--text-muted)">{countPosts(folder)}</span>
       </summary>
       <div className="ml-1 pl-4 border-l border-(--border)">
         {sortedFolders(folder).map((child) => (
