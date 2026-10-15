@@ -67,7 +67,7 @@ export default function AboutPage() {
         </h1>
         <div className="font-mono text-sm text-(--text-muted) mb-5">Seung Ho Go</div>
         <p className="text-base text-(--text) leading-relaxed max-w-xl">
-          매주 ISDS Lab 세미나에서 발표한 논문을 리뷰로 정리합니다. 학교에서 듣는 과목의 공부 노트와 직접 만든 프로젝트의 기록도 함께 남깁니다.
+          매주 ISDS Lab 세미나에서 발표한 논문을 리뷰로 정리합니다. 공부 중인 내용을 정리한 노트와 직접 만든 프로젝트의 기록도 함께 남깁니다.
         </p>
 
         <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />

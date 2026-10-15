@@ -14,7 +14,7 @@ export default function Home() {
           AI &amp; Mathematics.
         </h1>
         <p className="text-base md:text-lg text-(--text) max-w-xl leading-relaxed">
-          AI 논문 리뷰와 수강 중인 과목의 공부 노트, 직접 만든 프로젝트의 기록을 담는 블로그입니다.
+          AI 논문 리뷰와 공부 중인 내용을 정리한 노트, 직접 만든 프로젝트의 기록을 담는 블로그입니다.
         </p>
         
         {/* Voltagent Signature Dashed Divider */}
