@@ -4,7 +4,7 @@ date: "2026-05-20"
 category: "프로젝트"
 subcategory: "Deep Learning/Computer Vision"
 tags: ["딥러닝", "LSTM", "MediaPipe", "컴퓨터비전"]
-description: "MediaPipe + LSTM + Attention으로 실시간 졸음 운전 감지 시스템을 구현한 딥러닝 수업 팀 프로젝트 회고."
+description: "MediaPipe로 뽑은 얼굴 특징을 LSTM과 Self-Attention에 넣어 실시간으로 졸음 운전을 감지하는 시스템을 만든 딥러닝 수업 팀 프로젝트 회고다. 직접 모은 데이터, 초기 모델의 문제와 개선 과정, 웹캠에 연결해 본 결과와 한계를 차례로 정리한다."
 ---
 
 졸음 운전을 하면 반응이 느려지고 집중력이 떨어져 심각한 사고로 이어진다. 국내 경찰청 통계에 따르면 졸음 운전 치사율은 음주 운전 치사율보다 높다. 그런데 시중의 졸음 감지 솔루션은 대부분 비싼 적외선 센서나 웨어러블 기기가 있어야 한다.
