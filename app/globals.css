@@ -153,6 +153,13 @@ body {
   margin: 2.2rem 0;
 }
 
+/* Display math wider than the screen scrolls inside its own box instead of widening the page */
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
 /* GFM footnotes (remark-gfm): hide the screen-reader "Footnotes" label, keep the notes small */
 .prose .footnotes {
   margin-top: 3rem;
