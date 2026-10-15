@@ -356,7 +356,7 @@ demonstration은 **정답이 포함된 입출력 쌍**이다. 직관적으로는
 것으로 보면 된다. query 위치의 hidden state가 앞의 예시들을 attention하면서 task의 형식과
 mapping을 추론하는 것이다.
 
-fine-tuning이었다면 예시를 학습에 사용해 weight를 갱신했을 것이다. 여기서는 세 설정 모두 **weight가
+fine-tuning이었다면 예시를 학습에 사용해 weight를 update했을 것이다. 여기서는 세 설정 모두 **weight가
 그대로다.** context를 지우면 적응한 상태도 같이 사라진다.
 
 ### GPT-2 이후의 모델·데이터 규모 확대
@@ -402,7 +402,7 @@ band 폭도 layer 비율도 적혀 있지 않다.
 폭이, 점선으로 그어진 **BERT-Large와 BERT++의 차이**와 비슷하다.
 
 BERT++는 SuperGLUE 전에 MultiNLI 392k와 SWAG 113k로 추가 fine-tuning을 거친 모델이다. 수십만 건의
-labeled 데이터로 weight를 갱신해서 얻은 향상 폭을, **예시 7개를 더 넣어서** 비슷하게 얻었다는
+labeled 데이터로 weight를 update해서 얻은 향상 폭을, **예시 7개를 더 넣어서** 비슷하게 얻었다는
 이야기다.
 
 다만 조심할 게 있다. GPT-3 곡선은 dev set이고 점선은 그렇지 않아서 완전히 같은 조건이
