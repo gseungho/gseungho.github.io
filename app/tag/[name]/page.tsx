@@ -35,8 +35,6 @@ export default async function TagPage({ params }: { params: Promise<{ name: stri
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--accent) animate-pulse" />
           <span className="font-mono text-sm text-(--text-muted)">{posts.length} index files available</span>
         </div>
-
-        <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
       </section>
 
       {/* Posts Section */}
