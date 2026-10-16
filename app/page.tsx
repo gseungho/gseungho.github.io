@@ -37,7 +37,7 @@ export default function Home() {
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8b949e]">
-            Recent Publications
+            Recent Posts
           </h2>
           <span className="font-mono text-xs text-[#8b949e]">{posts.length} articles</span>
         </div>
