@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
+import { categoryLabel } from "@/lib/categories";
 
 // One row of a post list. Rows are separated by lines drawn by the parent list (divide-y).
 export default function PostCard({ post }: { post: PostMeta }) {
@@ -10,7 +11,7 @@ export default function PostCard({ post }: { post: PostMeta }) {
           {/* Voltagent button-pill-tag style */}
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="inline-block px-2.5 py-0.5 text-xs font-semibold text-(--text-strong) bg-(--bg) border border-(--border) rounded-full transition-colors duration-300 group-hover:border-(--accent)/60 group-hover:text-(--accent) shrink-0">
-              {post.category}
+              {categoryLabel(post.category)}
             </span>
             {post.subcategory && (
               <span className="font-mono text-[11px] text-(--text-muted) truncate">

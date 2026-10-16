@@ -8,6 +8,7 @@ import rehypeSlug from "rehype-slug";
 import Link from "next/link";
 import type { Metadata } from "next";
 import TableOfContents from "@/components/TableOfContents";
+import { categoryLabel } from "@/lib/categories";
 
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
@@ -61,7 +62,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             href={`/category/${post.category}`}
             className="inline-block px-2.5 py-0.5 text-xs font-semibold text-(--accent) bg-(--bg-soft)/60 border border-(--border) rounded-full hover:border-(--accent)/80 transition-colors"
           >
-            {post.category}
+            {categoryLabel(post.category)}
           </Link>
           <span className="font-mono text-xs text-(--text-muted)">{post.date}</span>
         </div>
