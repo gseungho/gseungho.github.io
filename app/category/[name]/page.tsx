@@ -29,7 +29,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   // Render Empty State if no posts are found in this category
   if (posts.length === 0) {
     return (
-      <div className="space-y-8">
+      <div className="space-y-6">
         <section className="pt-2">
           <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
             folder / categories
@@ -41,8 +41,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--text-muted) opacity-50" />
             <span className="font-mono text-sm text-(--text-muted)">0 index files available</span>
           </div>
-
-          <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
         </section>
 
         <section className="py-16 text-center border border-dashed border-(--border) rounded-lg bg-(--bg-soft)/30">
@@ -55,7 +53,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Category Header Band */}
       <section className="pt-2">
         <div className="font-mono text-xs font-semibold uppercase tracking-[0.25em] text-(--accent) mb-3">
@@ -68,8 +66,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--accent) animate-pulse" />
           <span className="font-mono text-sm text-(--text-muted)">{posts.length} index files available</span>
         </div>
-
-        <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
       </section>
 
       {/* Folder tree built from each post's subcategory path */}
