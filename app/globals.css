@@ -80,6 +80,11 @@ body {
 }
 /* keep anchor targets clear of the sticky header */
 .prose h2, .prose h3 { scroll-margin-top: 5.5rem; }
+/* larger headings on desktop; phones keep the sizes above so h2 stays below the post title */
+@media (min-width: 768px) {
+  .prose h2 { font-size: 2.125rem; }
+  .prose h3 { font-size: 1.625rem; }
+}
 .prose p { 
   margin: 1.1rem 0; 
   color: var(--text); 
