@@ -95,10 +95,8 @@ export default function AboutPage() {
           </div>
         </div>
         <p className="text-base text-(--text) leading-relaxed max-w-xl">
-          매주 ISDS Lab 세미나에서 발표한 논문을 리뷰로 정리합니다. 공부 중인 내용을 정리한 노트와 직접 만든 프로젝트의 기록도 함께 남깁니다.
+          세종대학교 소프트웨어학과에 재학 중이고 수학통계학과를 복수전공하고 있습니다. 2025년 2월부터 ISDS Lab에서 연구하고 있고 지금은 모델 경량화, 그중에서도 pruning을 주로 다룹니다. 클래스 불균형 학습과 입력에 따라 계산량을 조절하는 모델에도 관심이 있습니다.
         </p>
-
-        <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
       </section>
 
       <Section label="Affiliation">
