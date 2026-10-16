@@ -31,9 +31,6 @@ export default function Home() {
         <p className="text-base md:text-lg text-(--text) max-w-xl leading-relaxed">
           AI 논문 리뷰와 공부 중인 내용을 정리한 노트, 직접 만든 프로젝트의 기록을 담는 블로그입니다.
         </p>
-        
-        {/* Voltagent Signature Dashed Divider */}
-        <div className="mt-8 border-b border-dashed border-(--border) w-full opacity-60" />
       </section>
 
       {/* Posts Section */}
