@@ -1,6 +1,7 @@
 import { getAllPosts, getAllCategories } from "@/lib/posts";
 import FolderTree from "@/components/FolderTree";
 import type { Metadata } from "next";
+import { categoryLabel } from "@/lib/categories";
 
 export async function generateStaticParams() {
   const defaultCategories = ["공부", "프로젝트", "논문리뷰", "창업일지"];
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ name: str
   const { name } = await params;
   const category = decodeURIComponent(name).normalize("NFC");
   return {
-    title: category,
+    title: categoryLabel(category),
     description: `Tensors & Notebooks의 ${category} 글 모음입니다.`,
     alternates: { canonical: `/category/${encodeURIComponent(category)}` },
   };
@@ -35,7 +36,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
             folder / categories
           </div>
           <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-(--text-strong) tracking-tight mb-3">
-            {category}
+            {categoryLabel(category)}
           </h1>
           <div className="flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--text-muted) opacity-50" />
@@ -60,7 +61,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ name:
           folder / categories
         </div>
         <h1 className="text-3xl md:text-4xl font-semibold leading-tight text-(--text-strong) tracking-tight mb-3">
-          {category}
+          {categoryLabel(category)}
         </h1>
         <div className="flex items-center gap-2">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--accent) animate-pulse" />

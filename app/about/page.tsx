@@ -3,6 +3,7 @@ import path from "path";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
 import type { Metadata } from "next";
+import { categoryLabel } from "@/lib/categories";
 
 export const metadata: Metadata = {
   title: "About",
@@ -92,11 +93,7 @@ function DatedRow({ date, children }: { date: string; children: React.ReactNode 
 export default function AboutPage() {
   const posts = getAllPosts();
   const count = (category: string) => posts.filter((p) => p.category === category).length;
-  const blog = [
-    { label: "Paper Reviews", href: "/category/논문리뷰", n: count("논문리뷰") },
-    { label: "Study Notes", href: "/category/공부", n: count("공부") },
-    { label: "Projects", href: "/category/프로젝트", n: count("프로젝트") },
-  ];
+  const blog = ["논문리뷰", "공부", "프로젝트"].map((c) => ({ label: categoryLabel(c), href: `/category/${c}`, n: count(c) }));
 
   return (
     <div className="space-y-14">
