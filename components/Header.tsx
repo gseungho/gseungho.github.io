@@ -34,7 +34,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-(--bg)/80 backdrop-blur-md border-b border-(--border) transition-colors duration-300">
-      <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-3">
+      <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between gap-3">
         <Link href="/" className="group flex items-center gap-1.5 text-base font-semibold tracking-tight text-(--text-strong) shrink-0">
           <span>Tensors &amp; Notebooks</span>
           <span className="text-(--accent) transition-transform duration-300 group-hover:scale-125">✦</span>
@@ -75,7 +75,7 @@ export default function Header() {
 
       {open && (
         <nav id="mobile-nav" className="md:hidden border-t border-(--border) bg-(--bg)">
-          <ul className="max-w-3xl mx-auto px-6 py-2">
+          <ul className="max-w-4xl mx-auto px-6 py-2">
             {NAV.map(({ href, label }) => (
               <li key={href}>
                 <Link

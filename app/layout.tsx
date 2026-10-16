@@ -38,9 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen flex flex-col bg-(--bg) text-(--text) antialiased transition-colors duration-300">
         <Header />
-        <main className="flex-grow max-w-3xl w-full mx-auto px-6 py-10">{children}</main>
+        <main className="flex-grow max-w-4xl w-full mx-auto px-6 py-10">{children}</main>
         <footer className="border-t border-(--border) py-10 px-6 mt-auto transition-colors duration-300">
-          <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-(--text-muted)">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-(--text-muted)">
             <div>
               <span>© {new Date().getFullYear()} gseungho. All rights reserved.</span>
             </div>
