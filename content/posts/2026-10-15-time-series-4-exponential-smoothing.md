@@ -91,7 +91,7 @@ $$
 | $y_{T-5}$ | 0.0655 | 0.0311 | 0.0061 | 0.0003 |
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/ses-weights.png" alt="α = 0.2, 0.5, 0.8일 때 최근 열 개 관측값에 붙는 SES 가중치 막대그래프" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/ses-weights.svg" alt="α = 0.2, 0.5, 0.8일 때 최근 열 개 관측값에 붙는 SES 가중치 막대그래프" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 2. α가 클수록 가중치가 최근 값에 쏠린다. α = 0.8이면 세 시점 전 값의 가중치가 벌써 0.0064다.</figcaption>
 </figure>
 
@@ -269,7 +269,7 @@ $$
 $$
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/holt-vs-damped.png" alt="같은 마지막 상태에서 출발한 Holt 예측 직선과 감쇠 추세 예측 곡선" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/holt-vs-damped.svg" alt="같은 마지막 상태에서 출발한 Holt 예측 직선과 감쇠 추세 예측 곡선" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 마지막 상태에서 출발해도 Holt(파랑)는 직선으로 오르고 감쇠 추세(주황, φ = 0.9)는 ℓ_T + 9b_T = 79.4 아래에서 멈춘다(모의 자료).</figcaption>
 </figure>
 
@@ -324,7 +324,7 @@ $$
 $$
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/additive-vs-multiplicative.png" alt="같은 수준 위에 덧셈 계절과 곱셈 계절을 얹은 두 모의 계열" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/additive-vs-multiplicative.svg" alt="같은 수준 위에 덧셈 계절과 곱셈 계절을 얹은 두 모의 계열" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 4. 덧셈 계절(왼쪽)은 진폭이 일정하고 곱셈 계절(오른쪽)은 수준이 오를수록 진폭도 커진다(모의 자료).</figcaption>
 </figure>
 

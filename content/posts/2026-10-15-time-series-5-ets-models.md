@@ -129,7 +129,7 @@ $$
 $$
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-5-ets-models/interval-width.png" alt="α = 0.2, 0.5, 1일 때 예측 시점 h에 따른 95% 예측구간 half-width" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-5-ets-models/interval-width.svg" alt="α = 0.2, 0.5, 1일 때 예측 시점 h에 따른 95% 예측구간 half-width" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 1. h = 12에서 95% 구간 half-width는 α = 0.2면 2.35, 0.5면 3.80, 1이면 6.79다(σ = 1). 시작은 모두 1.96이다.</figcaption>
 </figure>
 
@@ -229,7 +229,7 @@ $$
 | $\alpha$ | 0.095 | 0.27 | 0.618 | 0.916 | 0.99 |
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-5-ets-models/kalman-gain.png" alt="q = 0.1, 1, 10일 때 칼만 이득 K_t가 상수 α로 수렴하는 모습" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-5-ets-models/kalman-gain.svg" alt="q = 0.1, 1, 10일 때 칼만 이득 K_t가 상수 α로 수렴하는 모습" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 2. 칼만 이득 K_t는 몇 step 만에 상수로 수렴하고 그 값이 SES의 α다. q = 1이면 1, 0.667, 0.625, 0.619, 0.618로 수렴한다.</figcaption>
 </figure>
 

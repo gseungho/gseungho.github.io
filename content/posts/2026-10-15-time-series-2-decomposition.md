@@ -94,7 +94,7 @@ $$
 세 가지 다섯 항 이동평균의 가중치를 나란히 그리면 그림 1과 같다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-2-decomposition/ma_weights.png" alt="5-MA, 3×3-MA, 2×4-MA의 가중치 막대그래프" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-2-decomposition/ma_weights.svg" alt="5-MA, 3×3-MA, 2×4-MA의 가중치 막대그래프" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 1. 모두 다섯 항을 쓰지만 무게를 나누는 방식이 다르다. 셋 다 좌우 대칭이다.</figcaption>
 </figure>
 
@@ -150,7 +150,7 @@ Additive 분해의 절차를 따라가 보자. $m$은 계절 주기다.
 네 단계를 분기별 시뮬레이션 계열 40개에 그대로 적용하면 그림 3이 나온다. 계열은 추세 $400 + 2t$에 계절 값 $-30, -10, +10, +30$과 표준편차 6인 잡음을 더해 만들었다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-2-decomposition/classical_decomposition.png" alt="분기별 시뮬레이션 계열의 classical decomposition 결과: 관측값, 추세, 계절, 나머지" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-2-decomposition/classical_decomposition.svg" alt="분기별 시뮬레이션 계열의 classical decomposition 결과: 관측값, 추세, 계절, 나머지" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 3. 위에서부터 관측값, 추세, 계절, 나머지. 추세는 처음과 마지막 두 분기가 비어 있고 계절 성분은 해마다 똑같은 모양을 되풀이한다.</figcaption>
 </figure>
 
@@ -232,7 +232,7 @@ $$
 그림 4는 시뮬레이션 계열 40개에서 $q = 11$로 두 시점의 loess 값을 구하는 모습이다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-2-decomposition/loess_local_line.png" alt="가운데 시점과 마지막 시점에서 loess가 가까운 11개 점에 가중 직선을 맞추는 모습" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-2-decomposition/loess_local_line.svg" alt="가운데 시점과 마지막 시점에서 loess가 가까운 11개 점에 가중 직선을 맞추는 모습" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 4. 주황 점이 쓰인 11개 이웃이고 점이 클수록 가중치가 크다. 파란 직선이 맞춘 직선, 파란 점이 그 시점의 loess 값이다. 마지막 시점에서도 왼쪽 이웃만으로 값이 나온다.</figcaption>
 </figure>
 

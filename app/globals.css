@@ -153,6 +153,8 @@ body {
   margin: 1.5rem auto; 
   display: block; 
 }
+/* figure SVGs are drawn at the column width (scripts/figures/blogstyle.py); fill it */
+.prose img[src$=".svg"] { width: 100%; height: auto; }
 .prose hr {
   border-color: var(--border);
   margin: 2.2rem 0;

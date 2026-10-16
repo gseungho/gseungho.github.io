@@ -178,7 +178,7 @@ Log-linear만 종속변수가 log 판매액이고 나머지 셋은 판매액 그
 Linear trend의 잔차는 처음에 전부 추세선 위에 있다가 한동안 아래에 있고 끝에서 다시 위로 올라간다. 직선이 휘어진 추세를 못 따라간다는 뜻이다. 실제 자료 대신 비슷한 모양으로 만든 시뮬레이션 계열로 이 현상을 다시 그려 보자. 한 달에 0.59%씩 성장하는 지수 추세에 3% 정도의 곱셈 잡음(multiplicative noise)을 얹은 468개 계열이다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-3-trend-regression/linear_vs_quadratic.png" alt="볼록한 시뮬레이션 계열에 linear와 quadratic 추세를 맞춘 결과와 linear 잔차" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-3-trend-regression/linear_vs_quadratic.svg" alt="볼록한 시뮬레이션 계열에 linear와 quadratic 추세를 맞춘 결과와 linear 잔차" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 1. 왼쪽: 볼록한 시뮬레이션 계열에 맞춘 직선(파랑)과 2차 곡선(주황). 오른쪽: 직선의 잔차는 처음과 끝이 양수, 가운데가 음수인 긴 덩어리로 갈린다.</figcaption>
 </figure>
 
@@ -210,7 +210,7 @@ Linear trend로 검산해 보자. 회귀 표준오차에서 $\text{SSR} = s_e^2(
 두 기준의 차이는 벌점 크기다. 모수 하나당 AIC는 $2/T$, SIC는 $\ln T/T$를 더한다. 그림 2는 두 벌점에 $T$를 곱해 나란히 그린 것이다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-3-trend-regression/aic_sic_penalty.png" alt="관측값 수 T에 따른 AIC와 SIC의 모수 1개당 벌점" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-3-trend-regression/aic_sic_penalty.svg" alt="관측값 수 T에 따른 AIC와 SIC의 모수 1개당 벌점" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 2. AIC의 벌점은 2로 고정이고 SIC의 벌점은 ln T로 계속 커진다. 두 선은 T = e² ≈ 7.4에서 만난다.</figcaption>
 </figure>
 

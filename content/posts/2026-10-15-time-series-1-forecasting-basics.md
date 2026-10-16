@@ -101,7 +101,7 @@ FPP3에 이 관점을 잘 보여 주는 예가 있다. 호주를 찾은 단기 �
 같은 일을 작은 모형으로 직접 해 보자. 아래에서 다시 쓸 자기회귀 모형 $y_t = 0.8\,y_{t-1} + 2 + \varepsilon_t$($\varepsilon_t \sim N(0, 1)$)로 관측값 60개를 만들고 그 뒤 30 step을 200번 시뮬레이션했다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/fan_chart_ar1.png" alt="자기회귀 모형의 관측값, 시뮬레이션한 미래 경로, 점예측과 95% 예측구간" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/fan_chart_ar1.svg" alt="자기회귀 모형의 관측값, 시뮬레이션한 미래 경로, 점예측과 95% 예측구간" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 1. 회색 가는 선 하나하나가 일어날 수 있는 미래다. 경로 200개의 평균이 파란 점예측이고 경로가 퍼진 범위가 예측구간이다(그림에는 경로 20개만 그렸다).</figcaption>
 </figure>
 
@@ -182,7 +182,7 @@ $$
 식 (1)에 제곱근을 씌워 $h$에 따라 그려 보면 차이가 한눈에 보인다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/forecast_sd_by_h.png" alt="a가 0.5, 0.8, 1일 때 예측 표준편차가 h에 따라 커지는 모습" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/forecast_sd_by_h.svg" alt="a가 0.5, 0.8, 1일 때 예측 표준편차가 h에 따라 커지는 모습" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 2. 몇 step 앞을 예측하느냐에 따라 예측 표준편차가 어떻게 커지는가. a가 1보다 작으면 점선의 상한에서 멈추고 a = 1이면 끝없이 커진다.</figcaption>
 </figure>
 
@@ -298,7 +298,7 @@ $$
 시계열 그림으로도 확인해 보자. 수준이 분기마다 약 3%씩 자라고 계절 변동이 수준에 비례하는 가상의 분기 자료 80개를 만들어 식 (2)를 $\lambda = 1, 0.5, 0$으로 적용했다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/boxcox_lambda.png" alt="같은 분기 자료에 Box-Cox 변환을 lambda 1, 0.5, 0으로 적용한 세 그림" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/boxcox_lambda.svg" alt="같은 분기 자료에 Box-Cox 변환을 lambda 1, 0.5, 0으로 적용한 세 그림" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 자료에 λ만 바꿔 Box-Cox 변환을 했다. 위에서 아래로 갈수록 뒤쪽의 출렁임이 앞쪽과 비슷해진다.</figcaption>
 </figure>
 
@@ -326,7 +326,7 @@ $$
 둘 다 오르내리는 패턴이라 헷갈리기 쉽다. 기준은 하나다. **길이가 고정돼 있으면 계절성이고 매번 달라지면 주기다.** 계절성은 달력에 묶여 있어서 월별 자료라면 정확히 12개월마다 되풀이된다. 주기는 경기 순환처럼 몇 년에 한 번 오지만 그 길이가 매번 다르다.
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/season_vs_cycle.png" alt="12개월마다 정점이 오는 계절성과 정점 간격이 불규칙한 주기 비교" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/season_vs_cycle.svg" alt="12개월마다 정점이 오는 계절성과 정점 간격이 불규칙한 주기 비교" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 4. 위는 12개월마다 같은 자리(점선)에서 정점을 찍는 계절성, 아래는 정점 사이 간격이 9개월에서 28개월까지 들쭉날쭉한 주기다.</figcaption>
 </figure>
 
@@ -360,7 +360,7 @@ y_t = S_t \times T_t \times R_t
 $$
 
 <figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/additive_vs_multiplicative.png" alt="같은 추세 위에 덧셈형과 곱셈형 계절 변동을 얹은 두 계열" className="rounded-lg mx-auto" />
+  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/additive_vs_multiplicative.svg" alt="같은 추세 위에 덧셈형과 곱셈형 계절 변동을 얹은 두 계열" className="rounded-lg mx-auto" />
   <figcaption className="mt-2 text-sm text-gray-500">그림 5. 회색 점선이 같은 추세다. 왼쪽 덧셈형은 계절 변동의 폭이 일정하고 오른쪽 곱셈형은 수준이 오를수록 폭이 커진다.</figcaption>
 </figure>
 
