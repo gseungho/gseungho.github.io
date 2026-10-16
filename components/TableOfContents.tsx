@@ -45,7 +45,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
   return (
     <nav
       aria-label="목차"
-      className="hidden min-[1340px]:block fixed top-28 right-6 w-52 max-h-[calc(100vh-10rem)] overflow-y-auto"
+      className="hidden min-[1440px]:block fixed top-28 right-6 w-52 max-h-[calc(100vh-10rem)] overflow-y-auto"
     >
       <p className="font-mono text-[10px] tracking-widest uppercase text-(--text-muted) mb-3">
         On this page
