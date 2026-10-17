@@ -50,7 +50,7 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
         className={[
           open ? "block" : "hidden",
           "fixed inset-y-0 left-0 z-[60] w-72 max-w-[85vw] overflow-y-auto bg-(--bg) border-r border-(--border) px-5 pt-5 pb-10",
-          "min-[1440px]:block min-[1440px]:inset-y-auto min-[1440px]:top-28 min-[1440px]:left-6 min-[1440px]:z-auto min-[1440px]:w-56 min-[1680px]:w-64",
+          "min-[1440px]:block min-[1440px]:inset-y-auto min-[1440px]:top-28 min-[1440px]:left-6 min-[1440px]:z-auto min-[1440px]:w-60 min-[1680px]:w-72",
           "min-[1440px]:max-h-[calc(100vh-10rem)] min-[1440px]:bg-transparent min-[1440px]:border-0 min-[1440px]:p-0",
         ].join(" ")}
       >
