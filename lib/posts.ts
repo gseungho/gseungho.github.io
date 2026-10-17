@@ -2,10 +2,28 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import GithubSlugger from "github-slugger";
+import katex from "katex";
 
 const postsDir = path.join(process.cwd(), "content/posts");
 
-export type Heading = { depth: 2 | 3; text: string; id: string };
+export type Heading = { depth: 2 | 3; text: string; html: string; id: string };
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// Heading text for the table of contents: $...$ rendered with KaTeX like the post body,
+// everything else escaped as plain text.
+function headingHtml(source: string): string {
+  return source
+    .split(/(\$[^$]+\$)/g)
+    .map((part) =>
+      /^\$[^$]+\$$/.test(part)
+        ? katex.renderToString(part.slice(1, -1), { throwOnError: false })
+        : escapeHtml(part)
+    )
+    .join("");
+}
 
 /**
  * Pull the ## / ### headings out of the markdown source for the table of contents.
@@ -28,14 +46,16 @@ export function getHeadings(content: string): Heading[] {
     if (!m) continue;
 
     // strip the inline markers that never reach the rendered text content
-    const text = m[2]
+    const source = m[2]
       .replace(/`([^`]*)`/g, "$1")
       .replace(/\*\*([^*]*)\*\*/g, "$1")
       .replace(/\*([^*]*)\*/g, "$1")
       .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
       .trim();
+    // rehype-slug sees inline math as its LaTeX source, so the id uses the text without the $ signs
+    const text = source.replace(/\$([^$]+)\$/g, "$1");
 
-    headings.push({ depth: m[1].length as 2 | 3, text, id: slugger.slug(text) });
+    headings.push({ depth: m[1].length as 2 | 3, text, html: headingHtml(source), id: slugger.slug(text) });
   }
 
   return headings;

@@ -63,9 +63,9 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
                     ? "border-(--accent) text-(--accent)"
                     : "border-transparent text-(--text-muted) hover:text-(--text)",
                 ].join(" ")}
-              >
-                {h.text}
-              </a>
+                // escaped text with KaTeX-rendered $...$, built at build time in getHeadings
+                dangerouslySetInnerHTML={{ __html: h.html }}
+              />
             </li>
           );
         })}
