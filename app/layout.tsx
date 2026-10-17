@@ -13,7 +13,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko" className="scroll-smooth">
+    // data-scroll-behavior lets Next.js turn smooth scrolling off during route changes, so a new page
+    // opens at the very top instead of smooth-scrolling to its first element (97px down)
+    <html lang="ko" className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
         <script
           dangerouslySetInnerHTML={{
