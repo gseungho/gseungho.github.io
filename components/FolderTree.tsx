@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
 
-type Folder = {
+export type Folder = {
   name: string;
   folders: Map<string, Folder>;
   posts: PostMeta[];
@@ -9,7 +9,7 @@ type Folder = {
 
 // "Deep Learning/Transformer" puts a post in Deep Learning > Transformer.
 // Posts without a subcategory stay at the root.
-function buildTree(posts: PostMeta[]): Folder {
+export function buildTree(posts: PostMeta[]): Folder {
   const root: Folder = { name: "", folders: new Map(), posts: [] };
   for (const post of posts) {
     let node = root;
@@ -30,7 +30,7 @@ function buildTree(posts: PostMeta[]): Folder {
   return root;
 }
 
-function countPosts(folder: Folder): number {
+export function countPosts(folder: Folder): number {
   let total = folder.posts.length;
   for (const child of folder.folders.values()) total += countPosts(child);
   return total;
@@ -48,7 +48,7 @@ function latestDate(folder: Folder): string {
 }
 
 // most recently updated folder first; same date falls back to the name
-function sortedFolders(folder: Folder): Folder[] {
+export function sortedFolders(folder: Folder): Folder[] {
   return [...folder.folders.values()].sort(
     (a, b) => latestDate(b).localeCompare(latestDate(a)) || a.name.localeCompare(b.name)
   );

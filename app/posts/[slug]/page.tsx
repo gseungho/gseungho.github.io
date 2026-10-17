@@ -8,6 +8,7 @@ import rehypeSlug from "rehype-slug";
 import Link from "next/link";
 import type { Metadata } from "next";
 import TableOfContents from "@/components/TableOfContents";
+import PostSidebar from "@/components/PostSidebar";
 import { categoryLabel } from "@/lib/categories";
 
 export async function generateStaticParams() {
@@ -39,6 +40,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = getPostBySlug(slug);
   const headings = getHeadings(post.content);
+  const categoryPosts = getAllPosts().filter(
+    (p) => p.category.normalize("NFC") === post.category.normalize("NFC")
+  );
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -53,6 +57,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <article className="space-y-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <PostSidebar posts={categoryPosts} current={slug} category={post.category} />
       <TableOfContents headings={headings} />
 
       {/* Post Header */}
