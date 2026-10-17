@@ -37,7 +37,7 @@ function PostList({ posts, current }: { posts: PostMeta[]; current: string }) {
               title={post.title}
               aria-current={active ? "page" : undefined}
               className={[
-                "block -ml-[11px] border-l pl-2.5 py-1 text-xs leading-snug break-keep transition-colors duration-200",
+                "block -ml-[11px] border-l pl-2.5 py-1 text-sm leading-snug break-keep transition-colors duration-200",
                 active
                   ? "border-(--accent) text-(--accent)"
                   : "border-transparent text-(--text-muted) hover:text-(--text)",
@@ -56,11 +56,11 @@ function SideFolder({ folder, current }: { folder: Folder; current: string }) {
   return (
     <details open={contains(folder, current)} className="folder">
       <summary className="flex items-center gap-1.5 py-1 select-none">
-        <svg className="folder-chevron w-2.5 h-2.5 shrink-0 text-(--text-muted)" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+        <svg className="folder-chevron w-3 h-3 shrink-0 text-(--text-muted)" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
           <path d="M3 1l5 4-5 4z" />
         </svg>
-        <span className="font-mono text-[11px] text-(--accent) truncate">{folder.name}</span>
-        <span className="ml-auto pl-2 font-mono text-[10px] text-(--text-muted)">{countPosts(folder)}</span>
+        <span className="font-mono text-[13px] text-(--accent) truncate">{folder.name}</span>
+        <span className="ml-auto pl-2 font-mono text-xs text-(--text-muted)">{countPosts(folder)}</span>
       </summary>
       <div className="ml-1 pl-2.5 border-l border-(--border)">
         {sortedFolders(folder).map((child) => (
@@ -80,7 +80,7 @@ export default function PostSidebar({ posts, current, category }: { posts: PostM
     <SidebarShell>
       <Link
         href={`/category/${category}`}
-        className="block font-mono text-[10px] tracking-widest uppercase text-(--text-muted) hover:text-(--accent) mb-3"
+        className="block font-mono text-[11px] tracking-widest uppercase text-(--text-muted) hover:text-(--accent) mb-3"
       >
         {categoryLabel(category)}
       </Link>
