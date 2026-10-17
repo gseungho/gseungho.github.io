@@ -272,13 +272,13 @@ $$
 
 ## ARIMA로 이어지는 다리
 
-6편부터는 ARIMA를 다룬다. 성분을 나누지 않고 $y_t$와 과거 값, 과거 충격의 관계를 직접 모형으로 쓰는 방법이다. 그런데 지수평활과 아예 다른 세계일까? 식 (2)의 관측값을 한 번 차분해 보자.
+[6편](/posts/2026-10-17-time-series-6-stationarity-differencing)부터는 ARIMA를 다룬다. 성분을 나누지 않고 $y_t$와 과거 값, 과거 충격의 관계를 직접 모형으로 쓰는 방법이다. 그런데 지수평활과 아예 다른 세계일까? 식 (2)의 관측값을 한 번 차분해 보자.
 
 $$
 y_t - y_{t-1} = (\ell_{t-1} + \varepsilon_t) - (\ell_{t-2} + \varepsilon_{t-1}) = \alpha\varepsilon_{t-1} + \varepsilon_t - \varepsilon_{t-1} = \varepsilon_t - (1-\alpha)\varepsilon_{t-1}
 $$
 
-차분한 계열이 이번 충격과 직전 충격 하나로 설명되는 꼴이다. **ETS(A,N,N)을 한 번 차분하면 다음 편에서 다룰 MA(1) 모형이 되고 계수는 $\theta_1 = \alpha - 1$이다.** 정상성과 차분, AR과 MA를 정리한 뒤 이 연결을 ARIMA의 언어로 다시 보자.
+차분한 계열이 이번 충격과 직전 충격 하나로 설명되는 꼴이다. **ETS(A,N,N)을 한 번 차분하면 [8편](/posts/2026-10-17-time-series-8-ma-invertibility)에서 다룰 MA(1) 모형이 되고 계수는 $\theta_1 = \alpha - 1$이다.** 정상성과 차분, AR과 MA를 정리한 뒤 이 연결을 ARIMA의 언어로 다시 보자.
 
 ---
 
