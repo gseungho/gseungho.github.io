@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
 import { buildTree, countPosts, sortedFolders, type Folder } from "@/components/FolderTree";
 import { categoryLabel } from "@/lib/categories";
+import SidebarShell from "@/components/SidebarShell";
 
 // Short label for the list: "시계열분석 (6): 정상성과 차분, 언제 …" -> "6. 정상성과 차분",
 // "ViT 리뷰: inductive bias는 …" -> "ViT 리뷰". The full title stays in the tooltip.
@@ -71,15 +72,12 @@ function SideFolder({ folder, current }: { folder: Folder; current: string }) {
   );
 }
 
-// Left-hand list of the posts in the current post's category, folder by folder (wide screens only,
-// mirrors the table of contents on the right).
+// Left-hand list of the posts in the current post's category, folder by folder. SidebarShell places it:
+// fixed at the left edge on wide screens, a drawer behind a button on narrow ones.
 export default function PostSidebar({ posts, current, category }: { posts: PostMeta[]; current: string; category: string }) {
   const root = buildTree(posts);
   return (
-    <nav
-      aria-label="글 목록"
-      className="hidden min-[1440px]:block fixed top-28 left-6 w-52 max-h-[calc(100vh-10rem)] overflow-y-auto"
-    >
+    <SidebarShell>
       <Link
         href={`/category/${category}`}
         className="block font-mono text-[10px] tracking-widest uppercase text-(--text-muted) hover:text-(--accent) mb-3"
@@ -90,6 +88,6 @@ export default function PostSidebar({ posts, current, category }: { posts: PostM
         <SideFolder key={folder.name} folder={folder} current={current} />
       ))}
       <PostList posts={root.posts} current={current} />
-    </nav>
+    </SidebarShell>
   );
 }
