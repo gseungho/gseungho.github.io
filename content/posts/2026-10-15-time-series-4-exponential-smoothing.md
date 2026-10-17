@@ -23,7 +23,7 @@ description: "관측값이 하나 들어올 때마다 수준을 업데이트하�
 | $\beta$ | 기울기 $b_t$ | 기울기 고정 (직선 추세) | 관측값마다 기울기가 크게 바뀜 |
 | $\gamma$ | 계절 $s_t$ | 계절 성분 고정 (해마다 같음) | 계절 성분이 매번 새로 바뀜 |
 
-$\gamma = 0$은 2편 classical decomposition의 가정과 같다. 거기서는 계절마다 평균을 내서 해마다 똑같은 계절 값을 썼다.
+$\gamma = 0$은 [2편](/posts/2026-10-15-time-series-2-decomposition) classical decomposition의 가정과 같다. 거기서는 계절마다 평균을 내서 해마다 똑같은 계절 값을 썼다.
 
 세 성분은 직접 보이지 않는다. 보이는 것은 관측값 $y_t$뿐이고 성분은 관측값으로 추정해야 한다. 그래서 이 성분들을 상태(state)라고 부르고 한 시점의 계산은 다음 순서로 돈다.
 
@@ -328,7 +328,7 @@ $$
   <figcaption className="mt-2 text-sm text-gray-500">그림 4. 덧셈 계절(왼쪽)은 진폭이 일정하고 곱셈 계절(오른쪽)은 수준이 오를수록 진폭도 커진다(모의 자료).</figcaption>
 </figure>
 
-곱셈 방식은 그림 4의 오른쪽처럼 계절 변동의 폭이 수준에 비례해 커지는 계열에 쓴다. [1편](/posts/2026-10-15-time-series-1-forecasting-basics)의 additive와 multiplicative 분해를 고르던 기준과 같다. FPP3의 호주 국내 숙박 여행(분기별) 예제에 두 방법을 모두 써 보면 예측이 꽤 비슷하게 나온다. 성분을 그려 보면 덧셈 쪽 계절 성분은 0 주위에서 움직이고 곱셈 쪽은 1 주위에서 움직인다. 2편 classical decomposition의 덧셈 분해와 곱셈 분해 그림에서 보던 차이와 같다.
+곱셈 방식은 그림 4의 오른쪽처럼 계절 변동의 폭이 수준에 비례해 커지는 계열에 쓴다. [1편](/posts/2026-10-15-time-series-1-forecasting-basics)의 additive와 multiplicative 분해를 고르던 기준과 같다. FPP3의 호주 국내 숙박 여행(분기별) 예제에 두 방법을 모두 써 보면 예측이 꽤 비슷하게 나온다. 성분을 그려 보면 덧셈 쪽 계절 성분은 0 주위에서 움직이고 곱셈 쪽은 1 주위에서 움직인다. [2편](/posts/2026-10-15-time-series-2-decomposition) classical decomposition의 덧셈 분해와 곱셈 분해 그림에서 보던 차이와 같다.
 
 감쇠 추세와 곱셈 계절을 합친 Holt-Winters damped도 있다. 예측식은 $\hat{y}_{t+h|t} = \big[\ell_t + (\phi + \cdots + \phi^h) b_t\big]\, s_{t+h-m(k+1)}$이고 평활식은 앞의 두 방법에서 $b_{t-1}$을 $\phi b_{t-1}$로 바꾼 꼴이다.
 

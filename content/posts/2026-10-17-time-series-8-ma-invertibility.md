@@ -23,7 +23,7 @@ $$
 
 $\varepsilon_t$는 white noise다. 과거 충격을 설명변수로 쓰는 회귀처럼 생겼지만 그 설명변수를 관측할 수 없다는 점이 다르다.
 
-**주의:** [2편](/posts/2026-10-15-time-series-2-decomposition)의 moving average와 이름만 같다. 2편의 이동평균은 관측값 $y$를 평균해 추세를 구하는 평활법이고 여기의 MA는 보이지 않는 충격 $\varepsilon$의 가중합으로 $y$를 만드는 모형이다.
+**주의:** [2편](/posts/2026-10-15-time-series-2-decomposition)의 moving average와 이름만 같다. [2편](/posts/2026-10-15-time-series-2-decomposition)의 이동평균은 관측값 $y$를 평균해 추세를 구하는 평활법이고 여기의 MA는 보이지 않는 충격 $\varepsilon$의 가중합으로 $y$를 만드는 모형이다.
 
 MA 모형은 성질이 단순하다. 모든 $\varepsilon$의 기댓값이 0이니 $E(y_t) = c$이고 서로 독립이니 분산은 $\sigma^2(1 + \theta_1^2 + \cdots + \theta_q^2)$이다. 둘 다 $t$와 상관없다. 공분산은 두 시점에 함께 들어 있는 충격에서만 나온다. MA(1) $y_t = \varepsilon_t + \theta\varepsilon_{t-1}$이라면 $y_t$와 $y_{t-1}$이 $\varepsilon_{t-1}$을 함께 담고 있어
 
@@ -57,7 +57,7 @@ $$
 y_t = \sum_{j=0}^{\infty}\phi^j\varepsilon_{t-j} \tag{2}
 $$
 
-계수 $\phi^j$는 7편에서 따라간 "충격이 $j$시점 뒤에 남는 양"이다. 정상성 조건 $\lvert\phi\rvert < 1$이 바로 남은 항 $\phi^ky_{t-k}$가 사라지는 조건이기도 하다. **정상인 AR($p$)는 모두 MA($\infty$)로 쓸 수 있다.** Backshift로 쓰면 $(1 - \phi B)y_t = \varepsilon_t$의 양변을 $(1 - \phi B)$로 나눈 것이다. 등비급수로 $(1 - \phi B)^{-1} = \sum_j\phi^jB^j$이고 $\lvert\phi\rvert < 1$일 때 수렴한다. 7편의 $(\mathbf{I} - \mathbf{L})^{-1}$이 누적합이었던 것과 같은 계산이다.
+계수 $\phi^j$는 [7편](/posts/2026-10-17-time-series-7-backshift-ar)에서 따라간 "충격이 $j$시점 뒤에 남는 양"이다. 정상성 조건 $\lvert\phi\rvert < 1$이 바로 남은 항 $\phi^ky_{t-k}$가 사라지는 조건이기도 하다. **정상인 AR($p$)는 모두 MA($\infty$)로 쓸 수 있다.** Backshift로 쓰면 $(1 - \phi B)y_t = \varepsilon_t$의 양변을 $(1 - \phi B)$로 나눈 것이다. 등비급수로 $(1 - \phi B)^{-1} = \sum_j\phi^jB^j$이고 $\lvert\phi\rvert < 1$일 때 수렴한다. [7편](/posts/2026-10-17-time-series-7-backshift-ar)의 $(\mathbf{I} - \mathbf{L})^{-1}$이 누적합이었던 것과 같은 계산이다.
 
 ## 가역성: MA를 AR(∞)로 뒤집기
 
@@ -76,7 +76,7 @@ $$
 \varepsilon_t = \sum_{j=0}^{\infty}(-\theta)^jy_{t-j} \tag{3}
 $$
 
-이고 이것을 $y_t$에 대해 정리하면 과거 값 무한 개로 쓰는 AR($\infty$)다. 이렇게 뒤집을 수 있는 MA를 가역(invertible)이라 한다. Backshift로는 $(1 + \theta B)^{-1} = \sum_j(-\theta)^jB^j$다. 부호가 번갈아 바뀐다는 점을 놓치기 쉽다. 일반적인 MA($q$)는 $\Theta(x) = 1 + \theta_1x + \cdots + \theta_qx^q$의 근이 모두 단위원 밖에 있을 때 가역이다. 7편의 AR 정상성 조건과 똑같은 모양의 조건을 다른 다항식에 건 셈이다.
+이고 이것을 $y_t$에 대해 정리하면 과거 값 무한 개로 쓰는 AR($\infty$)다. 이렇게 뒤집을 수 있는 MA를 가역(invertible)이라 한다. Backshift로는 $(1 + \theta B)^{-1} = \sum_j(-\theta)^jB^j$다. 부호가 번갈아 바뀐다는 점을 놓치기 쉽다. 일반적인 MA($q$)는 $\Theta(x) = 1 + \theta_1x + \cdots + \theta_qx^q$의 근이 모두 단위원 밖에 있을 때 가역이다. [7편](/posts/2026-10-17-time-series-7-backshift-ar)의 AR 정상성 조건과 똑같은 모양의 조건을 다른 다항식에 건 셈이다.
 
 ### 가역성은 왜 필요한가
 
@@ -93,7 +93,7 @@ MA는 어차피 늘 정상인데 왜 가역성까지 요구할까? 이유는 두
 
 그림 2 오른쪽에서 $\theta = 0.5$이면 10시점 전 관측값의 가중치가 0.001로 줄지만 $\theta = 2$이면 1024로 커진다. 오래된 관측값일수록 지금의 충격을 더 많이 좌우한다는 말이니 예측 모형으로 쓸 수 없다. **가역성은 지금의 충격을 최근 관측값 위주로 계산할 수 있다는 보증이다.**
 
-6편에서 본 과차분이 여기와 이어진다. White noise를 차분하면 $\varepsilon_t - \varepsilon_{t-1}$로 $\theta = -1$이다. 근이 단위원 바로 위에 있어서 가중치 $\lvert\theta\rvert^j = 1$이 전혀 줄지 않는다. 필요 없는 차분을 하면 가역성의 경계에 걸린 MA가 생기는 셈이다.
+[6편](/posts/2026-10-17-time-series-6-stationarity-differencing)에서 본 과차분이 여기와 이어진다. White noise를 차분하면 $\varepsilon_t - \varepsilon_{t-1}$로 $\theta = -1$이다. 근이 단위원 바로 위에 있어서 가중치 $\lvert\theta\rvert^j = 1$이 전혀 줄지 않는다. 필요 없는 차분을 하면 가역성의 경계에 걸린 MA가 생기는 셈이다.
 
 ## AR과 MA의 대응
 
@@ -111,7 +111,7 @@ AR은 과거 값 유한 개로 쓰니 늘 가역이고 MA는 충격 유한 개�
 
 ## 지수평활과 ARIMA는 어떻게 이어지는가
 
-5편 끝에서 ETS(A,N,N)을 한 번 차분해 보았다. 관측 방정식 $y_t = \ell_{t-1} + \varepsilon_t$와 상태 방정식 $\ell_t = \ell_{t-1} + \alpha\varepsilon_t$로부터
+[5편](/posts/2026-10-15-time-series-5-ets-models) 끝에서 ETS(A,N,N)을 한 번 차분해 보았다. 관측 방정식 $y_t = \ell_{t-1} + \varepsilon_t$와 상태 방정식 $\ell_t = \ell_{t-1} + \alpha\varepsilon_t$로부터
 
 $$
 y_t - y_{t-1} = (\ell_{t-1} - \ell_{t-2}) + \varepsilon_t - \varepsilon_{t-1} = \varepsilon_t - (1 - \alpha)\varepsilon_{t-1}
@@ -133,7 +133,7 @@ $$
 
 ## 다음 글
 
-정상성과 차분(6편), AR(7편), MA(이번 글)로 ARIMA의 재료가 모였다. 다음 글에서는 AR과 MA의 ACF와 PACF를 유도해 그림 1의 차이로 차수를 고르는 방법을 정리한다. 그 뒤에 차분과 AR, MA를 합친 ARIMA($p$, $d$, $q$)로 넘어간다.
+정상성과 차분([6편](/posts/2026-10-17-time-series-6-stationarity-differencing)), AR([7편](/posts/2026-10-17-time-series-7-backshift-ar)), MA(이번 글)로 ARIMA의 재료가 모였다. 다음 글에서는 AR과 MA의 ACF와 PACF를 유도해 그림 1의 차이로 차수를 고르는 방법을 정리한다. 그 뒤에 차분과 AR, MA를 합친 ARIMA($p$, $d$, $q$)로 넘어간다.
 
 ---
 
