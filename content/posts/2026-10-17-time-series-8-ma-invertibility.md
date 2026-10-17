@@ -40,7 +40,7 @@ $$
 
 그림 1의 MA(1)은 $\rho_1 = 0.8/1.64 = 0.488$이고 표본에서는 $r_1 = 0.471$이었다. 시차 2부터는 모두 점선 안이다. 같은 0.8을 쓴 AR(1)은 $\rho_k = 0.8^k$라 0.8, 0.64, 0.51로 천천히 줄어든다. **MA($q$)의 ACF는 시차 $q$ 뒤에 끊기고 AR의 ACF는 천천히 줄어든다.** 이 차이로 차수를 고르는 방법은 다음 글에서 다룬다[^band].
 
-## 정상 AR은 MA(∞)다
+## 정상 AR은 MA($\infty$)다
 
 두 모형은 서로 바꿔 쓸 수 있다. 먼저 AR(1)을 MA로 바꿔 보자. 평균이 0이고 $\lvert\phi\rvert < 1$인 AR(1)에서 $y_{t-1}$ 자리에 같은 식을 계속 넣는다.
 
@@ -59,7 +59,7 @@ $$
 
 계수 $\phi^j$는 [7편](/posts/2026-10-17-time-series-7-backshift-ar)에서 따라간 "충격이 $j$시점 뒤에 남는 양"이다. 정상성 조건 $\lvert\phi\rvert < 1$이 바로 남은 항 $\phi^ky_{t-k}$가 사라지는 조건이기도 하다. **정상인 AR($p$)는 모두 MA($\infty$)로 쓸 수 있다.** Backshift로 쓰면 $(1 - \phi B)y_t = \varepsilon_t$의 양변을 $(1 - \phi B)$로 나눈 것이다. 등비급수로 $(1 - \phi B)^{-1} = \sum_j\phi^jB^j$이고 $\lvert\phi\rvert < 1$일 때 수렴한다. [7편](/posts/2026-10-17-time-series-7-backshift-ar)의 $(\mathbf{I} - \mathbf{L})^{-1}$이 누적합이었던 것과 같은 계산이다.
 
-## 가역성: MA를 AR(∞)로 뒤집기
+## 가역성: MA를 AR($\infty$)로 뒤집기
 
 이번에는 반대로 MA(1) $y_t = \varepsilon_t + \theta\varepsilon_{t-1}$을 AR로 바꿔 보자. $\varepsilon_t = y_t - \theta\varepsilon_{t-1}$에서 $\varepsilon_{t-1}$ 자리에 같은 식을 계속 넣는다.
 
