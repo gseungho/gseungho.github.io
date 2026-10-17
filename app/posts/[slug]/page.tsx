@@ -55,9 +55,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
+    <>
+    {/* outside the article: its space-y margins would shorten the fixed drawer */}
+    <PostSidebar posts={categoryPosts} current={slug} category={post.category} />
     <article className="space-y-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <PostSidebar posts={categoryPosts} current={slug} category={post.category} />
       <TableOfContents headings={headings} />
 
       {/* Post Header */}
@@ -126,5 +128,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </Link>
       </div>
     </article>
+    </>
   );
 }
