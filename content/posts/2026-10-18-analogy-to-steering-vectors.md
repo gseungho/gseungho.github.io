@@ -75,7 +75,7 @@ $\mathbf{x}_w$는 단어 $w$의 벡터다. [자연어처리 (3)](/posts/2026-10-
 | RNN | 16.2% | 28.5% | 34.7% | 39.6% |
 
 무작위로 고르면 1%에도 한참 못 미친다고 하니 RNN 벡터에 관계가 방향으로 들어 있는 것은 분명하다.
-의미 관계를 재는 SemEval-2012 Task 2에서도 1600차원 벡터[^1]가 Spearman 0.275로 이전 최고 0.230을
+의미 관계를 평가하는 SemEval-2012 Task 2에서도 1600차원 벡터[^1]가 Spearman 0.275로 이전 최고 0.230을
 넘었다(Table 4).
 
 다만 숫자를 거꾸로 읽으면 가장 좋은 벡터도 문제 열 개 중 여섯 개를 틀린다. "모든 쌍이 같은
@@ -252,7 +252,7 @@ $c$를 논문은 injection coefficient라 부른다. analogy로 읽으면 "Love"
 
 GPT-2-XL(1.5B)에 결혼 주제 벡터를 넣으면 layer 6 근처에서 효과가 가장 커서 생성문의 90% 넘게 결혼
 관련 단어가 들어갔다. 조작하지 않은 모델은 2%다(4.1.3절). 독성 줄이기는 RealToxicityPrompts에서
-1,000개를 뽑아 Perspective API로 쟀다(Table 3). steering vector는 "Love" − "Hate"다.
+1,000개를 뽑아 Perspective API로 측정했다(Table 3). steering vector는 "Love" − "Hate"다.
 
 | 모델 | 방법 | toxicity ↓ | disfluency ↓ | relevance ↑ |
 |---|---|---|---|---|

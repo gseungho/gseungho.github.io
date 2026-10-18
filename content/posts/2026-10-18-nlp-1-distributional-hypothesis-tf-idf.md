@@ -11,7 +11,7 @@ description: "단어를 신경망에 넣으려면 벡터로 바꿔야 하는데 
 
 > **단어를 벡터로 바꾸는 법: 무엇을 세어야 뜻이 비슷한 단어끼리 벡터도 비슷해질까?**
 
-신경망은 숫자만 계산한다. 문장을 분류하든 번역하든 첫 단계는 단어를 숫자 벡터로 바꾸는 일이다. 이 글에서는 그 첫 단계를 가장 단순하게, 세는 방법으로 해 본다. 단어가 어느 문서에 몇 번 나오는지 세어 벡터를 만들고 그 벡터끼리 얼마나 닮았는지 잰다. [다음 글](/posts/2026-10-18-nlp-2-word2vec)의 Word2Vec은 세는 대신 맞히는 방법이다.
+신경망은 숫자만 계산한다. 문장을 분류하든 번역하든 첫 단계는 단어를 숫자 벡터로 바꾸는 일이다. 이 글에서는 그 첫 단계를 가장 단순하게, 세는 방법으로 해 본다. 단어가 어느 문서에 몇 번 나오는지 세어 벡터를 만들고 그 벡터끼리 얼마나 닮았는지 비교한다. [다음 글](/posts/2026-10-18-nlp-2-word2vec)의 Word2Vec은 세는 대신 맞히는 방법이다.
 
 ## 번호와 one-hot으로는 왜 안 되는가
 
@@ -74,7 +74,7 @@ $$
 
 ## Cosine similarity는 왜 길이로 나누는가
 
-두 벡터가 닮았다는 것을 어떻게 잴까? 가장 많이 쓰는 것은 두 벡터 사이 각의 cosine이다.
+두 벡터가 얼마나 닮았는지 어떻게 수치로 나타낼까? 가장 많이 쓰는 것은 두 벡터 사이 각의 cosine이다.
 
 $$
 \cos(\mathbf{a},\mathbf{b}) = \frac{\mathbf{a}^\top\mathbf{b}}{\|\mathbf{a}\|\,\|\mathbf{b}\|} = \frac{\sum_i a_ib_i}{\sqrt{\sum_i a_i^2}\,\sqrt{\sum_i b_i^2}} \tag{1}
@@ -100,10 +100,10 @@ dog는 knife와 Richard III, Tempest 두 편에서만 겹친다. 내적이 $2\cd
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-18-nlp-1-distributional-hypothesis-tf-idf/knife-similarity.svg" alt="knife와 sword, love, like, dog 사이의 내적, Euclidean distance, cosine 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. knife와 다른 단어의 거리를 세 가지로 쟀다. 내적은 자주 나오는 love와 like를 가장 가깝다고 하고 Euclidean distance는 dog가 love보다 knife에 가깝다고 한다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 1. knife와 다른 단어의 거리를 세 가지 방법으로 계산했다. 내적은 자주 나오는 love와 like를 가장 가깝다고 하고 Euclidean distance는 dog가 love보다 knife에 가깝다고 한다.</figcaption>
 </figure>
 
-그림 1의 왼쪽에서 보듯 내적은 긴 벡터를 편애한다. love는 몇몇 희곡에 아주 많이 나와서 벡터 길이가 169.5로 가장 길고 knife와의 내적이 1234나 된다. sword(222)의 다섯 배가 넘는다. 자주 나오는 단어는 어느 단어와 곱해도 내적이 크니 내적은 뜻보다 빈도를 잰다(SLP3 5.4). Euclidean distance는 거꾸로 긴 벡터를 멀리 둔다. love는 knife가 나오는 희곡들에 함께 나오는데도 거리가 162.5로 가장 멀고 겹치는 희곡이 두 편뿐인 dog(16.7)가 더 가깝다.
+그림 1의 왼쪽에서 보듯 내적은 긴 벡터를 편애한다. love는 몇몇 희곡에 아주 많이 나와서 벡터 길이가 169.5로 가장 길고 knife와의 내적이 1234나 된다. sword(222)의 다섯 배가 넘는다. 자주 나오는 단어는 어느 단어와 곱해도 내적이 크니 내적은 뜻보다 빈도에 좌우된다(SLP3 5.4). Euclidean distance는 거꾸로 긴 벡터를 멀리 둔다. love는 knife가 나오는 희곡들에 함께 나오는데도 거리가 162.5로 가장 멀고 겹치는 희곡이 두 편뿐인 dog(16.7)가 더 가깝다.
 
 Cosine은 이 문제가 없다. 어떤 단어가 모든 문서에서 두 배씩 나온다고 해 보자. 벡터에 양수 $\alpha$를 곱해도
 
@@ -111,7 +111,7 @@ $$
 \cos(\alpha\mathbf{a}, \mathbf{b}) = \frac{\alpha\,\mathbf{a}^\top\mathbf{b}}{\alpha\|\mathbf{a}\|\,\|\mathbf{b}\|} = \cos(\mathbf{a}, \mathbf{b}) \tag{2}
 $$
 
-라서 cosine은 그대로다. knife와 2×knife는 cosine이 1인데 Euclidean distance는 $\|\textit{knife}\| = 11.2$나 된다. **Cosine은 길이를 나눠 없애고 방향만 본다. 얼마나 자주 나오는지가 아니라 어느 문서에 어떤 비율로 나오는지를 비교하는 셈이다.** 벡터마다 미리 자기 길이로 나눠 단위 벡터로 만들어 두면 cosine은 그냥 내적이 된다(SLP3 5.4). 다음 글의 Word2Vec이 두 단어의 유사도를 내적으로 재는 것도 같은 생각에서 나왔다(SLP3 5.5.1).
+라서 cosine은 그대로다. knife와 2×knife는 cosine이 1인데 Euclidean distance는 $\|\textit{knife}\| = 11.2$나 된다. **Cosine은 길이를 나눠 없애고 방향만 본다. 얼마나 자주 나오는지가 아니라 어느 문서에 어떤 비율로 나오는지를 비교하는 셈이다.** 벡터마다 미리 자기 길이로 나눠 단위 벡터로 만들어 두면 cosine은 그냥 내적이 된다(SLP3 5.4). 다음 글의 Word2Vec이 두 단어의 유사도를 내적으로 계산하는 것도 같은 생각에서 나왔다(SLP3 5.5.1).
 
 **주의:** 등장 횟수에는 음수가 없어서 count 벡터끼리의 cosine은 0과 1 사이에 있다(SLP3 5.4). 음수 쪽 값은 원소에 음수가 있는 임베딩, 곧 다음 글의 Word2Vec부터 나온다.
 
