@@ -168,6 +168,14 @@ body {
   overflow-y: hidden;
   padding: 0.25rem 0;
 }
+/* KaTeX pins a \tag number to the right edge of the box; on phones a long or scrolled formula
+   runs under it. Below md the number follows the formula instead (and scrolls with it). */
+@media (max-width: 767px) {
+  .prose .katex-display > .katex > .katex-html > .tag {
+    position: static;
+    margin-left: 1em;
+  }
+}
 
 /* GFM footnotes (remark-gfm): hide the screen-reader "Footnotes" label, keep the notes small */
 .prose .footnotes {
