@@ -180,9 +180,7 @@ BERT(Devlin et al., 2019)도 입력층에서는 표를 쓴다. WordPiece token �
 
 **단어 하나에 벡터 하나를 주던 표가 문장을 읽고 token마다 벡터를 계산하는 망으로 바뀌었다.** 그 표는 사라지지 않았다. BERT의 입력층에도 여전히 남아 있다.
 
-## 다음 글
-
-다음 글에서는 이번 글에서 만든 문장 벡터 $\mathbf{d}$를 받아 label을 내는 text classification을 다룬다. 이전 글은 [3편](/posts/2026-10-18-nlp-3-evaluating-embeddings-glove)의 임베딩 평가와 GloVe다.
+다음 글에서는 이번 글에서 만든 문장 벡터 $\mathbf{d}$를 받아 label을 내는 text classification을 다룬다.
 
 ---
 

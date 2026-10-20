@@ -120,7 +120,7 @@ $\phi_1$ 하나로 AR(1)의 성격이 정해진다.
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-17-time-series-7-backshift-ar/ar1-paths.svg" alt="같은 충격으로 만든 AR(1) 세 계열, φ = 0.5, 0.95, −0.8" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 같은 충격 ε로 만든 AR(1) 세 개. φ₁이 1에 가까울수록 평균에서 오래 떠돌고 음수이면 매 시점 부호가 바뀌며 튄다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 같은 충격 $\varepsilon$로 만든 AR(1) 세 개. $\phi_1$이 1에 가까울수록 평균에서 오래 떠돌고 음수이면 매 시점 부호가 바뀌며 튄다.</figcaption>
 </figure>
 
 그림 1에서 보듯 $\phi_1$이 1에 가까울수록 계열이 평균에서 위아래로 오래 떠돈다. [6편](/posts/2026-10-17-time-series-6-stationarity-differencing)에서 $\phi_1 = 0.99$인 AR(1)이 random walk와 비슷해 보였던 것과 같은 현상이다.
@@ -194,7 +194,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-17-time-series-7-backshift-ar/ar2-region.svg" alt="AR(2)가 정상인 계수 영역 삼각형과 실근, 복소근의 경계" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. AR(2)가 정상인 (φ₁, φ₂) 영역은 삼각형이다. 점선 아래는 복소근이라 충격이 진동하며 줄어든다. 점 네 개는 그림 2의 네 경우다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 3. AR(2)가 정상인 $(\phi_1, \phi_2)$ 영역은 삼각형이다. 점선 아래는 복소근이라 충격이 진동하며 줄어든다. 점 네 개는 그림 2의 네 경우다.</figcaption>
 </figure>
 
 근이 $x = 1$이나 $x = -1$을 지나 단위원 안으로 들어오지 않으려면 $\Phi(1) = 1 - \phi_1 - \phi_2 > 0$, $\Phi(-1) = 1 + \phi_1 - \phi_2 > 0$이어야 한다. 이것이 삼각형의 두 빗변이다. 역근의 곱이 $-\phi_2$라서 $\lvert\phi_2\rvert < 1$도 필요하다. **주의:** $-1 < \phi_2 < 1$과 $-2 < \phi_1 < 2$만으로는 부족하다. $\phi = (1.5, 0.5)$는 둘 다 만족하지만 $\phi_1 + \phi_2 = 2$라 삼각형 밖이다. 그림 2의 넷째 칸처럼 폭발한다.
@@ -229,7 +229,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-17-time-series-7-backshift-ar/lag-scatter.svg" alt="시차 산점도에 절편 있는 회귀선과 원점을 지나는 회귀선" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. φ = 0.8, μ = 5인 AR(1) 200개의 시차 산점도. 원점에 묶인 직선은 (5, 5) 근처의 점구름을 지나려고 기울기가 1 가까이 된다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 4. $\phi = 0.8$, $\mu = 5$인 AR(1) 200개의 시차 산점도. 원점에 묶인 직선은 (5, 5) 근처의 점구름을 지나려고 기울기가 1 가까이 된다.</figcaption>
 </figure>
 
 그림 4를 보면 이유가 보인다. 점 $(Y_{t-1}, Y_t)$는 $(\mu, \mu) = (5, 5)$ 근처에 모여 있다. 원점에서 출발해 그 점구름을 지나는 직선은 기울기가 1에 가까울 수밖에 없다. $(5, 5)$가 대각선 $y = x$ 위에 있기 때문이다. **절편($\mu$)을 빼면 기울기가 수준을 떠안아 1 쪽으로 치우친다.**
@@ -270,8 +270,6 @@ $$
 $$
 
 $\lvert\phi_1\rvert < 1$이면 $h$가 커질수록 예측이 평균 $\mu$로 돌아간다. 마지막 관측값이 평균에서 벗어난 만큼이 $\phi_1^h$로 줄어드는 셈이다. 예측오차의 분산은 $\sigma^2\sum_{j=0}^{h-1}\phi_1^{2j}$이고 $\sigma^2/(1 - \phi_1^2)$에 다가간다. [1편](/posts/2026-10-15-time-series-1-forecasting-basics) 그림 1의 부채꼴이 AR(1)의 예측이었다. [4편](/posts/2026-10-15-time-series-4-exponential-smoothing)의 SES는 예측이 평평했고 random walk의 예측은 마지막 값에 머물렀다. **정상 AR의 예측은 평균으로 돌아간다는 점이 다르다.**
-
-## 다음 글
 
 [8편](/posts/2026-10-17-time-series-8-ma-invertibility)에서는 과거 값 대신 과거 충격으로 현재를 설명하는 MA 모형을 다룬다. 이번 글의 충격이 남는 양 $\phi_1^h$가 거기서 "정상 AR은 MA($\infty$)다"라는 식으로 다시 나온다.
 

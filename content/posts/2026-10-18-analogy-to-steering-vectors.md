@@ -438,7 +438,7 @@ $c$에 비례해 오르고 따로 바꿀 수 있는 개념의 logit은 움직이
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-18-analogy-to-steering-vectors/park-geometry.svg" alt="embedding representation과 unembedding representation을 더했을 때 logit 변화 비교" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 왼쪽: 회색 선은 Z의 logit이 같은 점들이다. embedding representation λ̄ 방향으로 가면 그 선을 따라 움직이고 unembedding representation γ̄ 방향으로 가면 선을 가로지른다. 오른쪽: 두 방향으로 c만큼 더했을 때 W와 Z의 logit 변화. 두 개념의 γ̄는 (1, 0.25)와 (0.55, 1)로 설명을 위해 만든 값이다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 왼쪽: 회색 선은 Z의 logit이 같은 점들이다. embedding representation $\bar\lambda$ 방향으로 가면 그 선을 따라 움직이고 unembedding representation $\bar\gamma$ 방향으로 가면 선을 가로지른다. 오른쪽: 두 방향으로 c만큼 더했을 때 W와 Z의 logit 변화. 두 개념의 $\bar\gamma$는 (1, 0.25)와 (0.55, 1)로 설명을 위해 만든 값이다.</figcaption>
 </figure>
 
 그림 4가 이 차이를 보여 준다. 만든 2차원 예에서 $\bar\gamma_W^\top\bar\gamma_Z = 0.8$이라 $\bar\gamma_W$를

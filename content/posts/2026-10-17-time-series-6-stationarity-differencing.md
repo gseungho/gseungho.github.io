@@ -84,7 +84,7 @@ ACF 그림의 파란 점선은 $\pm 1.96/\sqrt{T}$다. White noise의 $r_k$가 �
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/acf-random-walk.svg" alt="random walk와 그 차분의 시간 그림과 ACF" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 길이 251인 random walk(왼쪽)와 그 차분(오른쪽). 아래는 각각의 ACF이고 파란 점선은 ±1.96/√251 = ±0.124다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 길이 251인 random walk(왼쪽)와 그 차분(오른쪽). 아래는 각각의 ACF이고 파란 점선은 $\pm 1.96/\sqrt{251} = \pm 0.124$다.</figcaption>
 </figure>
 
 그림 2 왼쪽의 random walk는 $r_1 = 0.968$에서 시작해 시차 25에서도 0.461이다. 오른쪽의 차분한 계열은 25개 시차 가운데 시차 8 하나($-0.173$)만 점선을 살짝 넘는다. 95% 기준선이니 25개 중 한두 개는 우연히 넘을 수 있다. 정리하면 이렇다.
@@ -181,7 +181,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/over-differencing.svg" alt="필요한 차분 횟수가 다른 세 계열의 차분 횟수별 분산과 r1" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 필요한 차분 횟수가 0, 1, 2인 계열을 0~3번 차분했을 때의 분산(중앙값)과 r₁(평균). 길이 250으로 1000번씩 만들었다. 필요한 만큼 차분한 곳에서 분산이 가장 작고 r₁이 0 근처다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 필요한 차분 횟수가 0, 1, 2인 계열을 0~3번 차분했을 때의 분산(중앙값)과 $r_1$(평균). 길이 250으로 1000번씩 만들었다. 필요한 만큼 차분한 곳에서 분산이 가장 작고 $r_1$이 0 근처다.</figcaption>
 </figure>
 
 그림 4에서 보듯 필요한 만큼 차분하면 분산이 가장 작고 $r_1$이 0 근처다. 한 번 더 하면 분산이 약 2배가 되고 $r_1$이 $-0.5$로 떨어진다. Random walk는 분산이 28.5, 0.99, 2.00, 6.01이고 $r_1$이 0.97, $-0.006$, $-0.498$, $-0.664$였다.
@@ -189,8 +189,6 @@ $$
 **주의:** 선형 추세에 white noise를 더한 $y_t = \beta t + \varepsilon_t$는 차분하면 $\beta + \varepsilon_t - \varepsilon_{t-1}$이라 정상이 되긴 한다. 그런데 $r_1$이 $-0.5$라 과차분 신호가 나온다. 이런 계열은 차분할 것이 아니라 [3편](/posts/2026-10-15-time-series-3-trend-regression)처럼 추세를 회귀로 빼는 쪽이 맞다. 차분해야 정상이 되는 계열(차분 정상)과 추세를 빼면 정상이 되는 계열(추세 정상)은 다르다. 이때 생기는 $\varepsilon_t - \varepsilon_{t-1}$은 [8편](/posts/2026-10-17-time-series-8-ma-invertibility)에서 볼 가역성이 깨진 MA다.
 
 다시 정리하면 이렇다. 정상성은 평균, 분산, 공분산이 시점과 상관없다는 조건이고 ACF가 천천히 줄어들면 비정상을 의심한다. 차분은 단위근, 다항식 추세, 계절 패턴을 지워 평균을 안정시키고 분산은 변환이 맡는다. 차분은 필요한 만큼만 하고 분산과 $r_1$로 지나쳤는지 확인한다.
-
-## 다음 글
 
 [7편](/posts/2026-10-17-time-series-7-backshift-ar)에서는 차분을 짧게 쓰는 backshift 연산자를 행렬로 보고 $d$번 차분한 식이 왜 이항계수로 쓰이는지 보인다. 이어서 과거 값으로 현재를 설명하는 AR 모형과 그 정상성 조건을 다룬다. 이번 글에서 "AR(1)은 과거 값이 $\phi_1$배씩 줄어든다"고 넘어간 부분을 거기서 식으로 보인다.
 

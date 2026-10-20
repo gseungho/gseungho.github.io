@@ -211,7 +211,7 @@ Linear trend로 검산해 보자. 회귀 표준오차에서 $\text{SSR} = s_e^2(
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-15-time-series-3-trend-regression/aic_sic_penalty.svg" alt="관측값 수 T에 따른 AIC와 SIC의 모수 1개당 벌점" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. AIC의 벌점은 2로 고정이고 SIC의 벌점은 ln T로 계속 커진다. 두 선은 T = e² ≈ 7.4에서 만난다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 2. AIC의 벌점은 2로 고정이고 SIC의 벌점은 $\ln T$로 계속 커진다. 두 선은 $T = e^2 \approx 7.4$에서 만난다.</figcaption>
 </figure>
 
 $T > e^2 \approx 7.4$이면 $\ln T > 2$라 SIC가 더 무겁게 벌한다. 이 예제에서는 $\ln 468 = 6.15$라 SIC 벌점이 AIC의 약 3배이고 SIC가 더 작은 모형 쪽으로 기운다. 참 모형이 후보 안에 있으면 $T$가 커질 때 SIC가 그 모형을 고를 확률은 1로 간다(일치성). AIC는 일치성이 없는 대신 예측오차가 작은 모형을 고르는 쪽에 맞춰져 있다. SIC는 BIC(Bayesian information criterion)라고도 부른다.

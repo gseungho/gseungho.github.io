@@ -73,6 +73,13 @@ export type PostMeta = {
 
 export type Post = PostMeta & { content: string };
 
+// reading order inside a folder: oldest first, numbered slugs in numeric order
+export function inReadingOrder(posts: PostMeta[]): PostMeta[] {
+  return [...posts].sort(
+    (a, b) => a.date.localeCompare(b.date) || a.slug.localeCompare(b.slug, undefined, { numeric: true })
+  );
+}
+
 export function getAllPosts(): PostMeta[] {
   const files = fs.readdirSync(postsDir);
   return files

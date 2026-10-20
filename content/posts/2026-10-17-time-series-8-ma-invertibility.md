@@ -35,7 +35,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-17-time-series-8-ma-invertibility/ma-vs-ar.svg" alt="MA(1)과 AR(1)의 시간 그림과 ACF" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. θ₁ = 0.8인 MA(1)과 φ₁ = 0.8인 AR(1)을 200개씩 만들었다. MA(1)의 ACF는 시차 1만 크고 바로 점선 안으로 들어가지만 AR(1)의 ACF는 0.75, 0.54, 0.36으로 천천히 줄어든다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 1. $\theta_1 = 0.8$인 MA(1)과 $\phi_1 = 0.8$인 AR(1)을 200개씩 만들었다. MA(1)의 ACF는 시차 1만 크고 바로 점선 안으로 들어가지만 AR(1)의 ACF는 0.75, 0.54, 0.36으로 천천히 줄어든다.</figcaption>
 </figure>
 
 그림 1의 MA(1)은 $\rho_1 = 0.8/1.64 = 0.488$이고 표본에서는 $r_1 = 0.471$이었다. 시차 2부터는 모두 점선 안이다. 같은 0.8을 쓴 AR(1)은 $\rho_k = 0.8^k$라 0.8, 0.64, 0.51로 천천히 줄어든다. **MA($q$)의 ACF는 시차 $q$ 뒤에 끊기고 AR의 ACF는 천천히 줄어든다.** 이 차이로 차수를 고르는 방법은 다음 글에서 다룬다[^band].
@@ -88,7 +88,7 @@ MA는 어차피 늘 정상인데 왜 가역성까지 요구할까? 이유는 두
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-17-time-series-8-ma-invertibility/invertibility.svg" alt="MA(1)의 시차 1 자기상관과 역변환 가중치" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 왼쪽: MA(1)의 ρ₁ = θ/(1 + θ²). θ = 0.5와 θ = 2가 같은 0.4를 준다. 오른쪽: 충격을 과거 관측값으로 되돌릴 때의 가중치 |θ|ʲ. θ = 2이면 10시점 전 관측값의 가중치가 1024다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 왼쪽: MA(1)의 $\rho_1 = \theta/(1 + \theta^2)$. $\theta = 0.5$와 $\theta = 2$가 같은 0.4를 준다. 오른쪽: 충격을 과거 관측값으로 되돌릴 때의 가중치 $\lvert\theta\rvert^j$. $\theta = 2$이면 10시점 전 관측값의 가중치가 1024다.</figcaption>
 </figure>
 
 그림 2 오른쪽에서 $\theta = 0.5$이면 10시점 전 관측값의 가중치가 0.001로 줄지만 $\theta = 2$이면 1024로 커진다. 오래된 관측값일수록 지금의 충격을 더 많이 좌우한다는 말이니 예측 모형으로 쓸 수 없다. **가역성은 지금의 충격을 최근 관측값 위주로 계산할 수 있다는 보증이다.**
@@ -130,8 +130,6 @@ $$
 가역 조건 $\lvert\theta\rvert = \lvert\alpha - 1\rvert < 1$을 풀면 $0 < \alpha < 2$다. 가중평균으로 읽으려고 잡은 $0 < \alpha < 1$보다 넓다. $1 < \alpha < 2$이면 가중치의 부호가 번갈아 바뀌지만 예측식으로는 여전히 작동한다는 뜻이다.
 
 **ETS와 ARIMA는 다른 세계가 아니다.** FPP3 9.10절은 덧셈 오차의 선형 ETS 모형이 모두 ARIMA의 특수한 경우라고 정리한다. ETS(A,A,N)은 ARIMA(0,2,2)이고 계절 모형도 대응하는 ARIMA가 있다. 반대로 곱셈 오차처럼 비선형인 ETS는 대응하는 ARIMA가 없고 ETS로 나타낼 수 없는 ARIMA도 많다. 둘은 겹치는 부분이 있는 두 모형족이다.
-
-## 다음 글
 
 정상성과 차분([6편](/posts/2026-10-17-time-series-6-stationarity-differencing)), AR([7편](/posts/2026-10-17-time-series-7-backshift-ar)), MA(이번 글)로 ARIMA의 재료가 모였다. 다음 글에서는 AR과 MA의 ACF와 PACF를 유도해 그림 1의 차이로 차수를 고르는 방법을 정리한다. 그 뒤에 차분과 AR, MA를 합친 ARIMA($p$, $d$, $q$)로 넘어간다.
 

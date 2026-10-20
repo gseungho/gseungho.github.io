@@ -51,7 +51,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/level-update.gif" alt="시험 점수 다섯 개를 보며 α = 0.3과 α = 0.9의 수준이 한 회차씩 업데이트되는 애니메이션" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 60점을 받은 뒤 수준은 얼마나 내려갈까? α = 0.3(파랑)은 72.9, α = 0.9(주황)는 62.8까지 내려간다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 60점을 받은 뒤 수준은 얼마나 내려갈까? $\alpha = 0.3$(파랑)은 72.9, $\alpha = 0.9$(주황)는 62.8까지 내려간다.</figcaption>
 </figure>
 
 그림 1에서 보듯 $\alpha = 0.3$이면 시험 한 번으로 판단을 크게 바꾸지 않는다. 60점을 받아도 추정은 78.4에서 72.9로 내려갈 뿐이다. $\alpha = 0.9$는 최근 점수를 거의 그대로 실력으로 본다. 어느 쪽이 맞을까? 실력이 실제로 얼마나 빨리 바뀌느냐에 달렸다.
@@ -92,7 +92,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/ses-weights.svg" alt="α = 0.2, 0.5, 0.8일 때 최근 열 개 관측값에 붙는 SES 가중치 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. α가 클수록 가중치가 최근 값에 쏠린다. α = 0.8이면 세 시점 전 값의 가중치가 벌써 0.0064다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 2. $\alpha$가 클수록 가중치가 최근 값에 쏠린다. $\alpha = 0.8$이면 세 시점 전 값의 가중치가 벌써 0.0064다.</figcaption>
 </figure>
 
 $\alpha$가 클수록 가중치가 빨리 줄어 최근 값에 쏠린다(그림 2). $\alpha = 0.8$이면 다섯 시점 전 값의 가중치가 0.0003밖에 안 된다.
@@ -156,7 +156,7 @@ $$
 
 같은 시점을 예측해도 언제 예측했느냐에 따라 값은 달라진다. $\hat{y}_{t+2|t} \ne \hat{y}_{t+2|t+1}$이다. 앞은 $\ell_t$이고 뒤는 $y_{t+1}$을 보고 업데이트한 $\ell_{t+1}$이다.
 
-### α와 ℓ₀는 어떻게 고르는가
+### $\alpha$와 $\ell_0$는 어떻게 고르는가
 
 1-step 예측오차의 제곱합(SSE)을 최소로 하는 값을 고른다.
 
@@ -229,7 +229,7 @@ $$
 
 **기울기는 그대로 두고 수준만 매 step 기울기만큼 올리는 셈이다.** 여기서 $\ell_T, b_T$는 $T$까지의 자료로 구한 추정값이고 $\hat{\ell}_{T+h}, \hat{b}_{T+h}$는 $T$ 시점에서 본 미래 상태의 예측값이다. 예측식 $\hat{y}_{T+h|T} = \ell_T + hb_T$가 $\hat{\ell}_{T+h}$와 같은 값이라는 것도 보인다.
 
-### 호주 인구에서 α가 거의 1인 이유
+### 호주 인구에서 $\alpha$가 거의 1인 이유
 
 FPP3의 호주 인구 예제에서는 $\hat\alpha = 0.9999$, $\hat\beta^* = 0.3267$이 나온다. 인구는 추세가 강하고 잡음이 거의 없이 매끈하게 늘어나는 계열이라 수준이 관측값을 거의 그대로 따라간다. $\hat\beta^*$도 작지 않아서 기울기가 자주 업데이트된다. 시작값은 $\ell_0 = 10.05$, $b_0 = 0.22$다.
 
@@ -249,7 +249,7 @@ $$
 b_1 = 0.3267 \times (10.28 - 10.05) + 0.6733 \times 0.22 = 0.223
 $$
 
-### 끝없이 오르는 직선을 꺾는 φ
+### 끝없이 오르는 직선을 꺾는 $\phi$
 
 Holt의 예측은 같은 기울기로 끝없이 오르거나 내려가서 먼 미래를 과대예측하기 쉽다. Gardner와 McKenzie(1985)는 추세를 언젠가 평평하게 꺾는 감쇠 모수 $\phi$를 넣었다.
 
@@ -270,7 +270,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/holt-vs-damped.svg" alt="같은 마지막 상태에서 출발한 Holt 예측 직선과 감쇠 추세 예측 곡선" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 마지막 상태에서 출발해도 Holt(파랑)는 직선으로 오르고 감쇠 추세(주황, φ = 0.9)는 ℓ_T + 9b_T = 79.4 아래에서 멈춘다(모의 자료).</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 마지막 상태에서 출발해도 Holt(파랑)는 직선으로 오르고 감쇠 추세(주황, $\phi = 0.9$)는 $\ell_T + 9b_T = 79.4$ 아래에서 멈춘다(모의 자료).</figcaption>
 </figure>
 
 $\phi = 0.9$면 $\phi/(1-\phi) = 9$라서 아무리 멀리 가도 기울기를 $9b_T$까지만 더한다. 그림 3의 모의 자료는 마지막 상태가 $\ell_T = 67.94$, $b_T = 1.269$이고 감쇠 예측은 40-step 뒤에도 79.19로 상한 79.36 아래에 머문다. **가까운 미래는 추세를 따르고 먼 미래는 평평해진다.** FPP3는 $\phi$가 0.8보다 작으면 감쇠가 너무 세고 1에 가까우면 감쇠 없는 모형과 구분이 안 되어 보통 0.8~0.98로 둔다고 설명한다. 여러 계열을 자동으로 예측할 때 가장 널리 쓰이는 방법 가운데 하나이기도 하다.

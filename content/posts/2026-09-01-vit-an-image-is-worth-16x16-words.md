@@ -459,13 +459,7 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 
 Table 8에 직접 비교는 없지만 반대 방향 실험은 원래 Transformer 논문에 있다. sinusoidal 대신 learned를 썼는데 BLEU 차이가 거의 없었다. 그리고 sinusoidal을 쓰면 interpolation 문제가 애초에 생기지 않는다. 공식이니까 몇 번째 위치든 그냥 계산하면 되기 때문이다.
 
-## 앞 글
-
-이 글의 앞 편은 다음 글이다.
-
-**[Attention Is All You Need: 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)**
-
-sinusoidal positional encoding이 "수식으로 강제한" 성질을 ViT의 learned embedding이 "분류 loss만으로 스스로 배운" 과정과 나란히 놓고 보면 이 논문의 Figure 7이 훨씬 잘 읽힌다.
+앞 글 [Attention Is All You Need: 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)에서 본 sinusoidal positional encoding이 "수식으로 강제한" 성질을 ViT의 learned embedding이 "분류 loss만으로 스스로 배운" 과정과 나란히 놓고 보면 이 논문의 Figure 7이 훨씬 잘 읽힌다.
 
 ---
 

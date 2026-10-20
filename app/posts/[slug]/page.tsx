@@ -1,4 +1,4 @@
-import { getAllPosts, getPostBySlug, getHeadings } from "@/lib/posts";
+import { getAllPosts, getPostBySlug, getHeadings, inReadingOrder } from "@/lib/posts";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import TableOfContents from "@/components/TableOfContents";
 import PostSidebar from "@/components/PostSidebar";
+import SeriesNav from "@/components/SeriesNav";
 import { categoryLabel } from "@/lib/categories";
 
 export async function generateStaticParams() {
@@ -43,6 +44,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const categoryPosts = getAllPosts().filter(
     (p) => p.category.normalize("NFC") === post.category.normalize("NFC")
   );
+  // the post's folder in the sidebar, for the 이전 글 / 다음 글 links
+  const folder = inReadingOrder(
+    categoryPosts.filter((p) => (p.subcategory ?? "").normalize("NFC") === (post.subcategory ?? "").normalize("NFC"))
+  );
+  const index = folder.findIndex((p) => p.slug === slug);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -117,6 +123,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {/* Voltagent Dashed Line Section Divider */}
       <div className="border-b border-dashed border-(--border) w-full mt-12 opacity-60" />
+
+      <SeriesNav prev={folder[index - 1]} next={folder[index + 1]} />
 
       {/* Back Button (button-outline-on-dark style) */}
       <div className="pt-4">

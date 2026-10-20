@@ -259,7 +259,7 @@ $y_t$는 양수여야 한다.[^1] $\lambda$에 값을 넣어 보면 성격이 �
 - $\lambda = 0.5$면 $w_t = (\sqrt{y_t} - 1)/0.5$로 제곱근 변환과 같은 효과다.
 - $\lambda = 0$ 자리에 갑자기 로그가 들어간 건 극한 때문이다. $y^{\lambda} = e^{\lambda \ln y} \approx 1 + \lambda \ln y$이므로 $\lambda \to 0$이면 $(y^{\lambda} - 1)/\lambda \to \ln y$가 된다. 그래서 $\lambda$를 1에서 0으로 줄여 가면 원자료, 제곱근, 세제곱근, 로그가 끊김 없이 이어진다.
 
-### λ가 1보다 크면 분산이 안정될까
+### $\lambda$가 1보다 크면 분산이 안정될까
 
 처음 이 식을 봤을 때 걸렸던 부분이다. $\lambda$가 1보다 크면 분자 $y_t^{\lambda}$가 폭발할 텐데 그래도 "분산을 안정시킨다"고 할 수 있을까?
 
@@ -299,7 +299,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/boxcox_lambda.svg" alt="같은 분기 자료에 Box-Cox 변환을 lambda 1, 0.5, 0으로 적용한 세 그림" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 자료에 λ만 바꿔 Box-Cox 변환을 했다. 위에서 아래로 갈수록 뒤쪽의 출렁임이 앞쪽과 비슷해진다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 자료에 $\lambda$만 바꿔 Box-Cox 변환을 했다. 위에서 아래로 갈수록 뒤쪽의 출렁임이 앞쪽과 비슷해진다.</figcaption>
 </figure>
 
 2년(8분기) 동안의 최댓값과 최솟값의 차를 변동 폭으로 보면 원자료에서는 처음 10.74에서 마지막 95.48로 8.9배 커진다. $\lambda = 0.5$에서는 3.0배, 로그에서는 1.0배다. 이 자료는 변동이 수준에 비례하도록 만들었으니 위 표대로 로그가 맞는 $\lambda$다.

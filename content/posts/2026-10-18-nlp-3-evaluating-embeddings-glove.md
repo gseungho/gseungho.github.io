@@ -184,7 +184,7 @@ $$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/glove-weight.svg" alt="GloVe 가중치 함수 f(x), alpha 3/4와 1, x_max 100에서 1로 고정" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 가중치 함수 f. 0에서 시작해 x_max = 100까지 올라간 뒤 1에 머문다. α = 3/4는 작은 횟수에 α = 1보다 조금 더 무게를 준다.</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 가중치 함수 $f$. 0에서 시작해 $x_{\max} = 100$까지 올라간 뒤 1에 머문다. $\alpha = 3/4$는 작은 횟수에 $\alpha = 1$보다 조금 더 무게를 준다.</figcaption>
 </figure>
 
 그림 4가 이 함수다. 논문은 모든 실험에서 $x_{\max} = 100$, $\alpha = 3/4$를 썼고 $\alpha = 3/4$가 $\alpha = 1$보다 조금 나았다고 한다. 한 번 나온 쌍의 가중치는 $\alpha = 3/4$에서 $0.01^{3/4} = 0.032$, $\alpha = 1$에서 0.010이다. 드문 쌍을 버리지는 않되 흔한 쌍보다 훨씬 가볍게 본다. $f(0) = 0$이므로 0인 칸은 계산에서 빠지고 0이 아닌 칸만 돌면 된다. **$f$가 $x_{\max}$에서 멈추기 때문에 아무리 흔한 쌍도 가중치가 1을 넘지 못한다.**
@@ -199,9 +199,7 @@ word2vec과는 어떻게 이어질까? D2L 15.5절은 skip-gram의 손실을 같
 
 사람은 unfriend를 처음 봐도 un과 friend로 뜻을 짐작한다. UNK는 그 단서를 모두 버린다. Mikolov et al.(2013a) 4.1절도 모델이 단어의 형태 정보를 입력으로 받지 않으니 100% 정확도는 불가능에 가깝고 단어 구조를 넣으면 특히 문법 문제가 나아질 것이라고 적었다. **단어를 더 쪼갤 수 없는 단위로 보는 한 처음 보는 단어에 줄 벡터가 없다.**
 
-## 다음 글
-
-[4편](/posts/2026-10-18-nlp-4-subword-composition-contextual)에서는 단어를 character n-gram으로 쪼개는 fastText와 BPE로 이 문제를 푼다. 이어서 단어 벡터를 문장 벡터로 합치는 방법과 context에 따라 벡터가 바뀌는 문맥화 임베딩까지 다룬다. 이전 글은 [2편](/posts/2026-10-18-nlp-2-word2vec)의 Word2Vec이다.
+[4편](/posts/2026-10-18-nlp-4-subword-composition-contextual)에서는 단어를 character n-gram으로 쪼개는 fastText와 BPE로 이 문제를 푼다. 이어서 단어 벡터를 문장 벡터로 합치는 방법과 context에 따라 벡터가 바뀌는 문맥화 임베딩까지 다룬다.
 
 ---
 

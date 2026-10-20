@@ -112,7 +112,7 @@ $$m \sim \mathrm{Bernoulli}(p) \;\Rightarrow\; \mathbb{E}[m\,x] = p\,x$$
 
 <figure className="my-6 text-center">
   <img src="/images/posts/gpt-bert-in-context-learning/gelu.png" alt="GELU, ReLU, dropout 기댓값 비교" className="rounded-lg mx-auto max-w-md" />
-  <figcaption className="mt-2 text-sm text-gray-500">GELU는 단조함수가 아니다. x ≈ −0.75에서 −0.17까지 내려갔다 올라온다</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">GELU는 단조함수가 아니다. $x \approx -0.75$에서 $-0.17$까지 내려갔다 올라온다</figcaption>
 </figure>
 
 그래프에서 눈에 띄는 건 GELU가 **단조증가가 아니라는 점**이다. 음수 구간에서 한 번 내려갔다가
