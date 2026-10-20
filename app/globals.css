@@ -11,7 +11,8 @@
   
   --border: #3d3a39;      /* hairline (universal edge) */
   --border-glow: #00d992; /* active green border */
-  
+  --divider: rgb(61 58 57 / 0.6); /* dashed lines above and below a post body */
+
   --text: #bdbdbd;        /* body text (secondary) */
   --text-strong: #ffffff; /* ink-strong (pure white for emphasis) */
   --text-muted: #8b949e;  /* mute (fine print / captions) */
@@ -30,7 +31,8 @@ html.light {
   
   --border: #e4e4e7;      /* hairline (zinc-200) */
   --border-glow: #10b981; /* active green border */
-  
+  --divider: #a1a1aa;     /* zinc-400: a dashed zinc-200 line all but vanishes on white */
+
   --text: #3f3f46;        /* body text (zinc-700) */
   --text-strong: #09090b; /* ink-strong (zinc-950) */
   --text-muted: #71717a;  /* mute (zinc-500) */

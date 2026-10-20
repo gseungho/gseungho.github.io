@@ -107,7 +107,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </header>
 
       {/* Voltagent Dashed Line Section Divider */}
-      <div className="border-b border-dashed border-(--border) w-full opacity-60" />
+      <div className="border-b border-dashed border-(--divider) w-full" />
 
       {/* Post Body (MDX Content) */}
       <div className="prose max-w-none">
@@ -124,7 +124,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* Voltagent Dashed Line Section Divider */}
-      <div className="border-b border-dashed border-(--border) w-full mt-12 opacity-60" />
+      <div className="border-b border-dashed border-(--divider) w-full mt-12" />
 
       <SeriesNav prev={folder[index - 1]} next={folder[index + 1]} />
 
