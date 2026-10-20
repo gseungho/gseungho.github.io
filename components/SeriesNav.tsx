@@ -1,17 +1,27 @@
 import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
 
-function NavCard({ post, label, next }: { post: PostMeta; label: string; next?: boolean }) {
+// No box: a small label with an arrow that nudges outward on hover, and the title, which takes the
+// accent colour on hover like the titles in the post lists.
+function NavLink({ post, next }: { post: PostMeta; next?: boolean }) {
   return (
-    <Link
-      href={`/posts/${post.slug}`}
-      className={[
-        "group block rounded-md border border-(--border) px-4 py-3 transition-colors duration-200 hover:border-(--accent)",
-        next ? "md:col-start-2 md:text-right" : "",
-      ].join(" ")}
-    >
-      <span className="block text-sm text-(--text-muted) group-hover:text-(--accent)">{label}</span>
-      <span className="mt-1 block text-base leading-snug break-keep text-(--text-strong)">{post.title}</span>
+    <Link href={`/posts/${post.slug}`} className={["group block", next ? "md:col-start-2 md:text-right" : ""].join(" ")}>
+      <span className={["flex items-center gap-1.5 text-sm text-(--text-muted)", next ? "md:justify-end" : ""].join(" ")}>
+        {!next && (
+          <span aria-hidden="true" className="transition-transform duration-200 group-hover:-translate-x-1">
+            ←
+          </span>
+        )}
+        {next ? "다음 글" : "이전 글"}
+        {next && (
+          <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">
+            →
+          </span>
+        )}
+      </span>
+      <span className="mt-1.5 block text-lg font-semibold leading-snug tracking-tight break-keep text-(--text-strong) transition-colors duration-200 group-hover:text-(--accent-soft)">
+        {post.title}
+      </span>
     </Link>
   );
 }
@@ -21,9 +31,9 @@ function NavCard({ post, label, next }: { post: PostMeta; label: string; next?: 
 export default function SeriesNav({ prev, next }: { prev?: PostMeta; next?: PostMeta }) {
   if (!prev && !next) return null;
   return (
-    <nav aria-label="이전 글과 다음 글" className="grid gap-3 md:grid-cols-2">
-      {prev && <NavCard post={prev} label="← 이전 글" />}
-      {next && <NavCard post={next} label="다음 글 →" next />}
+    <nav aria-label="이전 글과 다음 글" className="grid gap-x-12 gap-y-7 md:grid-cols-2">
+      {prev && <NavLink post={prev} />}
+      {next && <NavLink post={next} next />}
     </nav>
   );
 }
