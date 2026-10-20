@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { PostMeta } from "@/lib/posts";
+import { inReadingOrder, type PostMeta } from "@/lib/posts";
 import { buildTree, countPosts, sortedFolders, type Folder } from "@/components/FolderTree";
 import { categoryLabel } from "@/lib/categories";
 import SidebarShell from "@/components/SidebarShell";
@@ -15,13 +15,6 @@ function navTitle(title: string): string {
 
 function contains(folder: Folder, slug: string): boolean {
   return folder.posts.some((p) => p.slug === slug) || [...folder.folders.values()].some((f) => contains(f, slug));
-}
-
-// reading order inside a folder: oldest first, numbered slugs in numeric order
-function inReadingOrder(posts: PostMeta[]): PostMeta[] {
-  return [...posts].sort(
-    (a, b) => a.date.localeCompare(b.date) || a.slug.localeCompare(b.slug, undefined, { numeric: true })
-  );
 }
 
 function PostList({ posts, current }: { posts: PostMeta[]; current: string }) {

@@ -147,7 +147,7 @@ $d=512$면 **0.044**, $d=768$이면 **0.036**이다.
 게다가 위의 네 항 중 **position-position만 상대적**이고 나머지 cross term은 절대 위치에
 의존한다. 이 불일치가 Transformer-XL 이후 relative position 계열 연구가 파고든 지점이다.
 
-### 임베딩에 √d_model을 곱하는 이유
+### 임베딩에 $\sqrt{d_{\text{model}}}$을 곱하는 이유
 
 논문 3.4절에 딱 한 문장 있다. "In the embedding layers, we multiply those weights by
 $\sqrt{d_{\text{model}}}$." 근거는 없다.
@@ -223,7 +223,7 @@ $W_V$는 V가 가중합에만 들어가므로 softmax 미분을 아예 거치지
 descent가 그 의미를 이해하고 최적화하는 게 아니다. 확실한 건 "구조적으로 다른 gradient를
 받는다"까지다.
 
-### 왜 √d_k로 나누는가
+### 왜 $\sqrt{d_k}$로 나누는가
 
 $q$와 $k$의 각 성분이 독립이고 평균 0, 분산 1이라고 가정하자(학습 초기의 근사다).
 
@@ -247,7 +247,7 @@ key 20개를 두고 softmax가 준 가장 큰 weight의 평균을 측정해 봤�
 
 <figure className="my-6 text-center">
   <img src="/images/posts/attention-is-all-you-need/fig_sqrt_dk.png" alt="d_k에 따른 내적 분산과 softmax 붕괴" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">왼쪽: 내적의 표준편차가 정확히 √d_k를 따라감. 오른쪽: scaling 없이는 한 key가 확률을 독식하고 나누면 d_k와 무관하게 일정해진다</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">왼쪽: 내적의 표준편차가 정확히 $\sqrt{d_k}$를 따라감. 오른쪽: scaling 없이는 한 key가 확률을 독식하고 나누면 $d_k$와 무관하게 일정해진다</figcaption>
 </figure>
 
 scaling 없이 $d_k{=}512$면 **한 key가 94%를 가져간다.** 사실상 one-hot이고 gradient가 거의 0이
@@ -422,7 +422,7 @@ decoder에서 미래 token을 가릴 때 아주 큰 음수로 바꿔치기해서
 | 0.2 | 5.47 | 25.7 |
 
 모델이 덜 확신하게 만들면 확률 예측의 품질(PPL)은 나빠지지만 번역 품질(BLEU)은 올라간다.
-**두 지표가 서로 다른 것을 재고 있다**는 걸 보여 주는 좋은 예다.
+**두 지표가 서로 다른 것을 보고 있다**는 걸 보여 주는 좋은 예다.
 
 ## 설계 선택을 뒷받침하는 근거
 
@@ -454,13 +454,11 @@ Post-LN은 몇 년 뒤에 뒤집혔다.
    않는다
 2. **sinusoidal의 회전행렬 성질이 상대 위치를 "보장"한다고 읽음**: $M$이 회전과 commute해야만
    성립하는 조건부 성질이다
-3. **단일 시드 실험 결과를 일반화할 뻔함**: gradient 코사인 유사도를 300 시드로 다시 재니
+3. **단일 시드 실험 결과를 일반화할 뻔함**: gradient 코사인 유사도를 300 시드로 다시 측정하니
    결론이 바뀌었다
 
 2번과 3번이 특히 기억에 남는다. 둘 다 **"그럴듯한 설명"에서 멈추지 않고 한 번 더 따져 봤을 때만**
 드러나는 것들이었다.
-
-## 다음 글
 
 이 논문을 읽고 나서 **[ViT: An Image is Worth 16×16 Words](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)** 를
 읽었다. 여기서 다룬 Pre-LN, CLS token, learned positional embedding이 전부 그쪽에서 다시

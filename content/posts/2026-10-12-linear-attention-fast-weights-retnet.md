@@ -82,7 +82,7 @@ gradient가 0이 되는 걸 피하기 위해서다.
 
 <figure className="my-6 text-center">
   <img src="/images/posts/linear-attention-fast-weights-retnet/perf_fig1.png" alt="attention 행렬을 만들지 않고 계산하는 순서" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">왼쪽은 L×L 행렬을 먼저 만드는 순서, 오른쪽은 작은 행렬을 먼저 만드는 순서 (Choromanski et al., 2021, Figure 1)</figcaption>
+  <figcaption className="mt-2 text-sm text-gray-500">왼쪽은 $L \times L$ 행렬을 먼저 만드는 순서, 오른쪽은 작은 행렬을 먼저 만드는 순서 (Choromanski et al., 2021, Figure 1)</figcaption>
 </figure>
 
 $\phi$로 바꾸면 무엇이 달라지는지가 이 그림이다. Performer 논문의 그림인데 아이디어가 가장 잘
@@ -318,7 +318,7 @@ softmax attention에는 update라는 개념이 없다. 논문의 표현대로 ke
 
 ## RetNet: 오래된 정보를 감쇠시키는 memory
 
-### 감쇠 계수 γ와 기억 범위
+### 감쇠 계수 $\gamma$와 기억 범위
 
 Retentive Network (Sun et al., 2023)는 같은 문제에 다른 답을 낸다. 논문의 식 (6)이다.
 
