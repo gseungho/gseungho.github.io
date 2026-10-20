@@ -129,7 +129,7 @@ $d=512$면 **0.044**, $d=768$이면 **0.036**이다.
 **"거의 직교한 방향에 겹쳐 저장해서 간섭이 거의 없다"이다.** 따라서 $e$와 $p$를 따로 저장할
 필요가 **없다.**
 
-### 절대 위치와 상대 위치는 어떻게 전달되는가
+### 절대 위치와 상대 위치가 전달되는 방식
 
 둘 중 하나를 고르는 질문이 아니었다. **둘 다 접근 가능하고 보장의 강도가 다르다.**
 
@@ -170,7 +170,7 @@ PyTorch `nn.Embedding` 기본값인 $\mathcal{N}(0,1)$이면 곱한 뒤 norm이 
 
 <Fig src="/images/posts/attention-is-all-you-need/fig_attention.png" alt="Scaled Dot-Product Attention과 Multi-Head Attention">Figure 2. 왼쪽이 Scaled Dot-Product Attention, 오른쪽이 Multi-Head Attention (Vaswani et al., 2017)</Fig>
 
-### Q, K, V는 어떻게 서로 다르게 학습되는가
+### 같은 loss에서 갈라지는 Q, K, V
 
 $W_Q$, $W_K$, $W_V$는 전부 같은 스칼라 loss 하나로 학습된다. 그런데 어떻게 각자 다른 역할을
 맡게 될까?
@@ -214,7 +214,7 @@ $W_V$는 V가 가중합에만 들어가므로 softmax 미분을 아예 거치지
 descent가 그 의미를 이해하고 최적화하는 게 아니다. 확실한 건 "구조적으로 다른 gradient를
 받는다"까지다.
 
-### 왜 $\sqrt{d_k}$로 나누는가
+### $\sqrt{d_k}$로 나누는 이유
 
 $q$와 $k$의 각 성분이 독립이고 평균 0, 분산 1이라고 가정하자(학습 초기의 근사다).
 
@@ -282,7 +282,7 @@ $\times\sqrt{d_{\text{model}}}$도 결국 같은 이야기다. **분산을 1 근
 Figure 1에 "Add & Norm"이라고 한 덩어리로 그려져 있어서 하나로 묶어 외우기 쉬운데
 **둘은 서로 다른 문제를 푼다.** 분리해서 봐야 한다.
 
-### Residual connection은 gradient를 어떻게 살리는가
+### Residual connection이 gradient를 살리는 방식
 
 $$\frac{\partial}{\partial x}\big(x+F(x)\big) = I + \frac{\partial F}{\partial x}$$
 
@@ -309,7 +309,7 @@ residual connection은 gradient를 살리는 대신 **activation이 layer마다 
 반복되면 이번엔 값이 발산하는 쪽이 문제가 된다. Norm이 매 block에서 다시 눌러 준다.
 **그래서 residual connection과 norm은 항상 세트다.**
 
-### 왜 BatchNorm이 아닌가
+### BatchNorm 대신 LayerNorm
 
 NLP의 입력은 $(N, T, D)$이고 BatchNorm은 배치 축으로 통계를 낸다. 두 가지가 걸린다.
 

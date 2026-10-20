@@ -272,7 +272,7 @@ token이 참여하는 block이 자주 있기만 하면 capacity는 과감하게 
 두 번째가 중요하다. 계산을 줄인 것 자체가 좋은 게 아니다. **무엇을 줄일지를 학습했기 때문에**
 손해가 없는 것이다.
 
-### 어떤 token에 계산을 더 배정하는가
+### 계산을 더 받는 token
 
 <Fig src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig5.png" alt="MoD의 routing 결정과 router 점수 분포">Figure 5. 왼쪽은 layer별 routing 결정, 오른쪽은 router 점수의 분포 (Raposo et al., 2024)</Fig>
 
