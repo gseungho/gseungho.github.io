@@ -154,10 +154,7 @@ $\mathbf{v}$가 steering vector, $c$는 얼마나 세게 더할지 정하는 sca
 일어나지만 효과는 거기서 끝나지 않는다. 뒤의 layer와 뒤의 token이 모두 바뀐 $\mathbf{h}^l_t$를 보고
 계산하므로 다음 token의 분포가 달라지고 그 뒤의 생성 전체가 달라진다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-analogy-to-steering-vectors/offset-vs-steering.svg" alt="단어 벡터의 offset과 hidden state에 더하는 steering 방향 비교" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 왼쪽은 단어 쌍마다 같은 offset이 있다는 analogy의 가정, 오른쪽은 prompt 쌍의 activation 차를 사용자 prompt의 hidden state마다 더하는 steering. 두 그림의 벡터는 설명을 위해 만든 2차원 값이다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-analogy-to-steering-vectors/offset-vs-steering.svg" alt="단어 벡터의 offset과 hidden state에 더하는 steering 방향 비교">그림 1. 왼쪽은 단어 쌍마다 같은 offset이 있다는 analogy의 가정, 오른쪽은 prompt 쌍의 activation 차를 사용자 prompt의 hidden state마다 더하는 steering. 두 그림의 벡터는 설명을 위해 만든 2차원 값이다.</Fig>
 
 그림 1의 두 그림은 같은 연산을 그린다. 화살표를 더하는 대상이 고정된 단어 벡터인지 문맥마다 다른
 hidden state인지만 다르다. 그러면 남는 질문은 둘이다. **$\mathbf{v}$는 어떻게 구하고 $l$과 $c$는
@@ -237,10 +234,7 @@ $$
 $c$를 논문은 injection coefficient라 부른다. analogy로 읽으면 "Love" − "Hate"가 woman − man 자리에,
 사용자 prompt의 activation이 king 자리에 들어간다. 그림 2가 이 흐름이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-analogy-to-steering-vectors/steering-pipeline.svg" alt="prompt 쌍에서 steering vector를 만들고 layer l에 더하는 과정" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 위: prompt 쌍을 같은 모델에 넣어 layer l의 activation 차를 구한다. 아래: 사용자 prompt를 계산하다가 layer l의 입력에 그 차를 c배 해서 더하고 나머지 layer를 마저 계산한다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-analogy-to-steering-vectors/steering-pipeline.svg" alt="prompt 쌍에서 steering vector를 만들고 layer l에 더하는 과정">그림 2. 위: prompt 쌍을 같은 모델에 넣어 layer l의 activation 차를 구한다. 아래: 사용자 prompt를 계산하다가 layer l의 입력에 그 차를 c배 해서 더하고 나머지 layer를 마저 계산한다.</Fig>
 
 식 (8)에서 짚어 둘 것이 있다. $\mathbf{h}^l_\pm$는 벡터 하나가 아니라 prompt의 token 위치마다 하나씩
 있는 activation 묶음이다. ActAdd는 이 묶음을 사용자 prompt의 앞쪽 위치부터 맞춰 더한다(부록 C의 정렬
@@ -321,10 +315,7 @@ layer 13 근처, 13B는 대개 14나 15에서 효과가 가장 컸다(4.1절).
 
 ### multiplier를 키우면 행동도 늘어나는가
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-analogy-to-steering-vectors/caa-multiplier.svg" alt="CAA multiplier에 따른 행동별 답 확률" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. multiplier를 −1에서 +1로 바꾸면 행동에 맞는 답의 확률이 오르는가? Sycophancy는 +1에서 오히려 내려간다. Panickssery et al. (2024) Table 3에서 Llama 2 13B Chat, layer 13, system prompt 없음 열을 옮겨 그렸다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-analogy-to-steering-vectors/caa-multiplier.svg" alt="CAA multiplier에 따른 행동별 답 확률">그림 3. multiplier를 −1에서 +1로 바꾸면 행동에 맞는 답의 확률이 오르는가? Sycophancy는 +1에서 오히려 내려간다. Panickssery et al. (2024) Table 3에서 Llama 2 13B Chat, layer 13, system prompt 없음 열을 옮겨 그렸다.</Fig>
 
 그림 3의 세로축은 50문항에서 행동에 맞는 답 글자에 모델이 준 확률의 평균이다[^3]. 일곱 행동 중
 여섯은 multiplier를 −1에서 +1로 바꾸면 확률이 단조롭게 오른다. Corrigibility는 0.45, 0.57, 0.83이다.
@@ -436,10 +427,7 @@ $c$에 비례해 오르고 따로 바꿀 수 있는 개념의 logit은 움직이
 벡터 $\bar\gamma_W$를 그대로 더하면 어떻게 될까? 기울기가 $\bar\gamma_W^\top\bar\gamma_Z$가 되므로 두
 방향이 Euclidean 의미로 직교하지 않는 한 $Z$도 같이 움직인다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-analogy-to-steering-vectors/park-geometry.svg" alt="embedding representation과 unembedding representation을 더했을 때 logit 변화 비교" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 왼쪽: 회색 선은 Z의 logit이 같은 점들이다. embedding representation $\bar\lambda$ 방향으로 가면 그 선을 따라 움직이고 unembedding representation $\bar\gamma$ 방향으로 가면 선을 가로지른다. 오른쪽: 두 방향으로 c만큼 더했을 때 W와 Z의 logit 변화. 두 개념의 $\bar\gamma$는 (1, 0.25)와 (0.55, 1)로 설명을 위해 만든 값이다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-analogy-to-steering-vectors/park-geometry.svg" alt="embedding representation과 unembedding representation을 더했을 때 logit 변화 비교">그림 4. 왼쪽: 회색 선은 Z의 logit이 같은 점들이다. embedding representation $\bar\lambda$ 방향으로 가면 그 선을 따라 움직이고 unembedding representation $\bar\gamma$ 방향으로 가면 선을 가로지른다. 오른쪽: 두 방향으로 c만큼 더했을 때 W와 Z의 logit 변화. 두 개념의 $\bar\gamma$는 (1, 0.25)와 (0.55, 1)로 설명을 위해 만든 값이다.</Fig>
 
 그림 4가 이 차이를 보여 준다. 만든 2차원 예에서 $\bar\gamma_W^\top\bar\gamma_Z = 0.8$이라 $\bar\gamma_W$를
 더하면 $Z$의 logit이 $0.8c$만큼 같이 오른다. $\bar\lambda_W$는 $\bar\gamma_Z$와 직교하도록 고른

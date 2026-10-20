@@ -49,10 +49,7 @@ $$
 | $\ell_t$ ($\alpha = 0.3$) | 73.5 | 78.4 | 72.9 | 75.0 | 78.0 |
 | $\ell_t$ ($\alpha = 0.9$) | 70.5 | 88.0 | 62.8 | 78.3 | 84.3 |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/level-update.gif" alt="시험 점수 다섯 개를 보며 α = 0.3과 α = 0.9의 수준이 한 회차씩 업데이트되는 애니메이션" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 60점을 받은 뒤 수준은 얼마나 내려갈까? $\alpha = 0.3$(파랑)은 72.9, $\alpha = 0.9$(주황)는 62.8까지 내려간다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/level-update.gif" alt="시험 점수 다섯 개를 보며 α = 0.3과 α = 0.9의 수준이 한 회차씩 업데이트되는 애니메이션">그림 1. 60점을 받은 뒤 수준은 얼마나 내려갈까? $\alpha = 0.3$(파랑)은 72.9, $\alpha = 0.9$(주황)는 62.8까지 내려간다.</Fig>
 
 그림 1에서 보듯 $\alpha = 0.3$이면 시험 한 번으로 판단을 크게 바꾸지 않는다. 60점을 받아도 추정은 78.4에서 72.9로 내려갈 뿐이다. $\alpha = 0.9$는 최근 점수를 거의 그대로 실력으로 본다. 어느 쪽이 맞을까? 실력이 실제로 얼마나 빨리 바뀌느냐에 달렸다.
 
@@ -90,10 +87,7 @@ $$
 | $y_{T-4}$ | 0.0819 | 0.0518 | 0.0154 | 0.0013 |
 | $y_{T-5}$ | 0.0655 | 0.0311 | 0.0061 | 0.0003 |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/ses-weights.svg" alt="α = 0.2, 0.5, 0.8일 때 최근 열 개 관측값에 붙는 SES 가중치 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. $\alpha$가 클수록 가중치가 최근 값에 쏠린다. $\alpha = 0.8$이면 세 시점 전 값의 가중치가 벌써 0.0064다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/ses-weights.svg" alt="α = 0.2, 0.5, 0.8일 때 최근 열 개 관측값에 붙는 SES 가중치 막대그래프">그림 2. $\alpha$가 클수록 가중치가 최근 값에 쏠린다. $\alpha = 0.8$이면 세 시점 전 값의 가중치가 벌써 0.0064다.</Fig>
 
 $\alpha$가 클수록 가중치가 빨리 줄어 최근 값에 쏠린다(그림 2). $\alpha = 0.8$이면 다섯 시점 전 값의 가중치가 0.0003밖에 안 된다.
 
@@ -268,10 +262,7 @@ $$
 \hat{y}_{T+h|T} \;\to\; \ell_T + \frac{\phi}{1-\phi}\, b_T
 $$
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/holt-vs-damped.svg" alt="같은 마지막 상태에서 출발한 Holt 예측 직선과 감쇠 추세 예측 곡선" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 마지막 상태에서 출발해도 Holt(파랑)는 직선으로 오르고 감쇠 추세(주황, $\phi = 0.9$)는 $\ell_T + 9b_T = 79.4$ 아래에서 멈춘다(모의 자료).</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/holt-vs-damped.svg" alt="같은 마지막 상태에서 출발한 Holt 예측 직선과 감쇠 추세 예측 곡선">그림 3. 같은 마지막 상태에서 출발해도 Holt(파랑)는 직선으로 오르고 감쇠 추세(주황, $\phi = 0.9$)는 $\ell_T + 9b_T = 79.4$ 아래에서 멈춘다(모의 자료).</Fig>
 
 $\phi = 0.9$면 $\phi/(1-\phi) = 9$라서 아무리 멀리 가도 기울기를 $9b_T$까지만 더한다. 그림 3의 모의 자료는 마지막 상태가 $\ell_T = 67.94$, $b_T = 1.269$이고 감쇠 예측은 40-step 뒤에도 79.19로 상한 79.36 아래에 머문다. **가까운 미래는 추세를 따르고 먼 미래는 평평해진다.** FPP3는 $\phi$가 0.8보다 작으면 감쇠가 너무 세고 1에 가까우면 감쇠 없는 모형과 구분이 안 되어 보통 0.8~0.98로 둔다고 설명한다. 여러 계열을 자동으로 예측할 때 가장 널리 쓰이는 방법 가운데 하나이기도 하다.
 
@@ -323,10 +314,7 @@ $$
 \end{aligned}
 $$
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/additive-vs-multiplicative.svg" alt="같은 수준 위에 덧셈 계절과 곱셈 계절을 얹은 두 모의 계열" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 덧셈 계절(왼쪽)은 진폭이 일정하고 곱셈 계절(오른쪽)은 수준이 오를수록 진폭도 커진다(모의 자료).</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-4-exponential-smoothing/additive-vs-multiplicative.svg" alt="같은 수준 위에 덧셈 계절과 곱셈 계절을 얹은 두 모의 계열">그림 4. 덧셈 계절(왼쪽)은 진폭이 일정하고 곱셈 계절(오른쪽)은 수준이 오를수록 진폭도 커진다(모의 자료).</Fig>
 
 곱셈 방식은 그림 4의 오른쪽처럼 계절 변동의 폭이 수준에 비례해 커지는 계열에 쓴다. [1편](/posts/2026-10-15-time-series-1-forecasting-basics)의 additive와 multiplicative 분해를 고르던 기준과 같다. FPP3의 호주 국내 숙박 여행(분기별) 예제에 두 방법을 모두 써 보면 예측이 꽤 비슷하게 나온다. 성분을 그려 보면 덧셈 쪽 계절 성분은 0 주위에서 움직이고 곱셈 쪽은 1 주위에서 움직인다. [2편](/posts/2026-10-15-time-series-2-decomposition) classical decomposition의 덧셈 분해와 곱셈 분해 그림에서 보던 차이와 같다.
 

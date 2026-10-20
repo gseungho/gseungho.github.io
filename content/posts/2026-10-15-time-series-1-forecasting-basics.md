@@ -100,10 +100,7 @@ FPP3에 이 관점을 잘 보여 주는 예가 있다. 호주를 찾은 단기 �
 
 같은 일을 작은 모형으로 직접 해 보자. 아래에서 다시 쓸 자기회귀 모형 $y_t = 0.8\,y_{t-1} + 2 + \varepsilon_t$($\varepsilon_t \sim N(0, 1)$)로 관측값 60개를 만들고 그 뒤 30 step을 200번 시뮬레이션했다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/fan_chart_ar1.svg" alt="자기회귀 모형의 관측값, 시뮬레이션한 미래 경로, 점예측과 95% 예측구간" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 회색 가는 선 하나하나가 일어날 수 있는 미래다. 경로 200개의 평균이 파란 점예측이고 경로가 퍼진 범위가 예측구간이다(그림에는 경로 20개만 그렸다).</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-1-forecasting-basics/fan_chart_ar1.svg" alt="자기회귀 모형의 관측값, 시뮬레이션한 미래 경로, 점예측과 95% 예측구간">그림 1. 회색 가는 선 하나하나가 일어날 수 있는 미래다. 경로 200개의 평균이 파란 점예측이고 경로가 퍼진 범위가 예측구간이다(그림에는 경로 20개만 그렸다).</Fig>
 
 - 경로들의 평균을 점예측(point forecast)이라고 한다.
 - 경로들이 퍼져 있는 범위를 예측구간(prediction interval)이라고 한다. 95% 예측구간은 실제 미래 값을 95% 확률로 담아야 하는 범위다.
@@ -181,10 +178,7 @@ $$
 
 식 (1)에 제곱근을 씌워 $h$에 따라 그려 보면 차이가 한눈에 보인다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/forecast_sd_by_h.svg" alt="a가 0.5, 0.8, 1일 때 예측 표준편차가 h에 따라 커지는 모습" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 몇 step 앞을 예측하느냐에 따라 예측 표준편차가 어떻게 커지는가. a가 1보다 작으면 점선의 상한에서 멈추고 a = 1이면 끝없이 커진다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-1-forecasting-basics/forecast_sd_by_h.svg" alt="a가 0.5, 0.8, 1일 때 예측 표준편차가 h에 따라 커지는 모습">그림 2. 몇 step 앞을 예측하느냐에 따라 예측 표준편차가 어떻게 커지는가. a가 1보다 작으면 점선의 상한에서 멈추고 a = 1이면 끝없이 커진다.</Fig>
 
 $a = 0.5$는 몇 step 만에 상한 $1/\sqrt{1 - 0.25} = 1.15$배에 붙고 $a = 0.8$은 $1/\sqrt{1 - 0.64} = 1.67$배까지 올라간다. $a = 1$은 30-step 앞에서 $\sqrt{30} = 5.48$배다. 그림 1의 구간이 처음에 빨리 넓어지다가 곧 일정한 폭에 머문 것도 $a = 0.8$이기 때문이다($1.96 \times 1.67 = 3.27$).
 
@@ -297,10 +291,7 @@ $$
 
 시계열 그림으로도 확인해 보자. 수준이 분기마다 약 3%씩 자라고 계절 변동이 수준에 비례하는 가상의 분기 자료 80개를 만들어 식 (2)를 $\lambda = 1, 0.5, 0$으로 적용했다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/boxcox_lambda.svg" alt="같은 분기 자료에 Box-Cox 변환을 lambda 1, 0.5, 0으로 적용한 세 그림" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 같은 자료에 $\lambda$만 바꿔 Box-Cox 변환을 했다. 위에서 아래로 갈수록 뒤쪽의 출렁임이 앞쪽과 비슷해진다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-1-forecasting-basics/boxcox_lambda.svg" alt="같은 분기 자료에 Box-Cox 변환을 lambda 1, 0.5, 0으로 적용한 세 그림">그림 3. 같은 자료에 $\lambda$만 바꿔 Box-Cox 변환을 했다. 위에서 아래로 갈수록 뒤쪽의 출렁임이 앞쪽과 비슷해진다.</Fig>
 
 2년(8분기) 동안의 최댓값과 최솟값의 차를 변동 폭으로 보면 원자료에서는 처음 10.74에서 마지막 95.48로 8.9배 커진다. $\lambda = 0.5$에서는 3.0배, 로그에서는 1.0배다. 이 자료는 변동이 수준에 비례하도록 만들었으니 위 표대로 로그가 맞는 $\lambda$다.
 
@@ -325,10 +316,7 @@ $$
 
 둘 다 오르내리는 패턴이라 헷갈리기 쉽다. 기준은 하나다. **길이가 고정돼 있으면 계절성이고 매번 달라지면 주기다.** 계절성은 달력에 묶여 있어서 월별 자료라면 정확히 12개월마다 되풀이된다. 주기는 경기 순환처럼 몇 년에 한 번 오지만 그 길이가 매번 다르다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/season_vs_cycle.svg" alt="12개월마다 정점이 오는 계절성과 정점 간격이 불규칙한 주기 비교" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 위는 12개월마다 같은 자리(점선)에서 정점을 찍는 계절성, 아래는 정점 사이 간격이 9개월에서 28개월까지 들쭉날쭉한 주기다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-1-forecasting-basics/season_vs_cycle.svg" alt="12개월마다 정점이 오는 계절성과 정점 간격이 불규칙한 주기 비교">그림 4. 위는 12개월마다 같은 자리(점선)에서 정점을 찍는 계절성, 아래는 정점 사이 간격이 9개월에서 28개월까지 들쭉날쭉한 주기다.</Fig>
 
 그림 4 아래 계열은 $c_t = 1.6\,c_{t-1} - 0.9\,c_{t-2} + \varepsilon_t$로 만들었다. 과거 두 시점을 쓰는 자기회귀 모형인데 이런 식만으로도 길이가 일정하지 않은 오르내림이 생긴다. 이 모형은 ARIMA 단원에서 다시 만난다.
 
@@ -359,10 +347,7 @@ $$
 y_t = S_t \times T_t \times R_t
 $$
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-1-forecasting-basics/additive_vs_multiplicative.svg" alt="같은 추세 위에 덧셈형과 곱셈형 계절 변동을 얹은 두 계열" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 5. 회색 점선이 같은 추세다. 왼쪽 덧셈형은 계절 변동의 폭이 일정하고 오른쪽 곱셈형은 수준이 오를수록 폭이 커진다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-1-forecasting-basics/additive_vs_multiplicative.svg" alt="같은 추세 위에 덧셈형과 곱셈형 계절 변동을 얹은 두 계열">그림 5. 회색 점선이 같은 추세다. 왼쪽 덧셈형은 계절 변동의 폭이 일정하고 오른쪽 곱셈형은 수준이 오를수록 폭이 커진다.</Fig>
 
 **곱셈 분해에 로그를 씌우면 덧셈 분해가 된다.**
 

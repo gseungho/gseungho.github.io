@@ -75,10 +75,7 @@ dataset이면 12개 모델이다.
 
 ### task별 입력 형식과 output layer
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/g1_fig1_right.png" alt="GPT-1의 task별 입력 변환" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 1 (right). task마다 입력을 하나의 token sequence로 바꾼다 (Radford et al., 2018)</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/g1_fig1_right.png" alt="GPT-1의 task별 입력 변환">Figure 1 (right). task마다 입력을 하나의 token sequence로 바꾼다 (Radford et al., 2018)</Fig>
 
 잘 알려지지 않았지만 중요한 GPT-1의 아이디어다. task마다 모델 구조를 새로 설계하는 대신 **입력을
 전부 하나의 token sequence로 직렬화한다.**
@@ -110,10 +107,7 @@ $$m \sim \mathrm{Bernoulli}(p) \;\Rightarrow\; \mathbb{E}[m\,x] = p\,x$$
 기댓값이 $x$에 대해 **선형**이다. 그래서 dropout은 activation이 될 수 없고 regularization에만
 쓰인다. 통과 확률이 입력에 의존하느냐 아니냐가 비선형성의 유무를 가른다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/gelu.png" alt="GELU, ReLU, dropout 기댓값 비교" className="rounded-lg mx-auto max-w-md" />
-  <figcaption className="mt-2 text-sm text-gray-500">GELU는 단조함수가 아니다. $x \approx -0.75$에서 $-0.17$까지 내려갔다 올라온다</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/gelu.png" alt="GELU, ReLU, dropout 기댓값 비교" size="md">GELU는 단조함수가 아니다. $x \approx -0.75$에서 $-0.17$까지 내려갔다 올라온다</Fig>
 
 그래프에서 눈에 띄는 건 GELU가 **단조증가가 아니라는 점**이다. 음수 구간에서 한 번 내려갔다가
 올라온다. ReLU는 음수를 전부 0으로 죽이고 dropout의 기댓값은 원점을 지나는 직선이다.
@@ -126,10 +120,7 @@ $$m \sim \mathrm{Bernoulli}(p) \;\Rightarrow\; \mathbb{E}[m\,x] = p\,x$$
 감정 분류라면 문장 끝에 `very`를 붙이고 다음 단어로 `positive`와 `negative` 중 어느 쪽 확률이
 높은지 본다. RACE라면 지문이 주어졌을 때 평균 log-probability가 가장 높은 선택지를 고른다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/g1_fig2_right.png" alt="pre-training update에 따른 zero-shot 성능" className="rounded-lg mx-auto max-w-sm" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2 (right). 실선이 Transformer, 점선이 LSTM (Radford et al., 2018)</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/g1_fig2_right.png" alt="pre-training update에 따른 zero-shot 성능" size="sm">Figure 2 (right). 실선이 Transformer, 점선이 LSTM (Radford et al., 2018)</Fig>
 
 pre-training update 횟수에 따라 이 zero-shot 성능을 그린 게 위 그래프다. 실선인 Transformer는
 꾸준히 올라가고 점선인 LSTM은 더 낮고 들쭉날쭉하다.
@@ -145,10 +136,7 @@ Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었다.
 
 ### 양방향 context가 필요한 이유
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/b_fig3.png" alt="BERT, GPT, ELMo의 pre-training 구조 비교" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3. 왼쪽부터 BERT, OpenAI GPT, ELMo (Devlin et al., 2019)</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/b_fig3.png" alt="BERT, GPT, ELMo의 pre-training 구조 비교">Figure 3. 왼쪽부터 BERT, OpenAI GPT, ELMo (Devlin et al., 2019)</Fig>
 
 가운데 GPT는 각 token이 자기 왼쪽만 본다. 생성에는 자연스럽다. 다음 단어를 만들 때 오른쪽은
 아직 존재하지도 않으니까. 하지만 NLI나 extractive QA처럼 문장 전체를 이해해야 하는 task에서는
@@ -162,10 +150,7 @@ Story Cloze 86.5(+8.9), RACE 59.0(+5.7), GLUE 72.8(이전 68.9)이었다.
 
 ### segment embedding은 순서가 아니라 소속을 표시한다
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/b_fig2.png" alt="BERT의 입력 임베딩 구성" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2. token + segment + position (Devlin et al., 2019)</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/b_fig2.png" alt="BERT의 입력 임베딩 구성">Figure 2. token + segment + position (Devlin et al., 2019)</Fig>
 
 BERT의 입력은 세 임베딩의 합이다. token embedding은 어떤 subword인지, position embedding은
 몇 번째인지를 나타낸다.
@@ -377,10 +362,7 @@ batch size는 token 단위다. 8개 크기 모두 **300B token**을 학습하고
 architecture는 GPT-2와 같다. 예외가 하나 있는데 layer마다 dense attention과 locally banded
 sparse attention을 번갈아 썼다는 **한 문장**이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/attn_patterns.png" alt="dense, banded, strided, fixed attention 패턴" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">행이 query, 열이 key. Child et al. (2019)의 정의대로 n=16, l=4로 다시 그렸다</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/attn_patterns.png" alt="dense, banded, strided, fixed attention 패턴">행이 query, 열이 key. Child et al. (2019)의 정의대로 n=16, l=4로 다시 그렸다</Fig>
 
 왼쪽 둘이 GPT-3가 명시한 것이다. dense는 앞의 모든 token을 보고 banded는 가까운 token만 봐서
 계산량이 줄어든다. 오른쪽 strided와 fixed는 Sparse Transformer가 제안한 다른 패턴인데
@@ -393,10 +375,7 @@ band 폭도 layer 비율도 적혀 있지 않다.
 
 ### context 속 예시를 늘렸을 때의 성능 변화
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/g3_fig3_8.png" alt="SuperGLUE 성능과 context 내 예시 수" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3.8. 오른쪽은 175B 모델에서 context 내 예시 수 K를 늘린 결과 (Brown et al., 2020)</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/g3_fig3_8.png" alt="SuperGLUE 성능과 context 내 예시 수">Figure 3.8. 오른쪽은 175B 모델에서 context 내 예시 수 K를 늘린 결과 (Brown et al., 2020)</Fig>
 
 오른쪽 그래프는 이 논문에서 특히 인상적인 그림이다. $K$를 1에서 8로 늘렸을 때의 향상
 폭이, 점선으로 그어진 **BERT-Large와 BERT++의 차이**와 비슷하다.
@@ -436,10 +415,7 @@ Alice was friends with Bob. Alice went to visit her friend ___. → Bob
 
 ### 모델 규모와 자릿수별 산술 성능
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/g3_fig3_10.png" alt="모델 크기별 산술 정확도" className="rounded-lg mx-auto max-w-md" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3.10. 자릿수별 덧셈·뺄셈 정확도 (Brown et al., 2020)</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/g3_fig3_10.png" alt="모델 크기별 산술 정확도" size="md">Figure 3.10. 자릿수별 덧셈·뺄셈 정확도 (Brown et al., 2020)</Fig>
 
 산술은 scale에 따라 매끄럽게 좋아지지 않는다. 13B는 두 자리 덧셈도 절반밖에 못 맞히는데
 175B는 다르다.
@@ -539,10 +515,7 @@ BERT 논문 Table 6을 보면 train 데이터가 3,600개뿐인 MRPC에서도 �
 
 pre-training으로 이미 좋은 representation을 갖고 출발하기 때문이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/gpt-bert-in-context-learning/g2_fig4.png" alt="GPT-2의 train/test perplexity" className="rounded-lg mx-auto max-w-xs" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 4. train과 test perplexity가 함께 떨어진다 (Radford et al., 2019)</figcaption>
-</figure>
+<Fig src="/images/posts/gpt-bert-in-context-learning/g2_fig4.png" alt="GPT-2의 train/test perplexity" size="xs">Figure 4. train과 test perplexity가 함께 떨어진다 (Radford et al., 2019)</Fig>
 
 GPT-2 쪽은 더 직접적이다. train과 test perplexity가 **함께** 떨어지고 있어서 1.5B도 아직
 underfit 상태라는 뜻이다. GPT-3에서 규모를 더 키운 근거가 여기 있다.

@@ -56,10 +56,7 @@ Stanford가 공개한 50차원 GloVe 벡터(뒤에서 다시 나온다)로 네 �
 
 $\sum d_i^2 = 2$이므로 $\rho = 1 - 6\cdot2/(4\cdot15) = 0.8$이다. 같은 네 쌍의 Pearson은 0.97이다. 높은 두 쌍과 낮은 두 쌍이 멀리 떨어져 있어서 Pearson은 그 큰 간격에 끌려 높게 나온다. 아래 두 쌍의 순서가 뒤집힌 것은 Spearman만 잡아낸다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/ws353-scatter.svg" alt="WordSim-353 353쌍의 사람 점수와 GloVe 50차원 cosine 산점도" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 사람 점수가 높을수록 cosine도 커지는가? 353쌍 전체의 Spearman은 0.503이다. 파란 점이 표의 네 쌍이다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/ws353-scatter.svg" alt="WordSim-353 353쌍의 사람 점수와 GloVe 50차원 cosine 산점도">그림 1. 사람 점수가 높을수록 cosine도 커지는가? 353쌍 전체의 Spearman은 0.503이다. 파란 점이 표의 네 쌍이다.</Fig>
 
 353쌍 전체가 그림 1이다. 오른쪽 위로 올라가는 경향은 뚜렷하지만 흩어짐도 크다. 50차원 GloVe의 Spearman은 0.503이고 같은 말뭉치의 300차원 GloVe는 논문 Table 3에서 0.658이었다[^ws].
 
@@ -79,10 +76,7 @@ $$
 
 $\mathbf{v}_b - \mathbf{v}_a$를 a에서 b로 가는 관계로 보고 그 관계를 c에 더하는 셈이다. 관계 하나가 공간의 방향 하나라면 man → woman, king → queen, uncle → aunt 화살표는 모두 나란해야 한다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/analogy-pca.svg" alt="GloVe 50차원 벡터 열 개를 PCA로 2차원에 그린 그림, 남성에서 여성으로 가는 화살표 다섯 개" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 50차원 GloVe 벡터 열 개를 PCA로 2차원에 눌렀다. 남성에서 여성으로 가는 화살표가 거의 나란하고 점선과 함께 평행사변형을 이룬다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/analogy-pca.svg" alt="GloVe 50차원 벡터 열 개를 PCA로 2차원에 그린 그림, 남성에서 여성으로 가는 화살표 다섯 개">그림 2. 50차원 GloVe 벡터 열 개를 PCA로 2차원에 눌렀다. 남성에서 여성으로 가는 화살표가 거의 나란하고 점선과 함께 평행사변형을 이룬다.</Fig>
 
 그림 2는 실제 50차원 GloVe 벡터다. SLP3 5.7절에 따르면 analogy를 이런 평행사변형으로 푸는 모형은 Rumelhart & Abrahamson(1973)이 먼저 내놓았고 word2vec 이후 다시 주목받았다. 다만 2차원 그림은 보기 좋게 눌러 놓은 것이라 50차원에서 다섯 차이 벡터끼리의 cosine은 0.60~0.83이다. 나란하긴 해도 똑같지는 않다.
 
@@ -110,10 +104,7 @@ Mikolov et al.(2013a)의 문제 모음은 word2vec 배포본에 `questions-words
 
 첫 줄은 수도 문제가 아니다. 논문 Table 1은 이 범주를 City-in-state라 부르고 수도는 나라와 수도를 묻는 별도 범주에 있다. 4.1절에 따르면 미국 대도시 68곳과 그 도시가 속한 주를 짝지은 뒤 두 쌍씩 무작위로 묶어 이 범주의 문제 약 2,500개를 만들었다. 50차원 GloVe로 전체 문제를 풀어 범주별 정확도를 낸 것이 그림 3이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/analogy-categories.svg" alt="questions-words.txt 14개 범주별 GloVe 50차원 analogy 정확도 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 어떤 관계는 잘 풀고 어떤 관계는 못 푸는가? 50차원 GloVe, 어휘 40만 개 전체에서 푼 결과다. 주황 점은 입력 단어를 빼지 않았을 때 1등이 입력 단어인 비율이다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/analogy-categories.svg" alt="questions-words.txt 14개 범주별 GloVe 50차원 analogy 정확도 막대그래프">그림 3. 어떤 관계는 잘 풀고 어떤 관계는 못 푸는가? 50차원 GloVe, 어휘 40만 개 전체에서 푼 결과다. 주황 점은 입력 단어를 빼지 않았을 때 1등이 입력 단어인 비율이다.</Fig>
 
 전체 정확도는 46.2%이고 범주마다 차이가 크다. 나라와 국적 형용사(86%)나 나라와 수도(68~79%)는 잘 풀고 화폐(8%), 반의어(9%), 도시와 주(15%)는 거의 못 푼다. 입력 단어를 빼지 않으면 전체 문제의 47.5%에서 1등이 입력 단어다. 앞의 king은 예외가 아니었다.
 
@@ -182,10 +173,7 @@ $$
 f(x) = \begin{cases} (x/x_{\max})^{\alpha} & x < x_{\max} \\ 1 & x \ge x_{\max} \end{cases} \tag{4}
 $$
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/glove-weight.svg" alt="GloVe 가중치 함수 f(x), alpha 3/4와 1, x_max 100에서 1로 고정" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 가중치 함수 $f$. 0에서 시작해 $x_{\max} = 100$까지 올라간 뒤 1에 머문다. $\alpha = 3/4$는 작은 횟수에 $\alpha = 1$보다 조금 더 무게를 준다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-3-evaluating-embeddings-glove/glove-weight.svg" alt="GloVe 가중치 함수 f(x), alpha 3/4와 1, x_max 100에서 1로 고정">그림 4. 가중치 함수 $f$. 0에서 시작해 $x_{\max} = 100$까지 올라간 뒤 1에 머문다. $\alpha = 3/4$는 작은 횟수에 $\alpha = 1$보다 조금 더 무게를 준다.</Fig>
 
 그림 4가 이 함수다. 논문은 모든 실험에서 $x_{\max} = 100$, $\alpha = 3/4$를 썼고 $\alpha = 3/4$가 $\alpha = 1$보다 조금 나았다고 한다. 한 번 나온 쌍의 가중치는 $\alpha = 3/4$에서 $0.01^{3/4} = 0.032$, $\alpha = 1$에서 0.010이다. 드문 쌍을 버리지는 않되 흔한 쌍보다 훨씬 가볍게 본다. $f(0) = 0$이므로 0인 칸은 계산에서 빠지고 0이 아닌 칸만 돌면 된다. **$f$가 $x_{\max}$에서 멈추기 때문에 아무리 흔한 쌍도 가중치가 1을 넘지 못한다.**
 

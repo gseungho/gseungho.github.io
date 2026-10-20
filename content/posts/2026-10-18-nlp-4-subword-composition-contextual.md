@@ -23,10 +23,7 @@ word2vec과 GloVe는 이런 내부 구조를 보지 않는다. D2L 15.6절의 �
 
 fastText(Bojanowski et al., 2017)는 단어를 character n-gram의 묶음으로 본다. 3.2절의 방법은 이렇다. 단어 앞뒤에 경계 기호 `<`와 `>`를 붙이고 길이 3~6인 조각을 모두 뽑는다. 단어 자체도 조각 목록에 하나로 넣는다. where를 쪼개면 그림 1이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-4-subword-composition-contextual/fasttext-where.svg" alt="where를 경계 기호와 함께 3-gram부터 6-gram, 단어 자체까지 15개 조각으로 나눈 그림" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. where는 몇 개의 조각으로 나뉘는가? 3-gram 5개, 4-gram 4개, 5-gram 3개, 6-gram 2개에 단어 자체까지 15개다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-4-subword-composition-contextual/fasttext-where.svg" alt="where를 경계 기호와 함께 3-gram부터 6-gram, 단어 자체까지 15개 조각으로 나눈 그림">그림 1. where는 몇 개의 조각으로 나뉘는가? 3-gram 5개, 4-gram 4개, 5-gram 3개, 6-gram 2개에 단어 자체까지 15개다.</Fig>
 
 경계 기호를 붙이면 글자가 $L + 2$개이므로 길이 $n$인 조각은 $L + 3 - n$개다. where는 $L = 5$라 5 + 4 + 3 + 2개에 `<where>` 하나를 더해 15개다. friend는 $L = 6$이라 6 + 5 + 4 + 3 + 1 = 19개다. 단어 $w$의 조각 집합을 $\mathcal{G}_w$, 조각 $g$의 벡터를 $\mathbf{z}_g$라 하면 단어 벡터는 조각 벡터의 합이다.
 
@@ -90,10 +87,7 @@ $$
 
 이고 $\mathbf{d} = [1.150, 0.475, 0.275]$다. 모든 $a_i = 1$이면 합, 모든 $a_i = 1/n$이면 평균이니 가중합은 앞의 둘을 품는다. 네 결과를 나란히 놓은 것이 그림 2다(attention은 바로 다음에 계산한다). 남는 질문은 $a_i$를 누가 정하느냐다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-4-subword-composition-contextual/composition.svg" alt="같은 다섯 token 벡터를 합, 평균, 최댓값, 고정 가중합, attention으로 합친 결과 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 같은 다섯 벡터를 다섯 방법으로 합치면 무엇이 달라지는가? 합과 평균은 방향이 같다. 가중합과 attention은 loved의 벡터 [1.8, 0.3, 0.1] 쪽으로 기운다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-4-subword-composition-contextual/composition.svg" alt="같은 다섯 token 벡터를 합, 평균, 최댓값, 고정 가중합, attention으로 합친 결과 막대그래프">그림 2. 같은 다섯 벡터를 다섯 방법으로 합치면 무엇이 달라지는가? 합과 평균은 방향이 같다. 가중합과 attention은 loved의 벡터 [1.8, 0.3, 0.1] 쪽으로 기운다.</Fig>
 
 ### Attention: 가중치도 학습한다
 
@@ -111,10 +105,7 @@ $$
 
 이다. 그림 3에서 보듯 점수 3.65가 다른 점수보다 2.5 이상 커서 가중치의 86%가 loved에 몰렸다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-4-subword-composition-contextual/attention-weights.svg" alt="다섯 token의 attention 점수와 softmax 가중치 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 점수 차이가 softmax를 지나면 얼마나 커지는가? 점수 3.65인 loved가 가중치 0.863을 가져간다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-4-subword-composition-contextual/attention-weights.svg" alt="다섯 token의 attention 점수와 softmax 가중치 막대그래프">그림 3. 점수 차이가 softmax를 지나면 얼마나 커지는가? 점수 3.65인 loved가 가중치 0.863을 가져간다.</Fig>
 
 $\mathbf{v}$에는 정답이 따로 없다. 분류 손실의 gradient가 $\mathbf{a}$를 거쳐 $\mathbf{v}$까지 흘러 분류에 도움이 되는 token에 큰 점수를 주는 쪽으로 학습된다. Yang et al.(2016)의 Hierarchical Attention Network가 같은 생각이다. 논문 식 (5)~(7)은 양방향 GRU가 만든 단어 표현을 한 층 MLP에 넣은 뒤 학습되는 벡터 $\mathbf{u}_w$와 내적하고 softmax로 가중합한다. 논문은 $\mathbf{u}_w$를 "what is the informative word"라는 고정된 질문으로 설명하고 무작위로 초기화해 다른 파라미터와 함께 학습한다.
 

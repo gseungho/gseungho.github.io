@@ -29,10 +29,7 @@ $$
 
 식 (1)의 $E(y_t)$와 $\operatorname{Var}(y_t)$는 한 경로를 시간에 걸쳐 평균한 값이 아니다. 같은 모형이 만들 수 있는 경로를 여러 개 그려 두고 시점 $t$ 하나에서 세로로 잘라 본 값이다. 그림 1로 확인해 보자.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/ensemble.svg" alt="AR(1)과 random walk에서 만든 경로 40개와 시점별 95% 범위" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 같은 모형에서 만든 경로 40개(회색)와 그중 하나(파랑). 주황 점선은 시점마다 95%가 들어가는 범위다. 오른쪽 random walk는 시점이 갈수록 범위가 넓어진다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/ensemble.svg" alt="AR(1)과 random walk에서 만든 경로 40개와 시점별 95% 범위">그림 1. 같은 모형에서 만든 경로 40개(회색)와 그중 하나(파랑). 주황 점선은 시점마다 95%가 들어가는 범위다. 오른쪽 random walk는 시점이 갈수록 범위가 넓어진다.</Fig>
 
 왼쪽은 $y_t = 0.8y_{t-1} + \varepsilon_t$인 AR(1)이고 오른쪽은 $y_t = y_{t-1} + \varepsilon_t$인 random walk다. 경로 2000개로 시점별 표준편차를 구하면 AR(1)은 $t = 25$에서 1.70, $t = 100$에서 1.66으로 거의 같다(이론값 $1/\sqrt{1 - 0.8^2} = 1.67$). Random walk는 4.98에서 10.44로 커진다. Random walk는 $y_t = y_0 + \varepsilon_1 + \cdots + \varepsilon_t$라서
 
@@ -82,10 +79,7 @@ ACF 그림의 파란 점선은 $\pm 1.96/\sqrt{T}$다. White noise의 $r_k$가 �
 
 ## 비정상 계열의 ACF는 천천히 줄어든다
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/acf-random-walk.svg" alt="random walk와 그 차분의 시간 그림과 ACF" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 길이 251인 random walk(왼쪽)와 그 차분(오른쪽). 아래는 각각의 ACF이고 파란 점선은 $\pm 1.96/\sqrt{251} = \pm 0.124$다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/acf-random-walk.svg" alt="random walk와 그 차분의 시간 그림과 ACF">그림 2. 길이 251인 random walk(왼쪽)와 그 차분(오른쪽). 아래는 각각의 ACF이고 파란 점선은 $\pm 1.96/\sqrt{251} = \pm 0.124$다.</Fig>
 
 그림 2 왼쪽의 random walk는 $r_1 = 0.968$에서 시작해 시차 25에서도 0.461이다. 오른쪽의 차분한 계열은 25개 시차 가운데 시차 8 하나($-0.173$)만 점선을 살짝 넘는다. 95% 기준선이니 25개 중 한두 개는 우연히 넘을 수 있다. 정리하면 이렇다.
 
@@ -126,10 +120,7 @@ $$
 
 계절 차분한 계열이 white noise이면 $y_t = y_{t-m} + \varepsilon_t$이고 이 모형으로 예측하면 작년 같은 철 값을 그대로 쓰는 seasonal naive가 된다. 계절 차분과 1차 차분을 둘 다 해야 하는 계열도 있다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/seasonal-difference.svg" alt="원계열, 계절 차분, 계절 차분 뒤 1차 차분" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 계절 차분만 하면 계절성은 사라지지만 수준이 떠돈다(가운데). 1차 차분을 한 번 더 하면 0 주위에서 고르게 흔들린다(아래). 시차 1 자기상관이 0.924에서 −0.049로 떨어진다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/seasonal-difference.svg" alt="원계열, 계절 차분, 계절 차분 뒤 1차 차분">그림 3. 계절 차분만 하면 계절성은 사라지지만 수준이 떠돈다(가운데). 1차 차분을 한 번 더 하면 0 주위에서 고르게 흔들린다(아래). 시차 1 자기상관이 0.924에서 −0.049로 떨어진다.</Fig>
 
 두 차분은 어느 쪽을 먼저 해도 결과가 같다. 그래도 계절 차분을 먼저 하기를 권한다. 계절 차분만으로 정상이 되어 1차 차분이 필요 없을 때가 있기 때문이다. 그 이유는 다음 절에서 보인다. 차분한 값은 해석할 수 있어야 한다는 점도 기억해 두자. 1차 차분은 "지난달보다 얼마나 변했나", 12개월 차분은 "작년 같은 달보다 얼마나 변했나"다. 로그를 씌운 뒤 차분하면 변화율이 된다([1편](/posts/2026-10-15-time-series-1-forecasting-basics)의 로그 수익률).
 
@@ -179,10 +170,7 @@ $$
 - 분산이 다시 커진다. White noise를 한 번 차분하면 정확히 2배다. $d$번 차분하면 $\binom{2d}{d}$배라서 2, 6, 20배로 커진다.
 - $r_1$이 $-0.5$ 근처로 떨어진다. White noise를 차분하면 $\rho_1 = -\sigma^2/(2\sigma^2) = -0.5$다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/over-differencing.svg" alt="필요한 차분 횟수가 다른 세 계열의 차분 횟수별 분산과 r1" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 필요한 차분 횟수가 0, 1, 2인 계열을 0~3번 차분했을 때의 분산(중앙값)과 $r_1$(평균). 길이 250으로 1000번씩 만들었다. 필요한 만큼 차분한 곳에서 분산이 가장 작고 $r_1$이 0 근처다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-17-time-series-6-stationarity-differencing/over-differencing.svg" alt="필요한 차분 횟수가 다른 세 계열의 차분 횟수별 분산과 r1">그림 4. 필요한 차분 횟수가 0, 1, 2인 계열을 0~3번 차분했을 때의 분산(중앙값)과 $r_1$(평균). 길이 250으로 1000번씩 만들었다. 필요한 만큼 차분한 곳에서 분산이 가장 작고 $r_1$이 0 근처다.</Fig>
 
 그림 4에서 보듯 필요한 만큼 차분하면 분산이 가장 작고 $r_1$이 0 근처다. 한 번 더 하면 분산이 약 2배가 되고 $r_1$이 $-0.5$로 떨어진다. Random walk는 분산이 28.5, 0.99, 2.00, 6.01이고 $r_1$이 0.97, $-0.006$, $-0.498$, $-0.664$였다.
 

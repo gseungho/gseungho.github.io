@@ -45,10 +45,7 @@ MoE에서 나왔고 뒤의 두 논문이 그걸 가져다 다른 결정에 쓴�
 
 ### 여러 expert 중 하나만 선택하는 Switch Transformer
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig2.png" alt="Switch Transformer encoder block" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2. FFN 자리에 expert 네 개와 router가 들어간 Switch Transformer block (Fedus et al., 2022)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig2.png" alt="Switch Transformer encoder block">Figure 2. FFN 자리에 expert 네 개와 router가 들어간 Switch Transformer block (Fedus et al., 2022)</Fig>
 
 Transformer block의 FFN 하나를 $N$개로 늘리고 각각을 **expert**라고 부른다. router가 token마다
 expert를 골라 보낸다. attention은 그대로 두고 FFN 자리만 바꾸는 구조다.
@@ -95,10 +92,7 @@ $k = 1$로도 품질이 유지된다는 걸 실험으로 보였다.
 
 ### Expert capacity를 넘긴 token의 처리
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig3.png" alt="capacity factor에 따른 token routing" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3. capacity factor 1.0(왼쪽)과 1.5(오른쪽). 빨간 점선이 넘쳐서 계산되지 않는 token (Fedus et al., 2022)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig3.png" alt="capacity factor에 따른 token routing">Figure 3. capacity factor 1.0(왼쪽)과 1.5(오른쪽). 빨간 점선이 넘쳐서 계산되지 않는 token (Fedus et al., 2022)</Fig>
 
 하드웨어 쪽 제약이 하나 있다. TPU와 GPU에서는 tensor 크기가 미리 정해져 있어야 한다. 그런데
 어느 expert에 token이 몇 개 갈지는 router가 그때그때 정한다. 그래서 expert마다 받을 수 있는 token
@@ -150,10 +144,7 @@ $$\sum_{i=1}^{N} P_i^2 \;\ge\; \frac{1}{N}$$
 
 ### 같은 품질에 도달하는 학습 시간 비교
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig5.png" alt="학습 시간에 따른 Switch-Base와 T5-Base의 품질" className="rounded-lg mx-auto max-w-md" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 5. 가로축이 학습 시간, 세로축이 negative log perplexity (Fedus et al., 2022)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/sw_fig5.png" alt="학습 시간에 따른 Switch-Base와 T5-Base의 품질" size="md">Figure 5. 가로축이 학습 시간, 세로축이 negative log perplexity (Fedus et al., 2022)</Fig>
 
 example당 FLOPs를 맞춘 비교에서 expert 64개를 쓴 Switch-Base는 T5-Base가 도달한 품질에
 **7분의 1 시간**에 도달한다. 같은 32 TPUv3 core에 같은 계산량이다. 달라진 건 파라미터 수뿐이다.
@@ -168,10 +159,7 @@ Switch가 보여준 건 이것이다. **파라미터 수와 계산량은 따로 
 
 ### block을 건너뛰는 방식과 early-exit의 차이
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig1.png" alt="Mixture-of-Depths 구조와 routing 결과" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 1. 왼쪽은 block 구조, 오른쪽 위는 학습된 모델의 routing 결과, 오른쪽 아래는 vanilla·early-exit과의 비교 (Raposo et al., 2024)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig1.png" alt="Mixture-of-Depths 구조와 routing 결과">Figure 1. 왼쪽은 block 구조, 오른쪽 위는 학습된 모델의 routing 결과, 오른쪽 아래는 vanilla·early-exit과의 비교 (Raposo et al., 2024)</Fig>
 
 Mixture-of-Depths (Raposo et al., 2024)는 MoE의 router를 가져오되 선택지를 둘로 줄인다.
 **block을 통과하거나 residual로 건너뛰거나.** MoE와 다른 점은 대상이 FFN만이 아니라
@@ -221,10 +209,7 @@ ACT(Adaptive Computation Time)처럼 계산량 자체가 입력마다 달라지�
 
 ### Token-choice와 expert-choice의 차이
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig2.png" alt="token-choice와 expert-choice routing" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2. 왼쪽부터 token-choice, expert-choice, MoD가 쓰는 expert-choice (Raposo et al., 2024)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig2.png" alt="token-choice와 expert-choice routing">Figure 2. 왼쪽부터 token-choice, expert-choice, MoD가 쓰는 expert-choice (Raposo et al., 2024)</Fig>
 
 routing에는 두 가지 방식이 있다.
 
@@ -269,10 +254,7 @@ cross-entropy를 건다. 뽑힌 token의 점수는 sigmoid 기준 0.5 위로, �
 
 ### block 생략 비율에 따른 성능 비교
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig3.png" alt="MoD hyperparameter 탐색 결과" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3. 왼쪽은 같은 FLOPs로 학습한 MoD 변형들의 loss(회색 상자 안이 최적 baseline보다 좋은 모델), 오른쪽은 일부 모델의 학습 곡선 (Raposo et al., 2024)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig3.png" alt="MoD hyperparameter 탐색 결과">Figure 3. 왼쪽은 같은 FLOPs로 학습한 MoD 변형들의 loss(회색 상자 안이 최적 baseline보다 좋은 모델), 오른쪽은 일부 모델의 학습 곡선 (Raposo et al., 2024)</Fig>
 
 저자들은 routing을 모든 block에 걸지 한 block 걸러 걸지, capacity를 12.5%부터 95%까지 어디에 둘지를
 비교했다. 가장 좋았던 건 **한 block 걸러 routing하고 routing block의 capacity를 12.5%로 두는
@@ -292,10 +274,7 @@ token이 참여하는 block이 자주 있기만 하면 capacity는 과감하게 
 
 ### 어떤 token에 계산을 더 배정하는가
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig5.png" alt="MoD의 routing 결정과 router 점수 분포" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 5. 왼쪽은 layer별 routing 결정, 오른쪽은 router 점수의 분포 (Raposo et al., 2024)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/mod_fig5.png" alt="MoD의 routing 결정과 router 점수 분포">Figure 5. 왼쪽은 layer별 routing 결정, 오른쪽은 router 점수의 분포 (Raposo et al., 2024)</Fig>
 
 그럼 router는 어떤 token에 계산을 쓸까?
 
@@ -354,10 +333,7 @@ Sequence 계열이 뚜렷하게 나쁘다. 같은 변환을 연달아 적용하�
 
 ### Router로 token별 반복 횟수 정하기
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig1.png" alt="Mixture-of-Recursions 개요" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 1. 왼쪽은 반복 단계 하나, 가운데는 전체 구조, 오른쪽은 token별 반복 횟수의 예 (Bae et al., 2025)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig1.png" alt="Mixture-of-Recursions 개요">Figure 1. 왼쪽은 반복 단계 하나, 가운데는 전체 구조, 오른쪽은 token별 반복 횟수의 예 (Bae et al., 2025)</Fig>
 
 Recursive Transformer는 모든 token을 똑같이 $N_r$번 돌린다. MoR은 여기에 router를 붙여
 **token마다 반복 횟수를 다르게** 한다. MoD의 결정이 "할까 말까"였다면 MoR은 "몇 번 할까"다.
@@ -368,10 +344,7 @@ Recursive Transformer는 모든 token을 똑같이 $N_r$번 돌린다. MoR은 �
 
 ### expert-choice 대 token-choice
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig2.png" alt="MoR의 routing 방식과 KV caching 방식" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2. (a) expert-choice routing, (b) token-choice routing, (c) KV caching 방식 두 가지 (Bae et al., 2025)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig2.png" alt="MoR의 routing 방식과 KV caching 방식">Figure 2. (a) expert-choice routing, (b) token-choice routing, (c) KV caching 방식 두 가지 (Bae et al., 2025)</Fig>
 
 MoR은 MoD에서 본 두 routing 방식을 반복 횟수에 적용해 둘 다 실험한다.
 
@@ -473,10 +446,7 @@ NLL이 2.7749로 vanilla의 2.7824보다 낮다. 논문은 이 설정에서 학�
 
 ### 모델 규모별 성능과 속도 측정의 조건
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig3.png" alt="모델 크기별 validation loss" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3. 135M, 360M, 730M, 1.7B 모델의 FLOPs 예산별 validation loss (Bae et al., 2025)</figcaption>
-</figure>
+<Fig src="/images/posts/moe-mod-mor-dynamic-compute/mor_fig3.png" alt="모델 크기별 validation loss">Figure 3. 135M, 360M, 730M, 1.7B 모델의 FLOPs 예산별 validation loss (Bae et al., 2025)</Fig>
 
 모델 크기를 네 가지로 바꿔 가며 본 결과다. 이 실험은 반복을 세 번으로 고정했다. 가장 작은
 135M에서는 MoR이 vanilla보다 나쁘다. 논문은 재귀 구조의 capacity가 부족해서일 것으로 본다. 규모가

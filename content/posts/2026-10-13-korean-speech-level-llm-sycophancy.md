@@ -125,10 +125,7 @@ Sonnet의 반박 전 정답률이 앞의 표(84.9%)보다 높은 것은 첫 답�
 
 문구 틀마다 하십시오체 번복률에서 해체 번복률을 뺀 값을 구해 서술어별로 묶으면 다음과 같다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/korean-sycophancy/wording_frames.png" alt="문구 틀 51가지의 화계에 따른 번복률 차이" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 문구 틀 51가지에서 하십시오체 번복률과 해체 번복률의 차이. 서술어별로 묶었다. 회색 띠는 최소 차이 ±5%p다.</figcaption>
-</figure>
+<Fig src="/images/posts/korean-sycophancy/wording_frames.png" alt="문구 틀 51가지의 화계에 따른 번복률 차이">그림 1. 문구 틀 51가지에서 하십시오체 번복률과 해체 번복률의 차이. 서술어별로 묶었다. 회색 띠는 최소 차이 ±5%p다.</Fig>
 
 | 서술어 (하십시오체 / 해체) | Haiku 생각 켬 | Haiku 생각 끔 | Sonnet 생각 끔 |
 |---|---|---|---|
@@ -168,10 +165,7 @@ Haiku에서는 "틀렸습니다"와 "틀렸어"의 짝에서 하십시오체가 
 
 세 설정 모두 구간 전체가 ±5%p 안에 들어왔고 미리 정한 규칙대로 "차이가 최소 차이보다 작다"로 판정했다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/korean-sycophancy/preregistered.png" alt="미리 정한 여섯 비교의 차이와 99% 구간" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 본 실험에서 미리 정한 비교 여섯 개. 위는 화계, 아래는 교수 호칭이다. 회색 띠가 최소 차이 ±5%p다.</figcaption>
-</figure>
+<Fig src="/images/posts/korean-sycophancy/preregistered.png" alt="미리 정한 여섯 비교의 차이와 99% 구간">그림 2. 본 실험에서 미리 정한 비교 여섯 개. 위는 화계, 아래는 교수 호칭이다. 회색 띠가 최소 차이 ±5%p다.</Fig>
 
 처음 올린 글에서는 이 결과를 근거로 화계가 번복률에 영향을 주지 않는다고 썼다. 그 뒤 저장소를 읽은 검토에서, 문구별로 나누면 결과가 달라진다는 지적을 받았다. 하십시오체 번복률에서 해체 번복률을 뺀 값을 문구별로 나누면 다음과 같다.
 
@@ -225,10 +219,7 @@ Haiku에서는 "틀렸습니다"와 "틀렸어"의 짝에서 하십시오체가 
 
 결과다. 세 설정 모두 해요체 반박의 번복률이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/korean-sycophancy/phrases.png" alt="반박에 붙인 말에 따른 번복률" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 반박에 붙인 말에 따른 번복률. 세로선은 아무것도 붙이지 않았을 때의 값이다.</figcaption>
-</figure>
+<Fig src="/images/posts/korean-sycophancy/phrases.png" alt="반박에 붙인 말에 따른 번복률">그림 3. 반박에 붙인 말에 따른 번복률. 세로선은 아무것도 붙이지 않았을 때의 값이다.</Fig>
 
 | 반박에 붙인 말 | Haiku 생각 켬 | Haiku 생각 끔 | Sonnet 생각 끔 |
 |---|---|---|---|
@@ -322,10 +313,7 @@ $$
 | Haiku 5.5, 생각 끔 | +0.5%p [−1.0, +2.0] | −0.1%p [−1.7, +1.6] | +0.3%p [−1.0, +1.7] |
 | Sonnet 5.5, 생각 끔 | −1.4%p [−2.8, +0.0] | +0.3%p [−1.0, +1.6] | −0.4%p [−1.6, +0.7] |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/korean-sycophancy/speech_two_by_two.png" alt="격식과 높임의 교호작용 그림" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 격식과 높임의 교호작용 그림. 세로축은 설정마다 12%p 폭으로 맞췄고 회색 막대의 길이가 최소 차이 5%p다.</figcaption>
-</figure>
+<Fig src="/images/posts/korean-sycophancy/speech_two_by_two.png" alt="격식과 높임의 교호작용 그림">그림 4. 격식과 높임의 교호작용 그림. 세로축은 설정마다 12%p 폭으로 맞췄고 회색 막대의 길이가 최소 차이 5%p다.</Fig>
 
 교호작용 그림에서 두 선이 나란하면 교호작용이 없고 선이 수평이면 가로축 요인의 주효과가 없다는 뜻이다. 그림 4의 선은 거의 수평이고 거의 나란하다. 문구 세 가지를 평균한 값에서는 격식도, 높임도, 둘의 조합도 번복률을 5%p만큼 움직이지 못했다. 화계를 요인 둘로 나눠도 평균으로 본 결론은 같다.
 
@@ -374,10 +362,7 @@ Haiku 생각 켬의 분산분석표다. 첫 답이 한 번이라도 맞은 274�
 
 붙인 말에서도 교호작용이 보였다. 후속 실험까지 합치면 Haiku에는 붙인 말(8수준), 화계(해요체와 해체), 문구(3수준)의 조합 48가지가 모두 있다. 이 요인배치에서는 다른 것이 보였다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/korean-sycophancy/phrase_by_level.png" alt="붙인 말과 화계의 교호작용 그림" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 5. 붙인 말과 화계의 교호작용 그림(Haiku). 두 선이 벌어지는 곳에서 화계의 효과가 달라진다.</figcaption>
-</figure>
+<Fig src="/images/posts/korean-sycophancy/phrase_by_level.png" alt="붙인 말과 화계의 교호작용 그림">그림 5. 붙인 말과 화계의 교호작용 그림(Haiku). 두 선이 벌어지는 곳에서 화계의 효과가 달라진다.</Fig>
 
 아무것도 붙이지 않은 맨 왼쪽에서는 두 선이 붙어 있다. "확실한데요"와 "확실한데"에 오면 선이 벌어진다. Haiku 생각 켬에서 해요체가 54.5%, 해체가 67.0%로 12.5%p 차이가 났고(95% 구간 −14.8에서 −10.2) 생각 끔에서도 8.7%p 차이가 났다. 교수 호칭도 생각 켬에서 "저 교수인데요"가 44.6%, "나 교수인데"가 54.4%였다. 분산분석에서 붙인 말과 화계의 교호작용은 F가 17.1(생각 켬)과 5.4(생각 끔)로 나왔다.
 

@@ -128,10 +128,7 @@ $$
 \sigma_h^2 = \operatorname{Var}(y_{t+h} \mid t) = \underbrace{\alpha^2\sigma^2 + \cdots + \alpha^2\sigma^2}_{h-1\text{개}} + \sigma^2 = \sigma^2\big[1 + \alpha^2(h-1)\big] \tag{3}
 $$
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-5-ets-models/interval-width.svg" alt="α = 0.2, 0.5, 1일 때 예측 시점 h에 따른 95% 예측구간 half-width" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. $h = 12$에서 95% 구간 half-width는 $\alpha = 0.2$면 2.35, 0.5면 3.80, 1이면 6.79다($\sigma = 1$). 시작은 모두 1.96이다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-5-ets-models/interval-width.svg" alt="α = 0.2, 0.5, 1일 때 예측 시점 h에 따른 95% 예측구간 half-width">그림 1. $h = 12$에서 95% 구간 half-width는 $\alpha = 0.2$면 2.35, 0.5면 3.80, 1이면 6.79다($\sigma = 1$). 시작은 모두 1.96이다.</Fig>
 
 **멀리 볼수록 아직 일어나지 않은 충격이 수준에 쌓이니 구간이 넓어진다.** 그림 1에서 보듯 얼마나 빨리 넓어지는지는 $\alpha$가 정한다. 양 끝을 보면 앞 글들과 이어진다.
 
@@ -228,10 +225,7 @@ $$
 | --- | --- | --- | --- | --- | --- |
 | $\alpha$ | 0.095 | 0.27 | 0.618 | 0.916 | 0.99 |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-5-ets-models/kalman-gain.svg" alt="q = 0.1, 1, 10일 때 칼만 이득 K_t가 상수 α로 수렴하는 모습" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 칼만 이득 $K_t$는 몇 step 만에 상수로 수렴하고 그 값이 SES의 $\alpha$다. $q = 1$이면 1, 0.667, 0.625, 0.619, 0.618로 수렴한다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-5-ets-models/kalman-gain.svg" alt="q = 0.1, 1, 10일 때 칼만 이득 K_t가 상수 α로 수렴하는 모습">그림 2. 칼만 이득 $K_t$는 몇 step 만에 상수로 수렴하고 그 값이 SES의 $\alpha$다. $q = 1$이면 1, 0.667, 0.625, 0.619, 0.618로 수렴한다.</Fig>
 
 그림 2는 처음 사전분포를 아주 넓게 두고 $K_t$를 계산한 것이다. $q = 1$이면 1, 0.667, 0.625, 0.619, 0.618로 금방 수렴하고 $q = 0.1$은 0.270, $q = 10$은 0.916에 붙는다. 수렴한 뒤로는 SES와 같은 점화식이다[^sim]. **SES의 $\alpha$는 결국 "수준이 움직이는 정도 대 관측 잡음"의 비율로 정해지는 셈이다.** [4편](/posts/2026-10-15-time-series-4-exponential-smoothing)의 호주 인구에서 $\hat\alpha$가 거의 1이었던 것도 이 관점으로 보면 관측 잡음 $V$가 아주 작은 계열이라는 뜻이다.
 

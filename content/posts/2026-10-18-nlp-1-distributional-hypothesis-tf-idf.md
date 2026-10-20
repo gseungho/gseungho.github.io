@@ -98,10 +98,7 @@ dog는 knife와 Richard III, Tempest 두 편에서만 겹친다. 내적이 $2\cd
 
 그런데 왜 굳이 길이로 나눌까? 내적만 쓰거나 Euclidean distance를 써도 되지 않을까? 셋을 나란히 놓아 보자.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-1-distributional-hypothesis-tf-idf/knife-similarity.svg" alt="knife와 sword, love, like, dog 사이의 내적, Euclidean distance, cosine 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. knife와 다른 단어의 거리를 세 가지 방법으로 계산했다. 내적은 자주 나오는 love와 like를 가장 가깝다고 하고 Euclidean distance는 dog가 love보다 knife에 가깝다고 한다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-1-distributional-hypothesis-tf-idf/knife-similarity.svg" alt="knife와 sword, love, like, dog 사이의 내적, Euclidean distance, cosine 막대그래프">그림 1. knife와 다른 단어의 거리를 세 가지 방법으로 계산했다. 내적은 자주 나오는 love와 like를 가장 가깝다고 하고 Euclidean distance는 dog가 love보다 knife에 가깝다고 한다.</Fig>
 
 그림 1의 왼쪽에서 보듯 내적은 긴 벡터를 편애한다. love는 몇몇 희곡에 아주 많이 나와서 벡터 길이가 169.5로 가장 길고 knife와의 내적이 1234나 된다. sword(222)의 다섯 배가 넘는다. 자주 나오는 단어는 어느 단어와 곱해도 내적이 크니 내적은 뜻보다 빈도에 좌우된다(SLP3 5.4). Euclidean distance는 거꾸로 긴 벡터를 멀리 둔다. love는 knife가 나오는 희곡들에 함께 나오는데도 거리가 162.5로 가장 멀고 겹치는 희곡이 두 편뿐인 dog(16.7)가 더 가깝다.
 
@@ -133,10 +130,7 @@ $\operatorname{tf}(t,d)$는 문서 $d$에서 단어 $t$가 나온 횟수, $N$은
 | love | 5 | 0.204 |
 | like | 8 | 0 |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-1-distributional-hypothesis-tf-idf/idf-curve.svg" alt="df가 1에서 8까지 늘 때 IDF가 줄어드는 곡선과 다섯 단어의 위치" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. df에 따른 IDF. 한 편에만 나오는 단어라면 0.903을 받고 여덟 편에 모두 나오는 like는 0을 받는다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-1-distributional-hypothesis-tf-idf/idf-curve.svg" alt="df가 1에서 8까지 늘 때 IDF가 줄어드는 곡선과 다섯 단어의 위치">그림 2. df에 따른 IDF. 한 편에만 나오는 단어라면 0.903을 받고 여덟 편에 모두 나오는 like는 0을 받는다.</Fig>
 
 TF-IDF는 횟수에 이 값을 곱한 것이다. Julius Caesar의 dog는 $12 \times 0.426 = 5.11$, Romeo & Juliet의 love는 $135 \times 0.204 = 27.56$, King Lear의 knife는 $10 \times 0.125 = 1.25$가 된다. like 행은 전부 0이 된다.
 
@@ -156,10 +150,7 @@ TF-IDF로 바꾸면 knife와 sword의 cosine은 어떻게 될까? 그대로다. 
 | Hamlet, Julius Caesar | 0.717 | 0.000 |
 | Richard III, Julius Caesar | 0.492 | 0.195 |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-18-nlp-1-distributional-hypothesis-tf-idf/doc-cosine-idf.svg" alt="세 문서 쌍의 cosine을 횟수 그대로와 TF-IDF로 비교한 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. IDF를 곱하기 전과 후의 문서 cosine. like가 빠지자 Julius Caesar는 dog가 나오는 문서하고만 닮는다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-18-nlp-1-distributional-hypothesis-tf-idf/doc-cosine-idf.svg" alt="세 문서 쌍의 cosine을 횟수 그대로와 TF-IDF로 비교한 막대그래프">그림 3. IDF를 곱하기 전과 후의 문서 cosine. like가 빠지자 Julius Caesar는 dog가 나오는 문서하고만 닮는다.</Fig>
 
 횟수 그대로이면 모든 쌍이 꽤 비슷해 보인다. like가 모든 문서에 수십 번씩 나와 문서 벡터의 방향을 끌고 가기 때문이다. Hamlet $[1, 0, 2, 64, 75]$와 Julius Caesar $[0, 12, 0, 0, 34]$는 겹치는 단어가 like 하나뿐인데도 0.717이 나온다. IDF를 곱하면 Julius Caesar에는 dog(5.11) 하나만 남고 Hamlet에는 dog가 없으니 cosine이 0이 된다. dog가 6번 나오는 Richard III는 0.195가 남는다. Hamlet과 Romeo & Juliet은 둘 다 love가 압도적이라 1.000이 된다. 단어를 다섯 개만 남긴 작은 행렬이라 생긴 극단값이다. 어휘 전체를 쓰면 다른 단어들이 함께 방향을 정한다. 같은 이유로 다섯 단어 중 like만 나오는 Othello는 TF-IDF 벡터가 영벡터가 된다.
 

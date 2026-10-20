@@ -93,10 +93,7 @@ $$
 
 세 가지 다섯 항 이동평균의 가중치를 나란히 그리면 그림 1과 같다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-2-decomposition/ma_weights.svg" alt="5-MA, 3×3-MA, 2×4-MA의 가중치 막대그래프" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 1. 모두 다섯 항을 쓰지만 무게를 나누는 방식이 다르다. 셋 다 좌우 대칭이다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-2-decomposition/ma_weights.svg" alt="5-MA, 3×3-MA, 2×4-MA의 가중치 막대그래프">그림 1. 모두 다섯 항을 쓰지만 무게를 나누는 방식이 다르다. 셋 다 좌우 대칭이다.</Fig>
 
 5-MA는 다섯 점에 똑같이 1/5을 주고 $3 \times 3$-MA는 가운데에 무게를 몰아준다. $2 \times 4$-MA는 양 끝에만 절반을 준다. 대칭을 지키려면 짝수 order 뒤에는 짝수 order를, 홀수 order 뒤에는 홀수 order를 붙여야 한다.
 
@@ -111,10 +108,7 @@ $$
 
 그림 2는 계절성이 있는 월별 시뮬레이션 계열 위로 $2 \times 12$-MA의 window(13개월)가 한 칸씩 옮겨 가며 추세를 그려 가는 모습이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-2-decomposition/ma_window.gif" alt="2×12-MA window가 월별 계열 위를 움직이며 추세선을 그리는 애니메이션" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 2. 주황 띠가 window다. window 하나가 1년치 계절을 통째로 덮어서 오르내림이 상쇄되고 파란 추세선만 남는다. 처음과 마지막 6개월은 window가 자료 밖으로 나가 추세를 구할 수 없다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-2-decomposition/ma_window.gif" alt="2×12-MA window가 월별 계열 위를 움직이며 추세선을 그리는 애니메이션">그림 2. 주황 띠가 window다. window 하나가 1년치 계절을 통째로 덮어서 오르내림이 상쇄되고 파란 추세선만 남는다. 처음과 마지막 6개월은 window가 자료 밖으로 나가 추세를 구할 수 없다.</Fig>
 
 시뮬레이션 계열은 선형 추세 $100 + 0.35t$에 진폭이 다른 두 사인파와 잡음을 더해 만들었다. 관측값은 1년 주기로 크게 출렁이지만 추세선은 거의 직선으로 올라간다.
 
@@ -149,10 +143,7 @@ Additive 분해의 절차를 따라가 보자. $m$은 계절 주기다.
 
 네 단계를 분기별 시뮬레이션 계열 40개에 그대로 적용하면 그림 3이 나온다. 계열은 추세 $400 + 2t$에 계절 값 $-30, -10, +10, +30$과 표준편차 6인 잡음을 더해 만들었다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-2-decomposition/classical_decomposition.svg" alt="분기별 시뮬레이션 계열의 classical decomposition 결과: 관측값, 추세, 계절, 나머지" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 3. 위에서부터 관측값, 추세, 계절, 나머지. 추세는 처음과 마지막 두 분기가 비어 있고 계절 성분은 해마다 똑같은 모양을 되풀이한다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-2-decomposition/classical_decomposition.svg" alt="분기별 시뮬레이션 계열의 classical decomposition 결과: 관측값, 추세, 계절, 나머지">그림 3. 위에서부터 관측값, 추세, 계절, 나머지. 추세는 처음과 마지막 두 분기가 비어 있고 계절 성분은 해마다 똑같은 모양을 되풀이한다.</Fig>
 
 계절 평균 $\tilde s_j$는 $-30.96, -11.51, 13.51, 29.31$로 참값 $-30, -10, +10, +30$에 가깝게 나왔다. 넷의 평균 $c$는 0.087이라 (ii)에서 각 값에서 0.087을 빼면 $\hat S_j = -31.05, -11.60, 13.42, 29.22$가 된다. 나머지는 0 주위에서 잡음 크기만큼 흔들린다.
 
@@ -231,10 +222,7 @@ $$
 
 그림 4는 시뮬레이션 계열 40개에서 $q = 11$로 두 시점의 loess 값을 구하는 모습이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/2026-10-15-time-series-2-decomposition/loess_local_line.svg" alt="가운데 시점과 마지막 시점에서 loess가 가까운 11개 점에 가중 직선을 맞추는 모습" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">그림 4. 주황 점이 쓰인 11개 이웃이고 점이 클수록 가중치가 크다. 파란 직선이 맞춘 직선, 파란 점이 그 시점의 loess 값이다. 마지막 시점에서도 왼쪽 이웃만으로 값이 나온다.</figcaption>
-</figure>
+<Fig src="/images/posts/2026-10-15-time-series-2-decomposition/loess_local_line.svg" alt="가운데 시점과 마지막 시점에서 loess가 가까운 11개 점에 가중 직선을 맞추는 모습">그림 4. 주황 점이 쓰인 11개 이웃이고 점이 클수록 가중치가 크다. 파란 직선이 맞춘 직선, 파란 점이 그 시점의 loess 값이다. 마지막 시점에서도 왼쪽 이웃만으로 값이 나온다.</Fig>
 
 이동평균도 같은 틀로 볼 수 있다. window 안의 점에 같은 가중치를 주고 직선 대신 상수를 맞추면 $m$-MA다. 여기서 가중치만 바꾸면 가중 이동평균이다. Loess는 상수 대신 직선을 맞추고 가중치를 거리로 정한다는 점이 다르다. **직선을 맞추니까 끝점에서도 값이 나온다.** 그림 4의 오른쪽처럼 마지막 시점이라면 왼쪽 이웃만으로 직선을 맞추면 된다.
 
