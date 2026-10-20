@@ -27,11 +27,12 @@ function NavLink({ post, next }: { post: PostMeta; next?: boolean }) {
 }
 
 // Previous and next post in the same folder, in the sidebar's reading order. The page renders it after
-// the body, so it sits below the footnotes.
+// the body, so it sits below the footnotes. From 1440px the sidebar (SidebarShell) lists the folder
+// beside the post at all times, so the links only show on narrower screens, where it is a drawer.
 export default function SeriesNav({ prev, next }: { prev?: PostMeta; next?: PostMeta }) {
   if (!prev && !next) return null;
   return (
-    <nav aria-label="이전 글과 다음 글" className="grid gap-x-12 gap-y-7 md:grid-cols-2">
+    <nav aria-label="이전 글과 다음 글" className="grid gap-x-12 gap-y-7 md:grid-cols-2 min-[1440px]:hidden">
       {prev && <NavLink post={prev} />}
       {next && <NavLink post={next} next />}
     </nav>
