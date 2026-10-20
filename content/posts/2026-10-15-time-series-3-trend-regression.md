@@ -220,7 +220,7 @@ $$
 
 Linear trend 값을 넣으면 $-5189.53$으로 출력의 Log likelihood($-5189.529$)와 같다. 흔히 쓰는 정의 $\text{AIC} = -2\ln L + 2k$, $\text{SIC} = -2\ln L + k\ln T$를 $T$로 나누면 식 (2)에 상수 $1 + \ln(2\pi)$가 더해진 꼴이다. 상수는 순위를 바꾸지 않으니 어느 정의로 계산해도 같은 모형을 고른다.[^diebold]
 
-### log-linear는 왜 비교표에서 빠졌는가
+### log-linear가 비교표에서 빠진 이유
 
 모형 선택 표의 exponential 열에는 log-linear의 AIC(-4.77)가 아니라 NLS의 AIC(17.15)가 들어가 있다.
 

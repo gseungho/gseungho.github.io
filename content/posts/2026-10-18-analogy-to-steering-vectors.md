@@ -27,7 +27,7 @@ man : woman :: king : ?의 답을 $\mathbf{v}_{\text{king}} - \mathbf{v}_{\text{
 - [자연어처리 (3): 임베딩 평가와 GloVe](/posts/2026-10-18-nlp-3-evaluating-embeddings-glove): analogy
   문제와 cosine으로 답을 고르는 방법.
 
-## 차이 벡터를 어디에 더하는가
+## 차이 벡터를 더하는 자리
 
 일곱 편을 먼저 한 표에 놓아 보자.
 
@@ -83,7 +83,7 @@ offset"은 대략적으로만 맞는 가정이고 논문은 offset이 왜 생기
 
 ## Bolukbasi: 쌍 열 개로 찾은 성별 방향
 
-### 쌍 하나는 왜 불안정한가
+### 쌍 하나가 불안정한 이유
 
 Bolukbasi et al. (2016)는 Google News로 학습한 공개 word2vec 벡터(단어와 구 300만 개, 300차원)에
 "man is to computer programmer as woman is to x"를 물으면 x = homemaker가 나온다는 결과로 유명하다(1절).
@@ -95,7 +95,7 @@ $\mathbf{v}_{\text{woman}} - \mathbf{v}_{\text{man}}$에 성별 말고 다른 �
 she−he, her−his, woman−man, Mary−John, herself−himself, daughter−son, mother−father, gal−guy,
 girl−boy, female−male의 열 쌍을 모아 이 잡음을 줄인다.
 
-### PCA는 무엇을 최대화하는가
+### PCA가 최대화하는 것
 
 모으는 방법은 PCA다. 6절의 Step 1을 쌍에 맞춰 풀어 보자. $i$번째 쌍을 $D_i = \{\mathbf{x}_i, \mathbf{y}_i\}$,
 평균을 $\boldsymbol\mu_i = (\mathbf{x}_i + \mathbf{y}_i)/2$라 하자. 논문이 SVD를 하는 행렬은
@@ -313,7 +313,7 @@ Hallucination, Myopic Reward, Survival Instinct, Sycophancy, Refusal)다. 행동
 벡터를 만들고(부록 Table 9) 따로 떼어 둔 객관식 50문항으로 평가했다. layer를 전부 훑었더니 7B는
 layer 13 근처, 13B는 대개 14나 15에서 효과가 가장 컸다(4.1절).
 
-### multiplier를 키우면 행동도 늘어나는가
+### multiplier와 행동의 관계
 
 <Fig src="/images/posts/2026-10-18-analogy-to-steering-vectors/caa-multiplier.svg" alt="CAA multiplier에 따른 행동별 답 확률">그림 3. multiplier를 −1에서 +1로 바꾸면 행동에 맞는 답의 확률이 오르는가? Sycophancy는 +1에서 오히려 내려간다. Panickssery et al. (2024) Table 3에서 Llama 2 13B Chat, layer 13, system prompt 없음 열을 옮겨 그렸다.</Fig>
 
@@ -335,7 +335,7 @@ attention head의 출력에 더한다. linear probe 정확도로 고른 상위 $
 activation의 평균을 잇는 방향으로 표준편차의 $\alpha$배만큼 옮긴다. $K = 48$, $\alpha = 15$에서
 Alpaca의 TruthfulQA `true*informative`가 32.5%에서 65.1%로 올랐다.
 
-## 선형 표현이란 무엇을 말하는가
+## 선형 표현의 뜻
 
 ### 세 가지 뜻
 
@@ -398,7 +398,7 @@ $\bar\gamma_W$는 개념 $W$를 읽는 linear probe 방향이다.
 차 $\lambda_1 - \lambda_0$가 모두 $\mathrm{Cone}(\bar\lambda_W)$에 들어가면 $\bar\lambda_W$가 embedding
 representation이다. 문맥 쌍의 표현 차를 쓴다는 점에서 ActAdd의 prompt 쌍과 같은 생각이다.
 
-### 정리 2.5: 왜 다른 개념은 움직이지 않는가
+### 정리 2.5: 다른 개념이 움직이지 않는 이유
 
 보조정리 2.4는 두 표현 사이의 관계를 준다. $Z$가 $W$와 causally separable하면
 

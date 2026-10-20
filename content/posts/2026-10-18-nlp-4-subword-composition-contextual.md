@@ -35,7 +35,7 @@ skip-gram의 center word 벡터 $\mathbf{v}_w$ 자리에 이 합을 넣은 것�
 
 경계 기호에는 역할이 있다. 논문은 where 안의 3-gram `her`와 단어 her를 나타내는 `<her>`가 서로 다른 조각이라고 강조한다. `<wh`는 단어 첫머리에서만, `re>`는 끝에서만 나오니 접두사와 접미사도 구별된다.
 
-### 조각을 나눠 쓰면 무엇이 좋은가
+### 조각을 나눠 쓰는 이점
 
 식 (1)의 합을 미분하면 각 항의 계수가 1이라서 $\partial J/\partial\mathbf{z}_g = \partial J/\partial\mathbf{v}_w$가 $\mathcal{G}_w$의 모든 조각에 똑같이 전해진다. friend라는 조각은 friendly, friendship, unfriendly 가운데 어느 단어가 학습되든 update된다. **드문 단어도 흔한 조각 덕분에 학습 신호를 받는다.**
 

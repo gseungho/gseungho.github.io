@@ -103,7 +103,7 @@ $$
 
 이 상태 방정식으로 보면 [4편](/posts/2026-10-15-time-series-4-exponential-smoothing)의 "미래의 수준과 기울기"도 한 줄로 설명된다. 미래 오차를 기댓값 0으로 두면 보정 항이 사라지니 기울기는 그대로이고 수준은 매 step 기울기만큼 오른다. 덧셈 오차 9개, 곱셈 오차 9개 모형 모두 상태 방정식이 "직전 상태 + 모수 × 오차" 꼴이다. 곱셈 오차 쪽은 오차에 그 시점의 예측 수준이 곱해진다는 점만 다르다.
 
-## 예측구간은 왜 점점 넓어질까
+## 예측구간은 왜 점점 넓어지는가
 
 모형이 생기면 예측구간을 낼 수 있다.
 
@@ -135,7 +135,7 @@ $$
 - $\alpha = 0$이면 $\sigma_h^2 = \sigma^2$로 $h$와 상관없이 일정하다. [3편](/posts/2026-10-15-time-series-3-trend-regression)의 결정적 추세 모형에서 예측구간 폭이 일정했던 것과 같다.
 - $\alpha = 1$(random walk)이면 $\sigma_h^2 = h\sigma^2$로 $h$에 비례해 커진다. [1편](/posts/2026-10-15-time-series-1-forecasting-basics)에서 AR 모형 $y_t = ay_{t-1} + b + \varepsilon_t$의 예측 분산을 구할 때 $a = 1$이면 끝없이 커지던 바로 그 경우다.
 
-## 모수는 무엇으로 추정할까
+## 모수를 추정하는 기준
 
 [4편](/posts/2026-10-15-time-series-4-exponential-smoothing)에서 SES는 SSE로 $\alpha$와 $\ell_0$을 고른다고 했다. Holt와 Holt-Winters도 원리는 같다. 평활 모수와 초기 상태를 한꺼번에 움직이며 1-step 예측오차의 SSE를 최소로 한다. FPP3도 [4편](/posts/2026-10-15-time-series-4-exponential-smoothing)의 호주 인구 예의 $\alpha, \beta^*, \ell_0, b_0$를 이렇게 구했다고 쓴다.
 
@@ -240,7 +240,7 @@ $$
 
 추세와 계절성이 있으면 상태가 벡터가 되고 같은 계산을 행렬로 한다. 선형 정규 상태공간모형에서 상태의 사후분포를 한 step씩 구하는 이 계산이 Kalman filter이고 베이지안 쪽에서는 West와 Harrison의 동적선형모형(dynamic linear model)이 같은 틀이다.
 
-## 3편의 회귀와 무엇이 다를까
+## 3편의 회귀와 다른 점
 
 [2편](/posts/2026-10-15-time-series-2-decomposition)처럼 분해하고 [3편](/posts/2026-10-15-time-series-3-trend-regression)처럼 회귀해서 예측할 수도 있고 [4편](/posts/2026-10-15-time-series-4-exponential-smoothing)과 이번 글처럼 지수평활로 예측할 수도 있다. 둘 다 추세와 계절성을 나눠 다루지만 성분을 보는 관점이 다르다.
 
