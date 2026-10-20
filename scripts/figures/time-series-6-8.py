@@ -268,6 +268,46 @@ ax.set_xlabel("$j$ (몇 시점 전 관측값인가)")
 ytitle(ax, "가중치 $|\\theta|^j$ (로그 축)")
 save(fig, os.path.join(OUT8, "invertibility.svg"))
 
+
+# ---------- 8-3. MA(1) estimation: CSS objective and the start-up error ----------
+def css_resid(y, mu, theta):
+    e, prev = np.empty_like(y), 0.0          # first innovation set to 0
+    for t, v in enumerate(y):
+        prev = v - mu - theta * prev
+        e[t] = prev
+    return e
+
+
+rng = np.random.default_rng(11)
+eps = rng.normal(size=201)
+y = 5.0 + eps[1:] + 0.6 * eps[:-1]            # MA(1), theta = 0.6, mu = 5, 200 values
+th = np.linspace(-0.95, 0.95, 381)
+S = np.array([np.sum(css_resid(y, y.mean(), v) ** 2) for v in th])
+k = S.argmin()
+fig, axes = plt.subplots(1, 2, figsize=(W, 3.3), gridspec_kw={"wspace": 0.3})
+ax = axes[0]
+ax.plot(th, S, color=BLUE, lw=1.8)
+ax.plot(th[k], S[k], "o", color=ORANGE, ms=7)
+ax.annotate(f"최솟값 $\\theta = {th[k]:.2f}$", (th[k], S[k]), xytext=(0, -12), textcoords="offset points",
+            ha="center", va="top", color=INK2, fontsize=9.5)
+ax.set_ylim(0, 600); ax.set_yticks(range(0, 501, 100))   # S climbs to about 2500 as theta nears -1
+ax.set_xlabel("$\\theta$")
+ytitle(ax, "$S(\\theta) = \\sum e_t^2$")
+ax = axes[1]
+t = np.arange(0, 51)
+for v, col in ((0.6, BLUE), (0.95, ORANGE), (1.05, AQUA)):
+    ax.plot(t, v ** t, color=col, lw=1.8)
+    ax.annotate(f"$\\theta = {v:g}$", (t[-1], v ** t[-1]), xytext=(6, 0), textcoords="offset points",
+                va="center", color=INK2, fontsize=9.5)
+ax.axhline(1, color=AXIS, lw=0.8)
+ax.set_yscale("log")
+ax.set_xlim(-1, 60); ax.set_xticks(range(0, 51, 10))
+ax.set_xlabel("$t$")
+ytitle(ax, "남은 처음 오차 $|\\theta|^t$ (로그 축)")
+save(fig, os.path.join(OUT8, "ma-estimation.svg"))
+print(f"[8-3] argmin S(ybar, theta) = {th[k]:.3f}, S at -0.5/0/0.3/0.6/0.9:",
+      [round(float(np.sum(css_resid(y, y.mean(), v) ** 2)), 1) for v in (-0.5, 0, 0.3, 0.6, 0.9)])
+
 for d in (OUT6, OUT7, OUT8):
     for f in sorted(os.listdir(d)):
         print(os.path.basename(d)[11:], f, os.path.getsize(os.path.join(d, f)))
