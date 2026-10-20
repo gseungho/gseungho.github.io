@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import TableOfContents from "@/components/TableOfContents";
 import PostSidebar from "@/components/PostSidebar";
 import SeriesNav from "@/components/SeriesNav";
+import Fig from "@/components/Fig";
 import { categoryLabel } from "@/lib/categories";
 
 export async function generateStaticParams() {
@@ -112,6 +113,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <div className="prose max-w-none">
         <MDXRemote
           source={post.content}
+          components={{ Fig }}
           options={{
             mdxOptions: {
               remarkPlugins: [remarkGfm, remarkMath],

@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "node scripts/check-posts.mjs",
+    "check": "node scripts/check-posts.mjs",
     "start": "next start",
     "lint": "eslint"
   },

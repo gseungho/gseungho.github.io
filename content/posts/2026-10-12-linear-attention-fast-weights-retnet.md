@@ -80,10 +80,7 @@ gradient가 0이 되는 걸 피하기 위해서다.
 
 ### 행렬곱의 순서와 계산 복잡도
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/linear-attention-fast-weights-retnet/perf_fig1.png" alt="attention 행렬을 만들지 않고 계산하는 순서" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">왼쪽은 $L \times L$ 행렬을 먼저 만드는 순서, 오른쪽은 작은 행렬을 먼저 만드는 순서 (Choromanski et al., 2021, Figure 1)</figcaption>
-</figure>
+<Fig src="/images/posts/linear-attention-fast-weights-retnet/perf_fig1.png" alt="attention 행렬을 만들지 않고 계산하는 순서">왼쪽은 $L \times L$ 행렬을 먼저 만드는 순서, 오른쪽은 작은 행렬을 먼저 만드는 순서 (Choromanski et al., 2021, Figure 1)</Fig>
 
 $\phi$로 바꾸면 무엇이 달라지는지가 이 그림이다. Performer 논문의 그림인데 아이디어가 가장 잘
 보여서 가져왔다. 그림의 $L$이 sequence 길이(이 글의 $N$), $r$이 feature map의 폭(이 글의
@@ -169,10 +166,7 @@ $M$개만 남기는 sliding window와 다르다. 첫 번째 token의 정보도 $
 
 ### sequence 길이별 비용과 이미지 생성 속도
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/linear-attention-fast-weights-retnet/trnn_fig1.png" alt="sequence 길이에 따른 시간과 GPU 메모리" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 1. sequence 길이에 따른 시간(왼쪽)과 GPU 메모리(오른쪽). 검은 선이 linear, 빨간 선이 softmax, 파란 선이 Reformer (Katharopoulos et al., 2020)</figcaption>
-</figure>
+<Fig src="/images/posts/linear-attention-fast-weights-retnet/trnn_fig1.png" alt="sequence 길이에 따른 시간과 GPU 메모리">Figure 1. sequence 길이에 따른 시간(왼쪽)과 GPU 메모리(오른쪽). 검은 선이 linear, 빨간 선이 softmax, 파란 선이 Reformer (Katharopoulos et al., 2020)</Fig>
 
 두 축이 모두 log라서 기울기가 곧 지수다. 검은 선(linear)은 기울기 1, 빨간 선(softmax)은 기울기
 2다. softmax는 길이 4,096에서 GPU 메모리가 차서 그 뒤로는 측정되지 않았다.
@@ -242,10 +236,7 @@ softmax에는 이 한계가 없다. 저장 공간이 늘어나니까. 저장 공
 
 ### 저장한 key 수에 따른 retrieval 성능
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig2.png" alt="저장한 key 수에 따른 retrieval loss" className="rounded-lg mx-auto max-w-xl" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2. 가로축이 저장한 key-value 쌍의 수, 세로축이 retrieval loss (Schlag et al., 2021)</figcaption>
-</figure>
+<Fig src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig2.png" alt="저장한 key 수에 따른 retrieval loss" size="xl">Figure 2. 가로축이 저장한 key-value 쌍의 수, 세로축이 retrieval loss (Schlag et al., 2021)</Fig>
 
 합성 task다. 서로 다른 key-value 쌍을 20개부터 600개까지 늘려 가며 전부 저장하게 한 뒤 제대로
 꺼내는지를 본다.
@@ -297,10 +288,7 @@ state 크기는 그대로다. 용량이 늘어난 게 아니라 **관리되기 �
 
 ### 같은 key의 값을 update하는 실험
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig3.png" alt="update 규칙별 학습 곡선" className="rounded-lg mx-auto max-w-xl" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3. update 규칙별 학습 곡선. 세로축이 log scale의 loss (Schlag et al., 2021)</figcaption>
-</figure>
+<Fig src="/images/posts/linear-attention-fast-weights-retnet/fwp_fig3.png" alt="update 규칙별 학습 곡선" size="xl">Figure 3. update 규칙별 학습 곡선. 세로축이 log scale의 loss (Schlag et al., 2021)</Fig>
 
 delta rule이 필요한 상황을 직접 만든 실험이다. 같은 key가 sequence 안에서 여러 번 나오고 그때마다
 다른 value가 붙는다. 모델은 가장 최근 값을 답해야 한다. 누적이 아니라 **update**가 필요한
@@ -370,10 +358,7 @@ $V_m$들의 가중합이고 weight가 "내용으로 정해지는 값"과 "위치
 
 ### 병렬·재귀·chunk 단위 계산
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/linear-attention-fast-weights-retnet/ret_dual.png" alt="RetNet의 병렬 형태와 재귀 형태" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 3. (a) 병렬 형태, (b) 재귀 형태. GN은 GroupNorm (Sun et al., 2023)</figcaption>
-</figure>
+<Fig src="/images/posts/linear-attention-fast-weights-retnet/ret_dual.png" alt="RetNet의 병렬 형태와 재귀 형태">Figure 3. (a) 병렬 형태, (b) 재귀 형태. GN은 GroupNorm (Sun et al., 2023)</Fig>
 
 두 그림은 **같은 함수**다. 같은 weight를 두고 계산 순서만 바꾼 것이다.
 
@@ -394,10 +379,7 @@ perplexity는 1.3B, 2.7B, 6.7B 세 크기에서 Transformer와 비슷했고 2B�
 
 ### linear attention은 왜 성능이 떨어지는가: 두 가지 진단
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/linear-attention-fast-weights-retnet/ret_tri.png" alt="불가능한 삼각형" className="rounded-lg mx-auto max-w-sm" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2. 학습 병렬성, 저렴한 추론, 좋은 성능을 동시에 얻기 어렵다는 "impossible triangle" (Sun et al., 2023)</figcaption>
-</figure>
+<Fig src="/images/posts/linear-attention-fast-weights-retnet/ret_tri.png" alt="불가능한 삼각형" size="sm">Figure 2. 학습 병렬성, 저렴한 추론, 좋은 성능을 동시에 얻기 어렵다는 "impossible triangle" (Sun et al., 2023)</Fig>
 
 RetNet의 주장은 이 삼각형으로 요약된다. 세 꼭짓점을 모두 만족하는 구조가 없었는데 RetNet이 그 자리에
 들어간다는 것이다. 그 주장을 표로 적은 것이 논문의 Table 1이다.

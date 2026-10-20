@@ -48,10 +48,7 @@ Related Work에서 저자들이 직접 밝히고 있는데 **Cordonnier et al. (
 
 ## 이미지 패치에서 분류 결과까지
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_overview.png" alt="ViT 전체 구조와 Transformer Encoder block" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 1. 왼쪽이 ViT 전체, 오른쪽이 encoder block 하나 (Dosovitskiy et al., 2021)</figcaption>
-</figure>
+<Fig src="/images/posts/vit-16x16-words/fig_overview.png" alt="ViT 전체 구조와 Transformer Encoder block">Figure 1. 왼쪽이 ViT 전체, 오른쪽이 encoder block 하나 (Dosovitskiy et al., 2021)</Fig>
 
 ViT는 **Transformer의 encoder만 쓴다.** decoder가 없다.
 
@@ -281,10 +278,7 @@ Figure 4도 같은 얘기다. **ResNet은 작은 데이터에서 더 좋지만 �
 - **작은 모델**(ViT-B/32): 80.73 → 84.90. **4.2%p나 오른다**
 - **가장 큰 모델**(ViT-L/16): 87.12 → 87.12. **소수점까지 똑같다.** 그런데 연산은 1567에서 1668로 **더 쓴다**
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_compute.png" alt="pre-training 연산량 대비 transfer 정확도" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 5. 연산량이 커질수록 hybrid(주황)와 ViT(파랑)가 겹쳐진다</figcaption>
-</figure>
+<Fig src="/images/posts/vit-16x16-words/fig_compute.png" alt="pre-training 연산량 대비 transfer 정확도">Figure 5. 연산량이 커질수록 hybrid(주황)와 ViT(파랑)가 겹쳐진다</Fig>
 
 **충분한 스케일에서는 inductive bias를 넣어 줘도 아무 이득이 없다.** 학습이 이미 그걸 대체하고 있는 것이다. 논문도 이 결과를 "somewhat surprising"이라고 표현한다. conv의 지역적 특징 추출이 어떤 크기에서든 도움이 될 거라고 예상했을 텐데 그렇지 않았다는 것이다.
 
@@ -296,10 +290,7 @@ Figure 4도 같은 얘기다. **ResNet은 작은 데이터에서 더 좋지만 �
 
 **attention distance**는 CNN의 receptive field에 대응하는 지표다. query 패치와 key 패치 사이의 픽셀 거리를 attention weight로 가중평균한 값이다. 작으면 "가까운 것만 본다", 크면 "멀리까지 본다"는 뜻이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_attndist.png" alt="layer 깊이별 mean attention distance" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 7 (right). x축이 layer 깊이, y축이 mean attention distance(픽셀), 점 하나가 head 하나</figcaption>
-</figure>
+<Fig src="/images/posts/vit-16x16-words/fig_attndist.png" alt="layer 깊이별 mean attention distance">Figure 7 (right). x축이 layer 깊이, y축이 mean attention distance(픽셀), 점 하나가 head 하나</Fig>
 
 - **낮은 layer에서는 head들이 크게 갈린다.** 어떤 head는 이미 이미지 전체를 보고 어떤 head는 **아주 좁은 영역만** 본다
 - **깊어질수록** 모든 head가 넓게 본다
@@ -310,10 +301,7 @@ Figure 4도 같은 얘기다. **ResNet은 작은 데이터에서 더 좋지만 �
 
 ### 2. 학습된 패치 임베딩 필터
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_pca.png" alt="학습된 패치 임베딩 필터의 주성분 28개" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 7 (left). ViT-L/32의 RGB embedding filters, 상위 28개 주성분</figcaption>
-</figure>
+<Fig src="/images/posts/vit-16x16-words/fig_pca.png" alt="학습된 패치 임베딩 필터의 주성분 28개">Figure 7 (left). ViT-L/32의 RGB embedding filters, 상위 28개 주성분</Fig>
 
 이 그림은 패치 임베딩 행렬 $E$의 필터를 분석한 결과다. $E$의 각 열이 conv filter 하나에 대응한다. ViT-L/32면 $32 \times 32 \times 3 = 3072$차원짜리 필터가 $D$개 있는 셈이다. 이걸 다 보여 줄 순 없으니 **$D$개 필터를 데이터 포인트로 삼아 PCA를 돌리고** 나온 주성분을 다시 패치 모양으로 되돌려 그린 것이다.
 
@@ -325,10 +313,7 @@ convolution의 locality를 전혀 주지 않았는데 **CNN 초기 layer가 수�
 
 개인적으로 이 논문에서 제일 인상적이었던 부분이다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_posemb.png" alt="학습된 위치 임베딩의 코사인 유사도" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 7 (center). ViT-L/32의 position embedding similarity</figcaption>
-</figure>
+<Fig src="/images/posts/vit-16x16-words/fig_posemb.png" alt="학습된 위치 임베딩의 코사인 유사도">Figure 7 (center). ViT-L/32의 position embedding similarity</Fig>
 
 일단 이 그림은 패치가 **49개**다. 앞에서 예시로 쓴 것과 모델이 다르기 때문이다.
 
@@ -351,10 +336,7 @@ convolution의 locality를 전혀 주지 않았는데 **CNN 초기 layer가 수�
 
 비교를 위해 sinusoidal PE의 코사인 유사도를 직접 계산해 봤다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_sinusoidal.png" alt="sinusoidal positional encoding의 코사인 유사도" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">직접 계산한 sinusoidal PE의 유사도: 왼쪽은 상대 거리별 곡선, 오른쪽은 유사도 행렬 (d=512)</figcaption>
-</figure>
+<Fig src="/images/posts/vit-16x16-words/fig_sinusoidal.png" alt="sinusoidal positional encoding의 코사인 유사도">직접 계산한 sinusoidal PE의 유사도: 왼쪽은 상대 거리별 곡선, 오른쪽은 유사도 행렬 (d=512)</Fig>
 
 식을 정리하면 상대 거리 $k$에 대해 $\frac{2}{d}\sum_i \cos(k \cdot w_i)$가 되는데 이건 **거리가 멀어지면 감소하도록 설계 단계에서 강제된** 성질이다. $d=512$에서 계산해 보면 $k=1$일 때 0.97, $k=200$일 때 0.35로 떨어진다.
 
@@ -432,10 +414,7 @@ fine-tuning은 pre-training(224)보다 **높은 해상도(384)에서** 하면 �
 
 ### 학습된 위치 패턴은 설정에 따라 달라진다
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/vit-16x16-words/fig_hparam.png" alt="hyperparameter에 따라 달라지는 위치 임베딩 패턴" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 10. 같은 ViT-L/16인데 learning rate와 weight decay에 따라 패턴이 달라진다</figcaption>
-</figure>
+<Fig src="/images/posts/vit-16x16-words/fig_hparam.png" alt="hyperparameter에 따라 달라지는 위치 임베딩 패턴">Figure 10. 같은 ViT-L/16인데 learning rate와 weight decay에 따라 패턴이 달라진다</Fig>
 
 앞에서 감탄했던 "위치 임베딩이 2D를 재발견한다"를 반박하는 쪽에 가까운 자료다. 같은 ViT-L/16인데 learning rate와 weight decay를 바꾸면 패턴이 눈에 띄게 달라진다. **"2D를 스스로 배운다"는 건 경험적 관찰이지 보장된 성질이 아니다.**
 

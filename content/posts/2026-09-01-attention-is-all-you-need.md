@@ -17,10 +17,7 @@ Transformer를 공부하면서 구조 설명만으로 이해하기 어려운 부
 직접 계산해서 확인했고 몇 가지는 논문에 이유가 제시되어 있지 않았다.
 후자도 그대로 적었다.
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/attention-is-all-you-need/fig_architecture.png" alt="Transformer 전체 구조" className="rounded-lg mx-auto max-w-sm" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 1. 왼쪽이 encoder, 오른쪽이 decoder (Vaswani et al., 2017)</figcaption>
-</figure>
+<Fig src="/images/posts/attention-is-all-you-need/fig_architecture.png" alt="Transformer 전체 구조" size="sm">Figure 1. 왼쪽이 encoder, 오른쪽이 decoder (Vaswani et al., 2017)</Fig>
 
 이 글에서 기준으로 삼는 모델은 원 논문의 base 모델이다. 설정은 $N=6$ layer, $d_{\text{model}}=512$, $d_{ff}=2048$,
 head $h=8$개, $d_k=d_v=64$, 파라미터 65M이다.
@@ -97,10 +94,7 @@ $$\cos\_sim(p_{pos},\,p_{pos+k}) = \frac{2}{d}\sum_i \cos(k\,w_i)$$
 |---|---|---|---|---|---|---|
 | cos sim | 0.973 | 0.741 | 0.616 | 0.512 | 0.437 | 0.350 |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/attention-is-all-you-need/fig_sinusoidal.png" alt="sinusoidal PE의 코사인 유사도" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">직접 계산한 sinusoidal PE: 왼쪽은 상대 거리 k에 따른 감소 곡선, 오른쪽은 위치 0~49의 유사도 행렬 (d=512)</figcaption>
-</figure>
+<Fig src="/images/posts/attention-is-all-you-need/fig_sinusoidal.png" alt="sinusoidal PE의 코사인 유사도">직접 계산한 sinusoidal PE: 왼쪽은 상대 거리 k에 따른 감소 곡선, 오른쪽은 위치 0~49의 유사도 행렬 (d=512)</Fig>
 
 가까울수록 1에 가깝고 멀수록 감소한다. **의도한 성질이 실제로 나온다.**
 
@@ -174,10 +168,7 @@ PyTorch `nn.Embedding` 기본값인 $\mathcal{N}(0,1)$이면 곱한 뒤 norm이 
 
 ## Self-attention을 공부하며 생긴 질문
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/attention-is-all-you-need/fig_attention.png" alt="Scaled Dot-Product Attention과 Multi-Head Attention" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">Figure 2. 왼쪽이 Scaled Dot-Product Attention, 오른쪽이 Multi-Head Attention (Vaswani et al., 2017)</figcaption>
-</figure>
+<Fig src="/images/posts/attention-is-all-you-need/fig_attention.png" alt="Scaled Dot-Product Attention과 Multi-Head Attention">Figure 2. 왼쪽이 Scaled Dot-Product Attention, 오른쪽이 Multi-Head Attention (Vaswani et al., 2017)</Fig>
 
 ### Q, K, V는 어떻게 서로 다르게 학습되는가
 
@@ -245,10 +236,7 @@ key 20개를 두고 softmax가 준 가장 큰 weight의 평균을 측정해 봤�
 | scaling 없음 | 0.401 | 0.769 | 0.887 | **0.943** |
 | $\div\sqrt{d_k}$ | 0.208 | 0.216 | 0.217 | **0.217** |
 
-<figure className="my-6 text-center">
-  <img src="/images/posts/attention-is-all-you-need/fig_sqrt_dk.png" alt="d_k에 따른 내적 분산과 softmax 붕괴" className="rounded-lg mx-auto" />
-  <figcaption className="mt-2 text-sm text-gray-500">왼쪽: 내적의 표준편차가 정확히 $\sqrt{d_k}$를 따라감. 오른쪽: scaling 없이는 한 key가 확률을 독식하고 나누면 $d_k$와 무관하게 일정해진다</figcaption>
-</figure>
+<Fig src="/images/posts/attention-is-all-you-need/fig_sqrt_dk.png" alt="d_k에 따른 내적 분산과 softmax 붕괴">왼쪽: 내적의 표준편차가 정확히 $\sqrt{d_k}$를 따라감. 오른쪽: scaling 없이는 한 key가 확률을 독식하고 나누면 $d_k$와 무관하게 일정해진다</Fig>
 
 scaling 없이 $d_k{=}512$면 **한 key가 94%를 가져간다.** 사실상 one-hot이고 gradient가 거의 0이
 된다. 나누면 $d_k$와 **무관하게** 0.21로 안정된다. 균등분포(0.05)보다는 뾰족하지만 확률이 한곳에 몰리는 현상은 줄었다.
