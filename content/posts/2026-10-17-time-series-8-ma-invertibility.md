@@ -35,7 +35,7 @@ $$
 
 <Fig src="/images/posts/2026-10-17-time-series-8-ma-invertibility/ma-vs-ar.svg" alt="MA(1)과 AR(1)의 시간 그림과 ACF">그림 1. $\theta_1 = 0.8$인 MA(1)과 $\phi_1 = 0.8$인 AR(1)을 200개씩 만들었다. MA(1)의 ACF는 시차 1만 크고 바로 점선 안으로 들어가지만 AR(1)의 ACF는 0.75, 0.54, 0.36으로 천천히 줄어든다.</Fig>
 
-그림 1의 MA(1)은 $\rho_1 = 0.8/1.64 = 0.488$이고 표본에서는 $r_1 = 0.471$이었다. 시차 2부터는 모두 점선 안이다. 같은 0.8을 쓴 AR(1)은 $\rho_k = 0.8^k$라 0.8, 0.64, 0.51로 천천히 줄어든다. **MA($q$)의 ACF는 시차 $q$ 뒤에 끊기고 AR의 ACF는 천천히 줄어든다.** 이 차이로 차수를 고르는 방법은 다음 글에서 다룬다[^band].
+그림 1의 MA(1)은 $\rho_1 = 0.8/1.64 = 0.488$이고 표본에서는 $r_1 = 0.471$이었다. 시차 2부터는 모두 점선 안이다. 같은 0.8을 쓴 AR(1)은 $\rho_k = 0.8^k$라 0.8, 0.64, 0.51로 천천히 줄어든다. **MA($q$)의 ACF는 시차 $q$ 뒤에 끊기고 AR의 ACF는 천천히 줄어든다.** 이 차이로 차수를 고르는 방법은 [다음 글](/posts/2026-10-21-time-series-9-acf-pacf)에서 다룬다[^band].
 
 ## 정상 AR은 MA($\infty$)다
 
@@ -141,7 +141,7 @@ $e_0 = 0$은 사실이 아니다. 참값 $\theta$를 넣어도 $e_t - \varepsilo
 | CSS | 0 | 0.605 | 0.059 |
 | 최대가능도 | 0 | 0.608 | 0.059 |
 
-$r_1$로 푸는 방법은 해가 나온 경우만 따져도 흔들림이 두 배가 넘는다. **그래서 MA 계수는 수치 최적화로 구한다.** AR 항이 섞인 ARMA도 식 (4)에 AR 항을 더할 뿐이고 AR과 MA 계수를 한꺼번에 추정한다. 그 이야기는 ARIMA를 다루는 글에서 이어 간다.
+$r_1$로 푸는 방법은 해가 나온 경우만 따져도 흔들림이 두 배가 넘는다. **그래서 MA 계수는 수치 최적화로 구한다.** AR 항이 섞인 ARMA도 식 (4)에 AR 항을 더할 뿐이고 AR과 MA 계수를 한꺼번에 추정한다. 그 이야기는 ARIMA를 다루는 [10편](/posts/2026-10-21-time-series-10-arima)에서 이어 간다.
 
 ## 지수평활과 ARIMA의 연결
 
@@ -151,7 +151,7 @@ $$
 y_t - y_{t-1} = (\ell_{t-1} - \ell_{t-2}) + \varepsilon_t - \varepsilon_{t-1} = \varepsilon_t - (1 - \alpha)\varepsilon_{t-1}
 $$
 
-이었다. 이제 이 식을 읽을 수 있다. 한 번 차분한 계열이 $\theta = \alpha - 1$인 MA(1)이다. 차분 한 번에 MA(1)을 붙인 이 모형을 ARIMA(0,1,1)이라 부른다. 이름은 다음 글들에서 정리한다.
+이었다. 이제 이 식을 읽을 수 있다. 한 번 차분한 계열이 $\theta = \alpha - 1$인 MA(1)이다. 차분 한 번에 MA(1)을 붙인 이 모형을 ARIMA(0,1,1)이라 부른다. 이름은 [10편](/posts/2026-10-21-time-series-10-arima)에서 정리한다.
 
 예측식도 같다. MA(1)의 1-step 예측은 다음 충격만 0으로 두면 되므로
 
@@ -165,7 +165,7 @@ $$
 
 **ETS와 ARIMA는 다른 세계가 아니다.** FPP3 9.10절은 덧셈 오차의 선형 ETS 모형이 모두 ARIMA의 특수한 경우라고 정리한다. ETS(A,A,N)은 ARIMA(0,2,2)이고 계절 모형도 대응하는 ARIMA가 있다. 반대로 곱셈 오차처럼 비선형인 ETS는 대응하는 ARIMA가 없고 ETS로 나타낼 수 없는 ARIMA도 많다. 둘은 겹치는 부분이 있는 두 모형족이다.
 
-정상성과 차분([6편](/posts/2026-10-17-time-series-6-stationarity-differencing)), AR([7편](/posts/2026-10-17-time-series-7-backshift-ar)), MA(이번 글)로 ARIMA의 재료가 모였다. 다음 글에서는 AR과 MA의 ACF와 PACF를 유도해 그림 1의 차이로 차수를 고르는 방법을 정리한다. 그 뒤에 차분과 AR, MA를 합친 ARIMA($p$, $d$, $q$)로 넘어간다.
+정상성과 차분([6편](/posts/2026-10-17-time-series-6-stationarity-differencing)), AR([7편](/posts/2026-10-17-time-series-7-backshift-ar)), MA(이번 글)로 ARIMA의 재료가 모였다. [9편](/posts/2026-10-21-time-series-9-acf-pacf)에서는 AR과 MA의 ACF와 PACF를 유도해 그림 1의 차이로 차수를 고르는 방법을 정리한다. 그 뒤 [10편](/posts/2026-10-21-time-series-10-arima)에서 차분과 AR, MA를 합친 ARIMA($p$, $d$, $q$)로 넘어간다.
 
 ---
 
