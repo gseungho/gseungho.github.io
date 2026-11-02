@@ -419,7 +419,7 @@ Haiku 생각 켬의 분산분석표다. 첫 답이 한 번이라도 맞은 274�
 
 - [저장소](https://github.com/gseungho/korean-llm-sycophancy): 실험과 분석 코드, 테스트
 - [실험 설계서](https://github.com/gseungho/korean-llm-sycophancy/tree/main/docs/specs): 결과를 보기 전에 적어 둔 조건과 판정 규칙
-- [결과 기록](https://github.com/gseungho/korean-llm-sycophancy/blob/main/docs/EVIDENCE.md): 이 글에 다 싣지 못한 표
+- [실험별 집계표](https://github.com/gseungho/korean-llm-sycophancy/tree/main/shared/reports): 이 글에 다 싣지 못한 표
 - [시행 단위 결과표](https://github.com/gseungho/korean-llm-sycophancy/blob/main/shared/trials.csv): 문항 번호와 답 글자만 담은 표
 - [새 문항 실험의 결과표](https://github.com/gseungho/korean-llm-sycophancy/blob/main/shared/confirm1_trials.csv): 같은 형식의 표
 
