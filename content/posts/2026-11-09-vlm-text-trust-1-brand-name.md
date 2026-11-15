@@ -1,5 +1,5 @@
 ---
-title: "브랜드 이름만 바꿔도 같은 상품이 다른 상품이 될까? VLM 실험 1편"
+title: "VLM 실험 1편: 같은 상품 사진에서 브랜드 이름만 달리한 테스트"
 date: "2026-11-09"
 category: "프로젝트"
 subcategory: "Deep Learning/LLM Evaluation"

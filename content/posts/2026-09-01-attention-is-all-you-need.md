@@ -17,7 +17,7 @@ Transformer를 공부하면서 구조 설명만으로 이해하기 어려운 부
 
 기준으로 삼는 모델은 원 논문의 base 모델이다. 설정은 $N=6$ layer, $d_{\text{model}}=512$, $d_{ff}=2048$, head $h=8$개, $d_k=d_v=64$, 파라미터 65M이다.
 
-이 논문을 먼저 읽고 그다음에 ViT를 읽었다. 이어지는 글은 [ViT 리뷰: inductive bias는 데이터로 대체할 수 있는가](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)에 있다.
+이 논문을 먼저 읽고 그다음에 ViT를 읽었다. 이어지는 글은 [ViT 리뷰: 2D 가정을 덜어낸 Transformer가 CNN을 넘은 조건](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)에 있다.
 
 ## 위치 정보를 임베딩에 더하는 이유
 

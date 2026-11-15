@@ -1,5 +1,5 @@
 ---
-title: "진짜 사진에 틀린 캡션을 붙이면 VLM은 알아차릴까? VLM 실험 2편"
+title: "VLM 실험 2편: 행사 사진에 틀린 캡션을 붙여 본 판정 반응"
 date: "2026-11-09"
 category: "프로젝트"
 subcategory: "Deep Learning/LLM Evaluation"

@@ -1,5 +1,5 @@
 ---
-title: "존댓말로 반박하면 LLM이 답을 더 잘 바꿀까? 한국어 말투와 번복률 실험"
+title: "한국어 말투와 LLM 번복률: 존댓말과 반말로 49만 번 반박해 본 기록"
 date: "2026-10-13"
 category: "프로젝트"
 subcategory: "Deep Learning/LLM Evaluation"

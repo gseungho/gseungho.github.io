@@ -1,5 +1,5 @@
 ---
-title: "ViT 리뷰: inductive bias는 데이터로 대체할 수 있는가"
+title: "ViT 리뷰: 2D 가정을 덜어낸 Transformer가 CNN을 넘은 조건"
 date: "2026-09-01"
 category: "논문리뷰"
 subcategory: "Deep Learning/Foundations"

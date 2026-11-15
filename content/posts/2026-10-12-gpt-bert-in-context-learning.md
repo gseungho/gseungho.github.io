@@ -1,5 +1,5 @@
 ---
-title: "GPT-1 · BERT · GPT-2 · GPT-3: 모델은 무슨 task인지 어디서 아는가"
+title: "GPT-1 · BERT · GPT-2 · GPT-3: task 정보가 weight에서 context로 옮겨가기까지"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Foundations"
@@ -541,7 +541,7 @@ update한다.
 ## 이어지는 글
 
 - [Attention Is All You Need: 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
-- [ViT 리뷰: inductive bias는 데이터로 대체할 수 있는가](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
+- [ViT 리뷰: 2D 가정을 덜어낸 Transformer가 CNN을 넘은 조건](/posts/2026-09-01-vit-an-image-is-worth-16x16-words)
 
 ## 참고문헌
 

@@ -1,5 +1,5 @@
 ---
-title: "Linear Attention · Fast Weight · RetNet: 크기가 고정된 memory에 어떻게 쓸 것인가"
+title: "Linear Attention · Fast Weight · RetNet: 고정된 state에 정보를 쓰고 지우는 규칙"
 date: "2026-10-12"
 category: "논문리뷰"
 subcategory: "Deep Learning/Sequence Models"
@@ -379,8 +379,8 @@ $$W \leftarrow W - \beta\,\nabla_W\, \ell = W + \beta\,(v - \bar{v})\,\phi(k)^\t
 
 ## 이어지는 글
 
-- [MoE · MoD · MoR: 모든 token에 같은 계산을 써야 하는가](/posts/2026-10-12-moe-mod-mor-dynamic-compute)
-- [GPT-1 · BERT · GPT-2 · GPT-3: 모델은 무슨 task인지 어디서 아는가](/posts/2026-10-12-gpt-bert-in-context-learning)
+- [MoE · MoD · MoR: token마다 계산량을 다르게 나누는 세 가지 방법](/posts/2026-10-12-moe-mod-mor-dynamic-compute)
+- [GPT-1 · BERT · GPT-2 · GPT-3: task 정보가 weight에서 context로 옮겨가기까지](/posts/2026-10-12-gpt-bert-in-context-learning)
 - [Attention Is All You Need: 설명이 항상 멈추는 자리들](/posts/2026-09-01-attention-is-all-you-need)
 
 ## 참고문헌
