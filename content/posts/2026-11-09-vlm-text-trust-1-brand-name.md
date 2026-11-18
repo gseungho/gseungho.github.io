@@ -286,7 +286,7 @@ Opus는 유명 이름이 사진과 어울리는지를 따지는 것으로 보인
 
 - [저장소](https://github.com/gseungho/vlm-same-item-test)에 실험과 분석 코드, 테스트, 설정, 모델의 답 원본을 올렸다.
 - [확인 실험 설계서](https://github.com/gseungho/vlm-same-item-test/blob/main/docs/specs/2026-11-04-same-item-confirm.md)에서 모델을 부르기 전에 공개한 판정 규칙(첫 커밋)을 볼 수 있다.
-- [결과와 해석](https://github.com/gseungho/vlm-same-item-test/blob/main/docs/EVIDENCE.md)에는 이 글에 다 싣지 못한 표와 해석을 담았다.
+- [실험별 결과 표](https://github.com/gseungho/vlm-same-item-test/tree/main/results)에는 이 글에 다 싣지 못한 표를 담았다.
 
 저장된 답만으로 이 글의 표를 API 호출 없이 다시 계산할 수 있다. 사진 파일은 올리지 않았고 설정에 ABO의 이미지 ID가 있다.
 

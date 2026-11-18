@@ -199,7 +199,7 @@ Haiku는 QC에서도 맞는 캡션의 42%를 "알 수 없다"로 두었다. 생�
 
 - [저장소](https://github.com/gseungho/vlm-caption-test): 실험과 분석 코드, 테스트, Commons 설정과 모델의 답 원본, 사진 출처 목록
 - [확인 실험 설계서](https://github.com/gseungho/vlm-caption-test/blob/main/docs/specs/2026-11-08-caption-confirm.md): 모델을 부르기 전에 공개한 판정 규칙(첫 커밋)
-- [결과와 해석](https://github.com/gseungho/vlm-caption-test/blob/main/docs/EVIDENCE.md): 이 글에 다 싣지 못한 표와 해석
+- [실험별 결과 표](https://github.com/gseungho/vlm-caption-test/tree/main/results): 이 글에 다 싣지 못한 표
 
 저장된 답만으로 이 글의 표를 API 호출 없이 다시 계산할 수 있다. VERITE의 설정과 답, 사진 파일은 올리지 않았다.
 
