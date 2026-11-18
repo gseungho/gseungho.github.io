@@ -415,15 +415,7 @@ Haiku 생각 켬의 분산분석표다. 첫 답이 한 번이라도 맞은 274�
 
 ## 코드와 자료
 
-코드와 기록은 GitHub에 올려 두었다.
-
-- 실험과 분석 코드, 테스트가 들어 있다([저장소](https://github.com/gseungho/korean-llm-sycophancy)).
-- 결과를 보기 전에 적어 둔 조건과 판정 규칙을 담았다([실험 설계서](https://github.com/gseungho/korean-llm-sycophancy/tree/main/docs/specs)).
-- 이 글에 다 싣지 못한 표를 모았다([실험별 집계표](https://github.com/gseungho/korean-llm-sycophancy/tree/main/shared/reports)).
-- 문항 번호와 답 글자만 담은 표다([시행 단위 결과표](https://github.com/gseungho/korean-llm-sycophancy/blob/main/shared/trials.csv)).
-- 같은 형식의 표다([새 문항 실험의 결과표](https://github.com/gseungho/korean-llm-sycophancy/blob/main/shared/confirm1_trials.csv)).
-
-KMMLU 문항 본문과 모델의 응답 원본은 라이선스 때문에 올리지 않았다. 결과표만 있어도 이 글의 그림과 구간, 분산분석표를 API 호출 없이 다시 계산할 수 있다.
+실험·분석 코드와 테스트는 [코드 저장소](https://github.com/gseungho/korean-llm-sycophancy-code)에 공개했다. 설계서와 결과 파일, 모델의 응답 원본, 문항 데이터는 저장소에 포함하지 않았다.
 
 ---
 

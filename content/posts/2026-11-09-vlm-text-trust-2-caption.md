@@ -195,13 +195,7 @@ Haiku는 QC에서도 맞는 캡션의 42%를 "알 수 없다"로 두었다. 생�
 
 ## 코드와 자료
 
-코드와 기록은 GitHub에 올려 두었다.
-
-- [저장소](https://github.com/gseungho/vlm-caption-test): 실험과 분석 코드, 테스트, Commons 설정과 모델의 답 원본, 사진 출처 목록
-- [확인 실험 설계서](https://github.com/gseungho/vlm-caption-test/blob/main/docs/specs/2026-11-08-caption-confirm.md): 모델을 부르기 전에 공개한 판정 규칙(첫 커밋)
-- [실험별 결과 표](https://github.com/gseungho/vlm-caption-test/tree/main/results): 이 글에 다 싣지 못한 표
-
-저장된 답만으로 이 글의 표를 API 호출 없이 다시 계산할 수 있다. VERITE의 설정과 답, 사진 파일은 올리지 않았다.
+실험·분석 코드와 테스트는 [코드 저장소](https://github.com/gseungho/vlm-text-trust-code)에 공개했다. 설계서와 결과 파일, 모델의 응답 원본, 문항·이미지 데이터는 저장소에 포함하지 않았다.
 
 ---
 
@@ -210,4 +204,4 @@ Haiku는 QC에서도 맞는 캡션의 42%를 "알 수 없다"로 두었다. 생�
 - Papadopoulos et al. "VERITE: A Robust Benchmark for Multimodal Misinformation Detection Accounting for Unimodal Bias." [arXiv:2304.14133](https://arxiv.org/abs/2304.14133)
 - MM-AQA, "Knowing When Not to Answer." [arXiv:2604.14799](https://arxiv.org/abs/2604.14799). Claude Sonnet 4.5가 답할 수 없는 STEM 문항을 알아본 비율을 여기서 가져왔다.
 - Deng et al. "Words or Vision: Do Vision-Language Models Have Blind Faith in Text?" CVPR 2025. [arXiv:2503.02199](https://arxiv.org/abs/2503.02199)
-- 사진: [Wikimedia Commons](https://commons.wikimedia.org/). 문항에 쓴 사진의 만든 사람과 라이선스는 저장소의 `data/captions/*/credits.json`에 있다.
+- 사진: [Wikimedia Commons](https://commons.wikimedia.org/). 본문에 실은 사진의 출처와 라이선스는 그림 설명에 적었다.
